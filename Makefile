@@ -33,12 +33,12 @@ update:
 	npm update
 
 .PHONY: lint
-lint:
+lint: node_modules
 	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --fast --issues-exit-code 0
 	npm run lint
 
 .PHONY: format
-format:
+format: node_modules
 	gofmt -l -s -w .
 	npm run format
 
