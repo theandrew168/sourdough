@@ -6,8 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
-		"lint": "eslint frontend/",
-		"format": "prettier --write index.html frontend/"
+		"format": "prettier --write index.html frontend/",
+		"lint": "eslint frontend/"
 	},
 	"devDependencies": {
 		"eslint": "^8.16.0",
@@ -16,5 +16,24 @@
 	},
 	"dependencies": {
 		"gl-matrix": "^3.4.3"
+	},
+	"prettier": {
+		"useTabs": true,
+		"semi": true,
+		"singleQuote": true,
+		"bracketSpacing": true,
+		"trailingComma": "all",
+		"printWidth": 100
+	},
+	"eslintConfig": {
+		"extends": ["eslint:recommended"],
+		"parserOptions": {
+			"sourceType": "module"
+		},
+		"env": {
+			"browser": true,
+			"es2022": true,
+			"node": true
+		}
 	}
 }
