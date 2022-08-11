@@ -16,7 +16,7 @@ frontend: node_modules
 
 .PHONY: backend
 backend: frontend
-	go build -o webgl main.go
+	go build -o webgl backend/main.go
 
 .PHONY: run-frontend
 run-frontend: node_modules
