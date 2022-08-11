@@ -1,22 +1,5 @@
 import { Shader } from './modules/shader.js';
 
-const vertSource = `
-	attribute vec4 aVertexPosition;
-
-	uniform mat4 uModelViewMatrix;
-	uniform mat4 uProjectionMatrix;
-
-	void main() {
-		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-	}
-`;
-
-const fragSource = `
-	void main() {
-		gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-	}
-`;
-
 async function main() {
 	const canvas = document.querySelector('#glCanvas');
 	const gl = canvas.getContext('webgl2');
@@ -24,6 +7,12 @@ async function main() {
 		alert('Unable to initialize WebGL. Your browser or machine may not support it.');
 		return;
 	}
+
+	const vertSourceResp = await fetch('/shader/basic.vert.glsl');
+	const vertSource = await vertSourceResp.text();
+
+	const fragSourceResp = await fetch('/shader/basic.frag.glsl');
+	const fragSource = await fragSourceResp.text();
 
 	const s = new Shader(gl, vertSource, fragSource);
 	console.log(s);
