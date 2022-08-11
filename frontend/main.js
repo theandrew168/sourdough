@@ -1,6 +1,10 @@
+import { mat4 } from 'gl-matrix';
+
 import { Shader } from './modules/shader.js';
 
 async function main() {
+	console.log(mat4.create());
+
 	const canvas = document.querySelector('#glCanvas');
 	const gl = canvas.getContext('webgl2');
 	if (!gl) {
