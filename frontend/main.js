@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
 
-import { Shader } from './modules/shader.js';
+import { Shader } from './webgl/shader.js';
 
 async function main() {
 	console.log(mat4.create());
