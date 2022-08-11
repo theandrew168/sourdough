@@ -1,4 +1,6 @@
-attribute vec4 aVertexPosition;
+#version 300 es
+
+in vec4 aVertexPosition;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
