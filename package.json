@@ -34,6 +34,9 @@
 			"browser": true,
 			"es2022": true,
 			"node": true
+		},
+		"rules": {
+			"no-unused-vars": "off"
 		}
 	}
 }

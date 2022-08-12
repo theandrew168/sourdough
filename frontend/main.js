@@ -12,6 +12,15 @@ async function main() {
 		return;
 	}
 
+	// resize now and setup window resize listener
+	resize(gl);
+	addEventListener('resize', (e) => {
+		resize(gl);
+
+		gl.clearColor(0.2, 0.3, 0.4, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
+	});
+
 	const vertSourceResp = await fetch('/shader/basic.vert.glsl');
 	const vertSource = await vertSourceResp.text();
 
@@ -23,6 +32,14 @@ async function main() {
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
+}
+
+function resize(gl) {
+	const width = gl.canvas.clientWidth;
+	const height = gl.canvas.clientHeight;
+	gl.canvas.width = width;
+	gl.canvas.height = height;
+	gl.viewport(0, 0, width, height);
 }
 
 await main();
