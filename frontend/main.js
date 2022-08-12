@@ -31,7 +31,7 @@ async function main() {
 	requestAnimationFrame(draw);
 	function draw(now) {
 		// convert to seconds
-		now *= 0.001
+		now *= 0.001;
 
 		gl.clearColor(Math.sin(now), 0.3, Math.cos(now), 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);

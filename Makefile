@@ -46,11 +46,6 @@ format: node_modules
 	gofmt -l -s -w .
 	npm run format
 
-.PHONY: lint
-lint: node_modules
-	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --fast --issues-exit-code 0
-	npm run lint
-
 .PHONY: clean
 clean:
 	rm -fr webgl dist/ node_modules/ backend/web/public/
