@@ -26,6 +26,15 @@ run-frontend: node_modules
 run-backend: backend
 	./webgl
 
+.PHONY: release
+release:
+	goreleaser release --snapshot --rm-dist
+
+.PHONY: deploy
+deploy: release
+	scp dist/webgl_linux_amd64.deb derz@derzchat.com:/tmp
+	ssh -t derz@derzchat.com sudo dpkg -i /tmp/webgl_linux_amd64.deb
+
 .PHONY: update
 update:
 	go get -u ./...
@@ -44,4 +53,4 @@ lint: node_modules
 
 .PHONY: clean
 clean:
-	rm -fr webgl backend/web/public/ node_modules/
+	rm -fr webgl dist/ node_modules/ backend/web/public/

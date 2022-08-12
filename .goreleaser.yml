@@ -1,0 +1,56 @@
+before:
+  hooks:
+    - go mod tidy
+    - npm run build
+
+builds:
+  - main: backend/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - none*
+    format_overrides:
+      - goos: windows
+        format: zip
+
+nfpms:
+  - package_name: webgl
+    file_name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://git.sr.ht/~theandrew168/webgl
+    maintainer: Andrew Dailey <andrew@shallowbrooksoftware.com>
+    description: Various WebGL experiments
+    license: MIT
+    formats:
+      - deb
+    bindir: /usr/bin
+    contents:
+      - src: script/webgl.service
+        dst: /lib/systemd/system/webgl.service
+        type: config
+      - src: script/webgl.conf
+        dst: /etc/webgl.conf
+        type: config
+    scripts:
+      postinstall: script/postinstall.sh
+      preremove: script/preremove.sh
+      postremove: script/postremove.sh
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

@@ -1,0 +1,16 @@
+[Unit]
+Description=webgl
+Documentation=https://git.sr.ht/~theandrew168/webgl
+After=network.target network-online.target
+Requires=network-online.target
+
+[Service]
+Type=notify
+Restart=on-failure
+RestartSec=5
+User=webgl
+Group=webgl
+ExecStart=webgl -conf /etc/webgl.conf
+
+[Install]
+WantedBy=multi-user.target
