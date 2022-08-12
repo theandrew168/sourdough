@@ -16,11 +16,7 @@ export class Shader {
 	}
 
 	bind() {
-		this.gl.bindShader(this.program);
-	}
-
-	unbind() {
-		this.gl.bindShader(0);
+		this.gl.useProgram(this.program);
 	}
 
 	destroy() {
