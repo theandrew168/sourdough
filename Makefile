@@ -27,7 +27,7 @@ run-backend: backend
 	./webgl
 
 .PHONY: release
-release:
+release: frontend
 	goreleaser release --snapshot --rm-dist
 
 .PHONY: deploy

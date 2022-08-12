@@ -1,7 +1,3 @@
-before:
-  hooks:
-    - make frontend
-
 builds:
   - main: backend/main.go
     env:
