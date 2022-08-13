@@ -1,4 +1,5 @@
 import { mat4 } from 'gl-matrix';
+import { OBJ } from 'webgl-obj-loader';
 
 import { Shader } from './webgl/shader.js';
 
@@ -18,14 +19,21 @@ async function main() {
 		resize(gl);
 	});
 
-	const vertSourceResp = await fetch('/shader/basic.vert.glsl');
+	const vertSourceResp = await fetch('/shader/basic_vert.glsl');
 	const vertSource = await vertSourceResp.text();
 
-	const fragSourceResp = await fetch('/shader/basic.frag.glsl');
+	const fragSourceResp = await fetch('/shader/basic_frag.glsl');
 	const fragSource = await fragSourceResp.text();
 
 	const s = new Shader(gl, vertSource, fragSource);
 	console.log(s);
+
+	const modelSourceResp = await fetch('/model/sprite.obj');
+	const modelSource = await modelSourceResp.text();
+	console.log(modelSource);
+
+	const model = new OBJ.Mesh(modelSource);
+	console.log(model);
 
 	// kick off draw loop
 	requestAnimationFrame(draw);
