@@ -1,7 +1,6 @@
 package web
 
 import (
-	"embed"
 	"io/fs"
 	"net/http"
 
@@ -9,14 +8,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-//go:embed public
-var publicFS embed.FS
-
 type Application struct {
 	public fs.FS
 }
 
-func NewApplication() *Application {
+func NewApplication(publicFS fs.FS) *Application {
 	public, err := fs.Sub(publicFS, "public")
 	if err != nil {
 		panic(err)

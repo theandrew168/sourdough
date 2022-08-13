@@ -4,13 +4,13 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
-		"format": "prettier --write index.html frontend/"
+		"dev": "npm run build -- --serve=127.0.0.1:5000 --servedir=public",
+		"build": "esbuild frontend/main.js --outfile=public/main.js --bundle --minify",
+		"format": "prettier --write frontend/"
 	},
 	"devDependencies": {
-		"prettier": "^2.6.2",
-		"vite": "^3.0.0"
+		"esbuild": "^0.15.2",
+		"prettier": "^2.6.2"
 	},
 	"dependencies": {
 		"gl-matrix": "^3.4.3"

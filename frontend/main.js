@@ -57,4 +57,4 @@ function resize(gl) {
 	console.log('resize', width, height);
 }
 
-await main();
+main();

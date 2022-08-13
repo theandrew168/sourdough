@@ -16,15 +16,15 @@ frontend: node_modules
 
 .PHONY: backend
 backend: frontend
-	go build -o webgl backend/main.go
+	go build -o webgl main.go
 
 .PHONY: run-frontend
 run-frontend: node_modules
 	npm run dev
 
 .PHONY: run-backend
-run-backend: backend
-	./webgl
+run-backend: frontend
+	go run main.go
 
 .PHONY: release
 release: frontend

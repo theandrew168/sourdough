@@ -1,5 +1,5 @@
-# Frontend build output
-backend/web/public/
+# Output JS bundle
+/public/main.js
 
 # Output binary
 /webgl
