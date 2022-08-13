@@ -35,6 +35,11 @@ async function main() {
 	const model = new OBJ.Mesh(modelSource);
 	console.log(model);
 
+	const textureImageResp = await fetch('/texture/bird.png');
+	const textureImage = await textureImageResp.blob();
+	const imageBitmap = await createImageBitmap(textureImage);
+	console.log(imageBitmap);
+
 	// kick off draw loop
 	requestAnimationFrame(draw);
 	function draw(now) {
