@@ -4,6 +4,9 @@ import (
 	"embed"
 	"io/fs"
 	"net/http"
+
+	"github.com/alexedwards/flow"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 //go:embed public
@@ -26,5 +29,20 @@ func NewApplication() *Application {
 }
 
 func (app *Application) Handler() http.Handler {
-	return http.FileServer(http.FS(app.public))
+	mux := flow.New()
+	mux.Use(app.logRequest)
+
+	// healthcheck endpoint
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte("pong\n"))
+	}, "GET")
+
+	// prometheus metrics
+	mux.Handle("/metrics", promhttp.Handler(), "GET")
+
+	public := http.FileServer(http.FS(app.public))
+	mux.Handle("/...", public)
+
+	return mux
 }
