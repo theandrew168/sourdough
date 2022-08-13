@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/alexedwards/flow v0.0.0-20220806114457-cf11be9e0e03
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
+	github.com/klauspost/compress v1.15.9
 	github.com/prometheus/client_golang v1.13.0
 )
 

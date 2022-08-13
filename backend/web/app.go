@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/alexedwards/flow"
+	"github.com/klauspost/compress/gzhttp"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -38,7 +39,7 @@ func (app *Application) Handler() http.Handler {
 	mux.Handle("/metrics", promhttp.Handler(), "GET")
 
 	public := http.FileServer(http.FS(app.public))
-	mux.Handle("/...", public)
+	mux.Handle("/...", gzhttp.GzipHandler(public))
 
 	return mux
 }

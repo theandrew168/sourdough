@@ -1,4 +1,5 @@
 import { mat4 } from 'gl-matrix';
+import { OBJ } from 'webgl-obj-loader';
 
 import { Shader } from './webgl/shader.js';
 
@@ -30,6 +31,9 @@ async function main() {
 	const modelSourceResp = await fetch('/model/sprite.obj');
 	const modelSource = await modelSourceResp.text();
 	console.log(modelSource);
+
+	const model = new OBJ.Mesh(modelSource);
+	console.log(model);
 
 	const textureImageResp = await fetch('/texture/bird.png');
 	const textureImage = await textureImageResp.blob();
