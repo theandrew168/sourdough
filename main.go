@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/go-redis/redis/v9"
 	"github.com/coreos/go-systemd/daemon"
+	"github.com/go-redis/redis/v9"
 
 	"git.sr.ht/~theandrew168/sourdough/backend/config"
 	"git.sr.ht/~theandrew168/sourdough/backend/web"
