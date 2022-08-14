@@ -40,6 +40,17 @@ async function main() {
 	const imageBitmap = await createImageBitmap(textureImage);
 	console.log(imageBitmap);
 
+	fetch('/texture/bg.jpg')
+		.then((resp) => {
+			if (!resp.ok) {
+				throw new Error('file not found');
+			}
+			return resp.blob();
+		})
+		.then((blob) => createImageBitmap(blob))
+		.then((bitmap) => console.log(bitmap))
+		.catch((err) => console.error(err));
+
 	// kick off draw loop
 	requestAnimationFrame(draw);
 	function draw(now) {
