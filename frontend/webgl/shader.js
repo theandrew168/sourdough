@@ -1,26 +1,46 @@
 export class Shader {
 	constructor(gl, vertSource, fragSource) {
 		this.gl = gl;
+		this.program = this.#compileAndLinkProgram(vertSource, fragSource);
+	}
 
-		const vertShader = gl.createShader(gl.VERTEX_SHADER);
-		this.#compileShader(vertShader, vertSource);
+	static async fromPath(gl, vertPath, fragPath) {
+		const vertSourceResp = await fetch(vertPath);
+		const vertSource = await vertSourceResp.text();
 
-		const fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-		this.#compileShader(fragShader, fragSource);
+		const fragSourceResp = await fetch(fragPath);
+		const fragSource = await fragSourceResp.text();
 
-		this.program = gl.createProgram();
-		this.#linkProgram(this.program, vertShader, fragShader);
-
-		gl.deleteShader(vertShader);
-		gl.deleteShader(fragShader);
+		const s = new Shader(gl, vertSource, fragSource);
+		return s;
 	}
 
 	bind() {
 		this.gl.useProgram(this.program);
 	}
 
+	unbind() {
+		this.gl.useProgram(null);
+	}
+
 	destroy() {
 		this.gl.deleteProgram(this.program);
+	}
+
+	#compileAndLinkProgram(vertSource, fragSource) {
+		const vertShader = this.gl.createShader(this.gl.VERTEX_SHADER);
+		this.#compileShader(vertShader, vertSource);
+
+		const fragShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+		this.#compileShader(fragShader, fragSource);
+
+		const program = this.gl.createProgram();
+		this.#linkProgram(program, vertShader, fragShader);
+
+		this.gl.deleteShader(vertShader);
+		this.gl.deleteShader(fragShader);
+
+		return program;
 	}
 
 	#compileShader(shader, source) {

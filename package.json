@@ -22,6 +22,6 @@
 		"singleQuote": true,
 		"bracketSpacing": true,
 		"trailingComma": "all",
-		"printWidth": 100
+		"printWidth": 90
 	}
 }

@@ -13,20 +13,21 @@ async function main() {
 		return;
 	}
 
-	// resize now and setup window resize listener
-	resize(gl);
-	addEventListener('resize', (e) => {
-		resize(gl);
-	});
-
-	const vertSourceResp = await fetch('/shader/basic_vert.glsl');
-	const vertSource = await vertSourceResp.text();
-
-	const fragSourceResp = await fetch('/shader/basic_frag.glsl');
-	const fragSource = await fragSourceResp.text();
-
-	const s = new Shader(gl, vertSource, fragSource);
+	const s = await Shader.fromPath(
+		gl,
+		'/shader/basic_vert.glsl',
+		'/shader/basic_frag.glsl',
+	);
+	s.bind();
+	s.unbind();
 	console.log(s);
+
+	const helloShader = await Shader.fromPath(
+		gl,
+		'/shader/hello_vert.glsl',
+		'/shader/hello_frag.glsl',
+	);
+	console.log(helloShader);
 
 	const modelSourceResp = await fetch('/model/sprite.obj');
 	const modelSource = await modelSourceResp.text();
@@ -40,6 +41,7 @@ async function main() {
 	const imageBitmap = await createImageBitmap(textureImage);
 	console.log(imageBitmap);
 
+	// an async approach
 	fetch('/texture/bg.jpg')
 		.then((resp) => {
 			if (!resp.ok) {
@@ -57,19 +59,24 @@ async function main() {
 		// convert to seconds
 		now *= 0.001;
 
+		checkResize(gl);
 		gl.clearColor(Math.sin(now), 0.3, Math.cos(now), 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
+
+		// continue draw loop
 		requestAnimationFrame(draw);
 	}
 }
 
-function resize(gl) {
+function checkResize(gl) {
 	const width = gl.canvas.clientWidth;
 	const height = gl.canvas.clientHeight;
-	gl.canvas.width = width;
-	gl.canvas.height = height;
-	gl.viewport(0, 0, width, height);
-	console.log('resize', width, height);
+	if (gl.canvas.width != width || gl.canvas.height != height) {
+		gl.canvas.width = width;
+		gl.canvas.height = height;
+		gl.viewport(0, 0, width, height);
+		console.log('resize', width, height);
+	}
 }
 
 main();
