@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
 
-import { Model } from './webgl/model.js';
+import { Mesh } from './webgl/mesh.js';
 import { Shader } from './webgl/shader.js';
 
 async function main() {
@@ -13,6 +13,12 @@ async function main() {
 		return;
 	}
 
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
+
 	const shader = await Shader.fromPath(
 		gl,
 		'/shader/hello_vert.glsl',
@@ -22,10 +28,10 @@ async function main() {
 	shader.unbind();
 	console.log(shader);
 
-	const model = await Model.fromPath(gl, '/model/sprite.obj');
-	model.bind();
-	model.unbind();
-	console.log(model);
+	const mesh = await Mesh.fromPath(gl, '/model/sprite.obj');
+	mesh.bind();
+	mesh.unbind();
+	console.log(mesh);
 
 	const textureImageResp = await fetch('/texture/bird.png');
 	const textureImage = await textureImageResp.blob();

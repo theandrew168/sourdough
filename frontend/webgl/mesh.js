@@ -1,6 +1,6 @@
 import { OBJ } from 'webgl-obj-loader';
 
-export class Model {
+export class Mesh {
 	constructor(gl, obj) {
 		this.gl = gl;
 		this.obj = obj;
@@ -12,8 +12,8 @@ export class Model {
 		const modelSource = await modelSourceResp.text();
 
 		const obj = new OBJ.Mesh(modelSource);
-		const model = new Model(gl, obj);
-		return model;
+		const mesh = new Mesh(gl, obj);
+		return mesh;
 	}
 
 	bind() {
