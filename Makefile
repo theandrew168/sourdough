@@ -48,4 +48,4 @@ format: node_modules
 
 .PHONY: clean
 clean:
-	rm -fr sourdough dist/ node_modules/ backend/web/public/
+	rm -fr sourdough dist/ node_modules/ public/main.js
