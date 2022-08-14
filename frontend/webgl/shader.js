@@ -1,7 +1,11 @@
 export class Shader {
 	constructor(gl, vertSource, fragSource) {
 		this.gl = gl;
+
 		this.program = this.#compileAndLinkProgram(vertSource, fragSource);
+		this.attribLocation = {
+			position: this.gl.getAttribLocation(this.program, 'a_position'),
+		};
 	}
 
 	static async fromPath(gl, vertPath, fragPath) {
@@ -11,8 +15,8 @@ export class Shader {
 		const fragSourceResp = await fetch(fragPath);
 		const fragSource = await fragSourceResp.text();
 
-		const s = new Shader(gl, vertSource, fragSource);
-		return s;
+		const shader = new Shader(gl, vertSource, fragSource);
+		return shader;
 	}
 
 	bind() {

@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
-import { OBJ } from 'webgl-obj-loader';
 
+import { Model } from './webgl/model.js';
 import { Shader } from './webgl/shader.js';
 
 async function main() {
@@ -13,27 +13,18 @@ async function main() {
 		return;
 	}
 
-	const s = await Shader.fromPath(
-		gl,
-		'/shader/basic_vert.glsl',
-		'/shader/basic_frag.glsl',
-	);
-	s.bind();
-	s.unbind();
-	console.log(s);
-
-	const helloShader = await Shader.fromPath(
+	const shader = await Shader.fromPath(
 		gl,
 		'/shader/hello_vert.glsl',
 		'/shader/hello_frag.glsl',
 	);
-	console.log(helloShader);
+	shader.bind();
+	shader.unbind();
+	console.log(shader);
 
-	const modelSourceResp = await fetch('/model/sprite.obj');
-	const modelSource = await modelSourceResp.text();
-	console.log(modelSource);
-
-	const model = new OBJ.Mesh(modelSource);
+	const model = await Model.fromPath(gl, '/model/sprite.obj');
+	model.bind();
+	model.unbind();
 	console.log(model);
 
 	const textureImageResp = await fetch('/texture/bird.png');
