@@ -2,7 +2,7 @@
 /public/main.js
 
 # Output binary
-/webgl
+/sourdough
 
 # IDE files
 .idea/

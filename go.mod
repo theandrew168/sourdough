@@ -1,4 +1,4 @@
-module git.sr.ht/~theandrew168/webgl
+module git.sr.ht/~theandrew168/sourdough
 
 go 1.19
 

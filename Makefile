@@ -16,7 +16,7 @@ frontend: node_modules
 
 .PHONY: backend
 backend: frontend
-	go build -o webgl main.go
+	go build -o sourdough main.go
 
 .PHONY: run-frontend
 run-frontend: node_modules
@@ -32,8 +32,8 @@ release: frontend
 
 .PHONY: deploy
 deploy: release
-	scp dist/webgl_linux_amd64.deb derz@derzchat.com:/tmp
-	ssh -t derz@derzchat.com sudo dpkg -i /tmp/webgl_linux_amd64.deb
+	scp dist/sourdough_linux_amd64.deb derz@derzchat.com:/tmp
+	ssh -t derz@derzchat.com sudo dpkg -i /tmp/sourdough_linux_amd64.deb
 
 .PHONY: update
 update:
@@ -48,4 +48,4 @@ format: node_modules
 
 .PHONY: clean
 clean:
-	rm -fr webgl dist/ node_modules/ backend/web/public/
+	rm -fr sourdough dist/ node_modules/ backend/web/public/

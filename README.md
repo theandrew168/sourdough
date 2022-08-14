@@ -1,5 +1,5 @@
-# webgl
-Various WebGL experiments
+# sourdough
+Projects that people can appreciate
 
 ## Setup
 This project depends on the [Go programming language](https://golang.org/dl/) and [NodeJS](https://nodejs.org/en/).

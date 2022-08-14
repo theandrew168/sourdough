@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-systemctl stop webgl
+systemctl stop sourdough

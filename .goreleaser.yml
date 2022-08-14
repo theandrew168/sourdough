@@ -16,21 +16,21 @@ archives:
         format: zip
 
 nfpms:
-  - package_name: webgl
+  - package_name: sourdough
     file_name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    homepage: https://git.sr.ht/~theandrew168/webgl
+    homepage: https://git.sr.ht/~theandrew168/sourdough
     maintainer: Andrew Dailey <andrew@shallowbrooksoftware.com>
-    description: Various WebGL experiments
+    description: Projects that people can appreciate
     license: MIT
     formats:
       - deb
     bindir: /usr/bin
     contents:
-      - src: script/webgl.service
-        dst: /lib/systemd/system/webgl.service
+      - src: script/sourdough.service
+        dst: /lib/systemd/system/sourdough.service
         type: config
-      - src: script/webgl.conf
-        dst: /etc/webgl.conf
+      - src: script/sourdough.conf
+        dst: /etc/sourdough.conf
         type: config
     scripts:
       postinstall: script/postinstall.sh

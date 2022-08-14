@@ -6,7 +6,7 @@ import (
 
 	"github.com/coreos/go-systemd/daemon"
 
-	"git.sr.ht/~theandrew168/webgl/backend/web"
+	"git.sr.ht/~theandrew168/sourdough/backend/web"
 )
 
 //go:embed public
