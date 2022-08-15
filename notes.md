@@ -18,6 +18,7 @@ Some model formats only support a subset of these features.
 Given a model, you should be able to know:
 * Which attributes are present (and in what order)
 * Format of each attribute (size, type)
+* Whether vertices are flat vs indexed
 
 From that info, you can derive:
 * Vertex stride (size of one complete vertex w/ all attribs)
