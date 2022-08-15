@@ -1,11 +1,25 @@
+import { AttribLocation } from './attrib.js';
+
 export class Shader {
 	constructor(gl, vertSource, fragSource) {
 		this.gl = gl;
 
-		this.program = this.#compileAndLinkProgram(vertSource, fragSource);
-		this.attribLocation = {
-			position: this.gl.getAttribLocation(this.program, 'a_position'),
-		};
+		const vertShader = this.gl.createShader(this.gl.VERTEX_SHADER);
+		this.#compileShader(vertShader, vertSource);
+
+		const fragShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+		this.#compileShader(fragShader, fragSource);
+
+		this.program = this.gl.createProgram();
+		Object.keys(AttribLocation).map((key) => {
+			const attrib = AttribLocation[key];
+			this.gl.bindAttribLocation(this.program, attrib.location, attrib.name);
+		});
+
+		this.#linkProgram(this.program, vertShader, fragShader);
+
+		this.gl.deleteShader(vertShader);
+		this.gl.deleteShader(fragShader);
 	}
 
 	static async fromPath(gl, vertPath, fragPath) {
@@ -29,22 +43,6 @@ export class Shader {
 
 	destroy() {
 		this.gl.deleteProgram(this.program);
-	}
-
-	#compileAndLinkProgram(vertSource, fragSource) {
-		const vertShader = this.gl.createShader(this.gl.VERTEX_SHADER);
-		this.#compileShader(vertShader, vertSource);
-
-		const fragShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-		this.#compileShader(fragShader, fragSource);
-
-		const program = this.gl.createProgram();
-		this.#linkProgram(program, vertShader, fragShader);
-
-		this.gl.deleteShader(vertShader);
-		this.gl.deleteShader(fragShader);
-
-		return program;
 	}
 
 	#compileShader(shader, source) {
