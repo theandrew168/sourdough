@@ -11,10 +11,10 @@ export class Shader {
 		this.#compileShader(fragShader, fragSource);
 
 		this.program = this.gl.createProgram();
-		Object.keys(AttribLocation).map((key) => {
+		for (const key of Object.keys(AttribLocation)) {
 			const attrib = AttribLocation[key];
 			this.gl.bindAttribLocation(this.program, attrib.location, attrib.name);
-		});
+		}
 
 		this.#linkProgram(this.program, vertShader, fragShader);
 

@@ -2,35 +2,58 @@ import { OBJ } from 'webgl-obj-loader';
 
 import { AttribLocation } from './attrib.js';
 
-// size, stride
-export const BufferFormat = {
-	V2F: 2 * Float32Array.BYTES_PER_ELEMENT,
-	V3F: 3 * Float32Array.BYTES_PER_ELEMENT,
-	T2F_V3F: 5 * Float32Array.BYTES_PER_ELEMENT,
-	N3F_V3F: 6 * Float32Array.BYTES_PER_ELEMENT,
-	T2F_N3F_V3F: 8 * Float32Array.BYTES_PER_ELEMENT,
+export const VertexFormat = {
+	P2F: [{ attrib: 'position', size: 2 }],
+	P3F: [{ attrib: 'position', size: 3 }],
+	P3F_T2F: [
+		{ attrib: 'position', size: 3 },
+		{ attrib: 'texcoord', size: 2 },
+	],
+	P3F_N3F: [
+		{ attrib: 'position', size: 3 },
+		{ attrib: 'normal', size: 3 },
+	],
+	P3F_T2F_N3F: [
+		{ attrib: 'position', size: 3 },
+		{ attrib: 'texcoord', size: 2 },
+		{ attrib: 'normal', size: 3 },
+	],
 };
+
+// TODO: impl this
+function loadOBJ(source) {
+	const format = VertexFormat.P2F;
+	const data = [-0.5, -0.5, 0, 0.5, 0.5, -0.5];
+	return { format, data };
+}
 
 export class Mesh {
 	constructor(gl, meshSource) {
 		this.gl = gl;
 
-		// TODO: derive this from meshSource (interface?)
-		const fmt = BufferFormat.V2F;
-		const size = 2;
-		const stride = 8;
-		const offset = 0;
-		const data = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
+		const { format, data } = loadOBJ(meshSource);
+		const components = format.reduce((sum, fmt) => sum + fmt.size, 0);
+		const stride = components * Float32Array.BYTES_PER_ELEMENT;
+		this.count = data.length / components;
 
 		this.vbo = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
 		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), this.gl.STATIC_DRAW);
 
 		this.vao = this.gl.createVertexArray();
+		this.bind();
 
-		const position = AttribLocation.position.location;
-		this.gl.enableVertexAttribArray(position);
-		this.gl.vertexAttribPointer(position, size, this.gl.FLOAT, false, stride, offset);
+		let offset = 0;
+		for (const { attrib, size } of format) {
+			const loc = AttribLocation[attrib].location;
+			this.gl.enableVertexAttribArray(loc);
+			this.gl.vertexAttribPointer(loc, size, this.gl.FLOAT, false, stride, offset);
+
+			const bytes = size * Float32Array.BYTES_PER_ELEMENT;
+			offset += bytes;
+		}
+
+		this.unbind();
 	}
 
 	static async fromPath(gl, modelPath) {
@@ -48,5 +71,10 @@ export class Mesh {
 
 	unbind() {
 		this.gl.bindVertexArray(null);
+	}
+
+	destroy() {
+		this.gl.deleteVertexArray(this.vao);
+		this.gl.deleteBuffer(this.vbo);
 	}
 }
