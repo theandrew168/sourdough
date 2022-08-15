@@ -2,11 +2,16 @@
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"isolatedModules": true,
+		"moduleResolution": "node",
 		"noEmit": true,
 		"noImplicitReturns": true,
 		"noUnusedLocals": true,
 		"skipLibCheck": true,
-		"strict": true
+		"strict": true,
+		"target": "ES6"
 	},
-	"include": ["frontend"]
+	"include": [
+		"frontend",
+		"node_modules/webgl-strict-types/index.d.ts"
+	]
 }

@@ -1,5 +1,3 @@
-import { mat4 } from 'gl-matrix';
-
 import { Mesh } from './webgl/mesh.js';
 import { Shader } from './webgl/shader.js';
 
