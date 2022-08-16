@@ -1,24 +1,22 @@
+import { VertexComponent } from './vertexformat';
+
 export type AttribLocation = {
 	attrib: string;
 	location: number;
 };
 
-export type AttribLocations = {
-	position: AttribLocation;
-	texcoord: AttribLocation;
-	normal: AttribLocation;
-};
+export type AttribLocations = Record<VertexComponent, AttribLocation>;
 
 export const ATTRIB_LOCATIONS: AttribLocations = {
-	position: {
+	[VertexComponent.Position]: {
 		attrib: 'i_position',
 		location: 0,
 	},
-	texcoord: {
+	[VertexComponent.Texcoord]: {
 		attrib: 'i_texcoord',
 		location: 1,
 	},
-	normal: {
+	[VertexComponent.Normal]: {
 		attrib: 'i_normal',
 		location: 2,
 	},

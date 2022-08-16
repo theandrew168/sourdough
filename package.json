@@ -5,12 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "npm run build -- --serve=127.0.0.1:5000 --servedir=public",
-		"build": "tsc && esbuild frontend/main.js --outfile=public/main.js --bundle --minify",
+		"build": "tsc && esbuild frontend/main.ts --outfile=public/main.js --bundle --minify",
 		"format": "prettier --write frontend/"
 	},
 	"dependencies": {
-		"gl-matrix": "^3.4.3",
-		"webgl-obj-loader": "^2.0.8"
+		"gl-matrix": "^3.4.3"
 	},
 	"devDependencies": {
 		"esbuild": "^0.15.2",
@@ -24,6 +23,6 @@
 		"singleQuote": true,
 		"bracketSpacing": true,
 		"trailingComma": "all",
-		"printWidth": 90
+		"printWidth": 100
 	}
 }
