@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
 
-import { Mesh } from './webgl/mesh';
+import { Buffer } from './webgl/buffer';
 import { Shader } from './webgl/shader';
 
 async function main() {
@@ -21,7 +21,7 @@ async function main() {
 
 	const shader = await Shader.fromPath(gl, '/shader/hello_vert.glsl', '/shader/hello_frag.glsl');
 
-	const mesh = new Mesh(gl);
+	const buffer = new Buffer(gl);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -33,9 +33,9 @@ async function main() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		shader.bind();
-		mesh.bind();
-		gl.drawArrays(gl.TRIANGLES, 0, mesh.count);
-		mesh.unbind();
+		buffer.bind();
+		gl.drawArrays(gl.TRIANGLES, 0, buffer.count);
+		buffer.unbind();
 		shader.unbind();
 
 		// continue draw loop

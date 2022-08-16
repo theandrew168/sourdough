@@ -1,7 +1,7 @@
 import { ATTRIB_LOCATIONS } from './attrib';
 import { VERTEX_FORMATS } from './vertexformat';
 
-export class Mesh {
+export class Buffer {
 	private gl: WebGL2RenderingContextStrict;
 	private vbo: WebGLBuffer;
 	private vao: WebGLVertexArrayObject;
