@@ -3,6 +3,8 @@ import { mat4 } from 'gl-matrix';
 import { readOBJ } from './model/obj';
 import { VertexBuffer } from './webgl/vertexbuffer';
 import { Shader } from './webgl/shader';
+import { VERTEX_FORMATS } from './vertexformat';
+import { Model } from './model';
 
 async function main() {
 	console.log(mat4.create());
@@ -21,9 +23,18 @@ async function main() {
 	gl.depthFunc(gl.LEQUAL);
 
 	const shader = await Shader.fromPath(gl, '/shader/hello_vert.glsl', '/shader/hello_frag.glsl');
-	const model = readOBJ('todo real stuff');
 
-	const buffer = new VertexBuffer(gl, model);
+	const objResp = await fetch('/model/sprite.obj');
+	const obj = await objResp.text();
+
+	const model = readOBJ(obj);
+	console.log(model);
+
+	const triangle: Model = {
+		format: VERTEX_FORMATS.P2F,
+		vertices: new Float32Array([-0.5, -0.5, 0, 0.5, 0.5, -0.5]),
+	};
+	const buffer = new VertexBuffer(gl, triangle);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {

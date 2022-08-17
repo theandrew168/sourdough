@@ -11,6 +11,7 @@ export type VertexComponent = {
 
 export type VertexFormat = VertexComponent[];
 
+// order: position, texcoord, normal
 export type VertexFormats = {
 	P2F: VertexFormat;
 	P3F: VertexFormat;
