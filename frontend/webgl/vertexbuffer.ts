@@ -28,8 +28,7 @@ export class VertexBuffer {
 			this.gl.enableVertexAttribArray(loc);
 			this.gl.vertexAttribPointer(loc, size, this.gl.FLOAT, false, stride, offset);
 
-			const bytes = size * Float32Array.BYTES_PER_ELEMENT;
-			offset += bytes;
+			offset += size * 4;
 		}
 
 		this.unbind();
