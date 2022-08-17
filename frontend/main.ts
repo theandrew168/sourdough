@@ -1,6 +1,7 @@
 import { mat4 } from 'gl-matrix';
 
-import { Buffer } from './webgl/buffer';
+import { readOBJ } from './model/obj';
+import { VertexBuffer } from './webgl/vertexbuffer';
 import { Shader } from './webgl/shader';
 
 async function main() {
@@ -20,8 +21,9 @@ async function main() {
 	gl.depthFunc(gl.LEQUAL);
 
 	const shader = await Shader.fromPath(gl, '/shader/hello_vert.glsl', '/shader/hello_frag.glsl');
+	const model = readOBJ('todo real stuff');
 
-	const buffer = new Buffer(gl);
+	const buffer = new VertexBuffer(gl, model);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
