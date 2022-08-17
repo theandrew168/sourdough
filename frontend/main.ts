@@ -3,7 +3,7 @@ import { mat4 } from 'gl-matrix';
 import { readOBJ } from './model/obj';
 import { VertexBuffer } from './webgl/vertexbuffer';
 import { Shader } from './webgl/shader';
-import { VERTEX_FORMATS } from './vertexformat';
+import { VertexType } from './vertexformat';
 import { Model } from './model';
 
 async function main() {
@@ -24,14 +24,14 @@ async function main() {
 
 	const shader = await Shader.fromPath(gl, '/shader/hello_vert.glsl', '/shader/hello_frag.glsl');
 
-	const objResp = await fetch('/model/sprite.obj');
+	const objResp = await fetch('/model/bunny.obj');
 	const obj = await objResp.text();
 
 	const model = readOBJ(obj);
 	console.log(model);
 
 	const triangle: Model = {
-		format: VERTEX_FORMATS.P2F,
+		format: [{ type: VertexType.Position, size: 2 }],
 		vertices: new Float32Array([-0.5, -0.5, 0, 0.5, 0.5, -0.5]),
 	};
 	const buffer = new VertexBuffer(gl, triangle);

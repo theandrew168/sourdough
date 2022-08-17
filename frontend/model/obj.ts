@@ -1,5 +1,5 @@
 import { Model } from '../model';
-import { VertexFormat, VertexType } from '../vertexformat';
+import { toVertexSize, VertexFormat, VertexType } from '../vertexformat';
 
 export function readOBJ(source: string): Model {
 	let positionSize = 0;
@@ -68,17 +68,12 @@ export function readOBJ(source: string): Model {
 
 	// determine format
 	let format: VertexFormat = [];
-	if (positionSize === 2) {
-		format.push({ type: VertexType.Position, size: 2 });
+	format.push({ type: VertexType.Position, size: toVertexSize(positionSize) });
+	if (texcoordSize !== 0) {
+		format.push({ type: VertexType.Texcoord, size: toVertexSize(texcoordSize) });
 	}
-	if (positionSize === 3) {
-		format.push({ type: VertexType.Position, size: 3 });
-	}
-	if (texcoordSize === 2) {
-		format.push({ type: VertexType.Texcoord, size: 2 });
-	}
-	if (normalSize === 3) {
-		format.push({ type: VertexType.Normal, size: 3 });
+	if (normalSize !== 0) {
+		format.push({ type: VertexType.Position, size: toVertexSize(normalSize) });
 	}
 
 	const model: Model = {

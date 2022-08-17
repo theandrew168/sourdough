@@ -20,4 +20,8 @@ export const ATTRIB_LOCATIONS: AttribLocations = {
 		attrib: 'i_normal',
 		location: 2,
 	},
+	[VertexType.Color]: {
+		attrib: 'i_color',
+		location: 3,
+	},
 };
