@@ -24,7 +24,7 @@ async function main() {
 
 	const shader = await Shader.fromPath(gl, '/shader/hello_vert.glsl', '/shader/hello_frag.glsl');
 
-	const objResp = await fetch('/model/sprite.obj');
+	const objResp = await fetch('/model/bunny.obj');
 	const obj = await objResp.text();
 
 	const model = readOBJ(obj);
