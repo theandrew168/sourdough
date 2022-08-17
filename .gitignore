@@ -1,3 +1,7 @@
+# Big models
+/public/model/bunny.obj
+/public/model/dragon.obj
+
 # Output JS bundle
 /public/main.js
 

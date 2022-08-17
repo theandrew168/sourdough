@@ -12,9 +12,9 @@ export function readOBJ(source: string): Model {
 	const faces: string[] = [];
 
 	// build arrays for each component
-	const lines: string[] = source.split('\n');
+	const lines: string[] = source.split(/\r?\n/);
 	lines.forEach((line) => {
-		const tokens = line.split(/\s+/);
+		const tokens = line.trim().split(/\s+/);
 		const marker = tokens[0];
 		const values = tokens.slice(1);
 		switch (marker) {
