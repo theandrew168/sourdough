@@ -1,6 +1,6 @@
 export enum VertexType {
 	Position,
-	Texcoord,
+	TexCoord,
 	Normal,
 	Color,
 }

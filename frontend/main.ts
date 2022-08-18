@@ -3,6 +3,7 @@ import { mat4 } from 'gl-matrix';
 import { readOBJ } from './model/obj';
 import { VertexBuffer } from './webgl/vertexbuffer';
 import { Shader } from './webgl/shader';
+import { Texture } from './webgl/texture';
 
 async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -18,15 +19,20 @@ async function main() {
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LEQUAL);
 
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
 	const shader = await Shader.fromPath(gl, '/shader/basic_vert.glsl', '/shader/basic_frag.glsl');
+
+	const imageSourceResp = await fetch('/texture/crate.png');
+	const imageSource = await imageSourceResp.blob();
+	const imageBitmap = await createImageBitmap(imageSource);
+	const texture = new Texture(gl, imageBitmap);
 
 	const modelSourceResp = await fetch('/model/cube.obj');
 	const modelSource = await modelSourceResp.text();
 
 	const model = readOBJ(modelSource);
-	console.log(model);
 	const buffer = new VertexBuffer(gl, model);
-	console.log(buffer);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -40,7 +46,7 @@ async function main() {
 		// Now move the drawing position a bit to where we want to
 		// start drawing the square.
 		const modelMatrix = mat4.create();
-		mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -6.0]);
+		mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -4.0]);
 		mat4.rotateZ(modelMatrix, modelMatrix, now);
 		mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
 
@@ -69,11 +75,15 @@ async function main() {
 		mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
 		mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
 
+		gl.activeTexture(gl.TEXTURE0);
+		texture.bind();
 		shader.bind();
+		shader.setUniformInt('uSampler', 0);
 		shader.setUniformMat4('uMVP', mvpMatrix);
 		buffer.bind();
 		gl.drawArrays(buffer.drawMode, 0, buffer.count);
 		buffer.unbind();
+		texture.unbind();
 		shader.unbind();
 
 		// continue draw loop

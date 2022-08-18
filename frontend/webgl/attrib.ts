@@ -12,8 +12,8 @@ export const ATTRIB_LOCATIONS: AttribLocations = {
 		attrib: 'aPosition',
 		location: 0,
 	},
-	[VertexType.Texcoord]: {
-		attrib: 'aTexcoord',
+	[VertexType.TexCoord]: {
+		attrib: 'aTexCoord',
 		location: 1,
 	},
 	[VertexType.Normal]: {

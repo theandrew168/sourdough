@@ -49,6 +49,16 @@ export class Shader {
 		this.gl.deleteProgram(this.program);
 	}
 
+	public setUniformInt(name: string, value: number) {
+		// TODO: cache this?
+		const location = this.gl.getUniformLocation(this.program, name);
+		if (!location) {
+			throw new Error(`invalid uniform location: ${name}`);
+		}
+
+		this.gl.uniform1i(location, value);
+	}
+
 	public setUniformMat4(name: string, value: mat4) {
 		// TODO: cache this?
 		const location = this.gl.getUniformLocation(this.program, name);

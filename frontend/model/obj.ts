@@ -72,7 +72,7 @@ export function readOBJ(source: string): Model {
 	let format: VertexFormat = [];
 	format.push({ type: VertexType.Position, size: toVertexSize(positionSize) });
 	if (texcoordSize !== 0) {
-		format.push({ type: VertexType.Texcoord, size: toVertexSize(texcoordSize) });
+		format.push({ type: VertexType.TexCoord, size: toVertexSize(texcoordSize) });
 	}
 	if (normalSize !== 0) {
 		format.push({ type: VertexType.Normal, size: toVertexSize(normalSize) });
