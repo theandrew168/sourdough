@@ -3,8 +3,6 @@ import { mat4 } from 'gl-matrix';
 import { readOBJ } from './model/obj';
 import { VertexBuffer } from './webgl/vertexbuffer';
 import { Shader } from './webgl/shader';
-import { VertexType } from './vertexformat';
-import { DrawMode, Model } from './model';
 
 async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -22,31 +20,13 @@ async function main() {
 
 	const shader = await Shader.fromPath(gl, '/shader/basic_vert.glsl', '/shader/basic_frag.glsl');
 
-	const objResp = await fetch('/model/bunny.obj');
-	const obj = await objResp.text();
+	const modelSourceResp = await fetch('/model/cube.obj');
+	const modelSource = await modelSourceResp.text();
 
-	const model = readOBJ(obj);
+	const model = readOBJ(modelSource);
 	console.log(model);
-
-	const square: Model = {
-		drawMode: DrawMode.TriangleStrip,
-		format: [
-			{ type: VertexType.Position, size: 2 },
-			{ type: VertexType.Color, size: 4 },
-		],
-		// prettier-ignore
-		vertices: new Float32Array([
-			 1.0,  1.0, // top-right
-			 1.0,  1.0,  1.0,  1.0, // white
-			-1.0,  1.0, // top-left
-			 1.0,  0.0,  0.0,  1.0, // red
-			 1.0, -1.0, // bottom-right
-			 0.0,  1.0,  0.0,  1.0, // green
-			-1.0, -1.0, // bottom-left
-			 0.0,  0.0,  1.0,  1.0, // blue
-		]),
-	};
-	const buffer = new VertexBuffer(gl, square);
+	const buffer = new VertexBuffer(gl, model);
+	console.log(buffer);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -62,6 +42,7 @@ async function main() {
 		const modelMatrix = mat4.create();
 		mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -6.0]);
 		mat4.rotateZ(modelMatrix, modelMatrix, now);
+		mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
 
 		const viewMatrix = mat4.create();
 		mat4.identity(viewMatrix);

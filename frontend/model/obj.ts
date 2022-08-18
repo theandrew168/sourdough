@@ -42,23 +42,25 @@ export function readOBJ(source: string): Model {
 		const indices = face.split('/');
 		if (indices.length === 1) {
 			// position
-			const positionIndex = Number(indices[0]) - 1;
-			vertices.push(...positions[positionIndex]);
+			const positionIndex = Number(indices[0]);
+			vertices.push(...positions[positionIndex - 1]);
 		} else if (indices.length === 2) {
 			// position + texcoord
-			const positionIndex = Number(indices[0]) - 1;
-			vertices.push(...positions[positionIndex]);
+			const positionIndex = Number(indices[0]);
+			vertices.push(...positions[positionIndex - 1]);
 
-			const texcoordIndex = Number(indices[1]) - 1;
-			vertices.push(...texcoords[texcoordIndex]);
+			const texcoordIndex = Number(indices[1]);
+			vertices.push(...texcoords[texcoordIndex - 1]);
 		} else if (indices.length === 3) {
 			// position + texcoord? + normal
-			const positionIndex = Number(indices[0]) - 1;
-			vertices.push(...positions[positionIndex]);
+			const positionIndex = Number(indices[0]);
+			vertices.push(...positions[positionIndex - 1]);
 
-			const texcoordIndex = Number(indices[1]) - 1;
+			// this check works because Number('') === 0 and no
+			// obj indices will be zero (they are one-based)
+			const texcoordIndex = Number(indices[1]);
 			if (texcoordIndex !== 0) {
-				vertices.push(...texcoords[texcoordIndex]);
+				vertices.push(...texcoords[texcoordIndex - 1]);
 			}
 
 			const normalIndex = Number(indices[2]) - 1;
@@ -73,7 +75,7 @@ export function readOBJ(source: string): Model {
 		format.push({ type: VertexType.Texcoord, size: toVertexSize(texcoordSize) });
 	}
 	if (normalSize !== 0) {
-		format.push({ type: VertexType.Position, size: toVertexSize(normalSize) });
+		format.push({ type: VertexType.Normal, size: toVertexSize(normalSize) });
 	}
 
 	const model: Model = {

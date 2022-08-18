@@ -1,5 +1,6 @@
 # Big models
 /public/model/dragon.obj
+/public/model/sphere.obj
 
 # Output JS bundle
 /public/main.js
