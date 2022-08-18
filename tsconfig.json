@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"isolatedModules": true,
+		"module": "esnext",
 		"moduleResolution": "node",
 		"noEmit": true,
 		"noImplicitAny": true,
@@ -10,7 +11,7 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"target": "ESNext"
+		"target": "esnext"
 	},
 	"include": [
 		"frontend",
