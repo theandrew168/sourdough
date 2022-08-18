@@ -30,8 +30,21 @@ async function main() {
 
 	const square: Model = {
 		drawMode: DrawMode.TriangleStrip,
-		format: [{ type: VertexType.Position, size: 2 }],
-		vertices: new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]),
+		format: [
+			{ type: VertexType.Position, size: 2 },
+			{ type: VertexType.Color, size: 4 },
+		],
+		// prettier-ignore
+		vertices: new Float32Array([
+			 1.0,  1.0, // top-right
+			 1.0,  1.0,  1.0,  1.0, // white
+			-1.0,  1.0, // top-left
+			 1.0,  0.0,  0.0,  1.0, // red
+			 1.0, -1.0, // bottom-right
+			 0.0,  1.0,  0.0,  1.0, // green
+			-1.0, -1.0, // bottom-left
+			 0.0,  0.0,  1.0,  1.0, // blue
+		]),
 	};
 	const buffer = new VertexBuffer(gl, square);
 
@@ -48,6 +61,7 @@ async function main() {
 		// start drawing the square.
 		const modelMatrix = mat4.create();
 		mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -6.0]);
+		mat4.rotateZ(modelMatrix, modelMatrix, now);
 
 		const viewMatrix = mat4.create();
 		mat4.identity(viewMatrix);

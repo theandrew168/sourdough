@@ -1,4 +1,4 @@
-import { Model } from '../model';
+import { DrawMode, Model } from '../model';
 import { toVertexSize, VertexFormat, VertexType } from '../vertexformat';
 
 export function readOBJ(source: string): Model {
@@ -77,6 +77,7 @@ export function readOBJ(source: string): Model {
 	}
 
 	const model: Model = {
+		drawMode: DrawMode.Triangles,
 		format: format,
 		vertices: Float32Array.from(vertices.map((v) => Number(v))),
 	};
