@@ -1,17 +1,20 @@
 import { ATTRIB_LOCATIONS } from './attrib';
 import { vertexFormatSize, vertexFormatStride } from '../vertexformat';
-import { Model } from '../model';
+import { DrawMode, Model } from '../model';
 
 export class VertexBuffer {
 	private gl: WebGL2RenderingContextStrict;
 	private vbo: WebGLBuffer;
 	private vao: WebGLVertexArrayObject;
+	public drawMode: WebGLRenderingContextStrict.DrawMode;
 	public count: number;
 
 	constructor(gl: WebGL2RenderingContextStrict, model: Model) {
 		this.gl = gl;
 
-		const { format, vertices } = model;
+		const { format, drawMode, vertices } = model;
+		this.drawMode = toWebGLDrawMode(this.gl, drawMode);
+
 		const stride = vertexFormatStride(format);
 		this.count = vertices.length / vertexFormatSize(format);
 
@@ -46,4 +49,15 @@ export class VertexBuffer {
 		this.gl.deleteVertexArray(this.vao);
 		this.gl.deleteBuffer(this.vbo);
 	}
+}
+
+function toWebGLDrawMode(
+	gl: WebGL2RenderingContextStrict,
+	drawMode: DrawMode,
+): WebGLRenderingContextStrict.DrawMode {
+	const webGLDrawModes: Record<DrawMode, WebGLRenderingContextStrict.DrawMode> = {
+		[DrawMode.Triangles]: gl.TRIANGLES,
+		[DrawMode.TriangleStrip]: gl.TRIANGLE_STRIP,
+	};
+	return webGLDrawModes[drawMode];
 }

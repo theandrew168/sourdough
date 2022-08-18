@@ -1,10 +1,9 @@
 #version 300 es
 
-in vec4 aVertexPosition;
+in vec4 aPosition;
 
-uniform mat4 uModelViewMatrix;
-uniform mat4 uProjectionMatrix;
+uniform mat4 uMVP;
 
 void main() {
-	gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+	gl_Position = uMVP * aPosition;
 }

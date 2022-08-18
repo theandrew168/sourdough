@@ -1,3 +1,5 @@
+import { mat4 } from 'gl-matrix';
+
 import { ATTRIB_LOCATIONS } from './attrib';
 
 export class Shader {
@@ -45,6 +47,16 @@ export class Shader {
 
 	public destroy() {
 		this.gl.deleteProgram(this.program);
+	}
+
+	public setUniformMat4(name: string, value: mat4) {
+		// TODO: cache this?
+		const location = this.gl.getUniformLocation(this.program, name);
+		if (!location) {
+			throw new Error(`invalid uniform location: ${name}`);
+		}
+
+		this.gl.uniformMatrix4fv(location, false, value);
 	}
 
 	private compileShader(shader: WebGLShader, source: string) {

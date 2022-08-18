@@ -9,19 +9,19 @@ export type AttribLocations = Record<VertexType, AttribLocation>;
 
 export const ATTRIB_LOCATIONS: AttribLocations = {
 	[VertexType.Position]: {
-		attrib: 'i_position',
+		attrib: 'aPosition',
 		location: 0,
 	},
 	[VertexType.Texcoord]: {
-		attrib: 'i_texcoord',
+		attrib: 'aTexcoord',
 		location: 1,
 	},
 	[VertexType.Normal]: {
-		attrib: 'i_normal',
+		attrib: 'aNormal',
 		location: 2,
 	},
 	[VertexType.Color]: {
-		attrib: 'i_color',
+		attrib: 'aColor',
 		location: 3,
 	},
 };
