@@ -1,4 +1,4 @@
-import { VertexComponent } from './vertexformat';
+import * as vertex from './vertex';
 
 export enum DrawMode {
 	Triangles,
@@ -7,6 +7,6 @@ export enum DrawMode {
 
 export type Model = {
 	drawMode: DrawMode;
-	format: VertexComponent[];
+	format: vertex.VertexComponent[];
 	vertices: Float32Array;
 };

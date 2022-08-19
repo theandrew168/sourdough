@@ -1,7 +1,7 @@
-import { DrawMode, Model } from '../model';
-import { toVertexSize, VertexFormat, VertexType } from '../vertexformat';
+import * as model from '../model';
+import * as vertex from '../vertex';
 
-export function readOBJ(source: string): Model {
+export function createModel(source: string): model.Model {
 	let positionSize = 0;
 	let texcoordSize = 0;
 	let normalSize = 0;
@@ -69,20 +69,19 @@ export function readOBJ(source: string): Model {
 	});
 
 	// determine format
-	let format: VertexFormat = [];
-	format.push({ type: VertexType.Position, size: toVertexSize(positionSize) });
+	let format: vertex.VertexFormat = [];
+	format.push({ type: vertex.VertexType.Position, size: vertex.toVertexSize(positionSize) });
 	if (texcoordSize !== 0) {
-		format.push({ type: VertexType.TexCoord, size: toVertexSize(texcoordSize) });
+		format.push({ type: vertex.VertexType.TexCoord, size: vertex.toVertexSize(texcoordSize) });
 	}
 	if (normalSize !== 0) {
-		format.push({ type: VertexType.Normal, size: toVertexSize(normalSize) });
+		format.push({ type: vertex.VertexType.Normal, size: vertex.toVertexSize(normalSize) });
 	}
 
-	const model: Model = {
-		drawMode: DrawMode.Triangles,
+	const m: model.Model = {
+		drawMode: model.DrawMode.Triangles,
 		format: format,
 		vertices: Float32Array.from(vertices.map((v) => Number(v))),
 	};
-
-	return model;
+	return m;
 }

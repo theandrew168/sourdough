@@ -1,26 +1,26 @@
-import { VertexType } from '../vertexformat';
+import * as vertex from '../vertex';
 
-export type AttribLocation = {
+export type Location = {
 	attrib: string;
 	location: number;
 };
 
-export type AttribLocations = Record<VertexType, AttribLocation>;
+export type Locations = Record<vertex.VertexType, Location>;
 
-export const ATTRIB_LOCATIONS: AttribLocations = {
-	[VertexType.Position]: {
+export const LOCATIONS: Locations = {
+	[vertex.VertexType.Position]: {
 		attrib: 'aPosition',
 		location: 0,
 	},
-	[VertexType.TexCoord]: {
+	[vertex.VertexType.TexCoord]: {
 		attrib: 'aTexCoord',
 		location: 1,
 	},
-	[VertexType.Normal]: {
+	[vertex.VertexType.Normal]: {
 		attrib: 'aNormal',
 		location: 2,
 	},
-	[VertexType.Color]: {
+	[vertex.VertexType.Color]: {
 		attrib: 'aColor',
 		location: 3,
 	},

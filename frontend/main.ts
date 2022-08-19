@@ -1,9 +1,9 @@
-import { mat4 } from 'gl-matrix';
+import * as math from 'gl-matrix';
 
-import { readOBJ } from './model/obj';
-import { VertexBuffer } from './webgl/vertexbuffer';
-import { Shader } from './webgl/shader';
-import { Texture } from './webgl/texture';
+import * as obj from './model/obj';
+import * as vertexbuffer from './webgl/vertexbuffer';
+import * as shader from './webgl/shader';
+import * as texture from './webgl/texture';
 
 async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -21,18 +21,23 @@ async function main() {
 
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-	const shader = await Shader.fromPath(gl, '/shader/basic_vert.glsl', '/shader/basic_frag.glsl');
+	const vertSourceResp = await fetch('/shader/basic_vert.glsl');
+	const vertSource = await vertSourceResp.text();
+
+	const fragSourceResp = await fetch('/shader/basic_frag.glsl');
+	const fragSource = await fragSourceResp.text();
+	const basicShader = new shader.Shader(gl, vertSource, fragSource);
 
 	const imageSourceResp = await fetch('/texture/crate.png');
 	const imageSource = await imageSourceResp.blob();
 	const imageBitmap = await createImageBitmap(imageSource);
-	const texture = new Texture(gl, imageBitmap);
+	const crateTexture = new texture.Texture(gl, imageBitmap);
 
 	const modelSourceResp = await fetch('/model/cube.obj');
 	const modelSource = await modelSourceResp.text();
 
-	const model = readOBJ(modelSource);
-	const buffer = new VertexBuffer(gl, model);
+	const model = obj.createModel(modelSource);
+	const buffer = new vertexbuffer.VertexBuffer(gl, model);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -45,13 +50,13 @@ async function main() {
 
 		// Now move the drawing position a bit to where we want to
 		// start drawing the square.
-		const modelMatrix = mat4.create();
-		mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -4.0]);
-		mat4.rotateZ(modelMatrix, modelMatrix, now);
-		mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
+		const modelMatrix = math.mat4.create();
+		math.mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -4.0]);
+		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
+		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
 
-		const viewMatrix = mat4.create();
-		mat4.identity(viewMatrix);
+		const viewMatrix = math.mat4.create();
+		math.mat4.identity(viewMatrix);
 
 		// Create a perspective matrix, a special matrix that is
 		// used to simulate the distortion of perspective in a camera.
@@ -67,24 +72,24 @@ async function main() {
 
 		// note: glmatrix.js always has the first argument
 		// as the destination to receive the result.
-		const projectionMatrix = mat4.create();
-		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+		const projectionMatrix = math.mat4.create();
+		math.mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
 		// multiply MVP matrices together (backwards)
-		const mvpMatrix = mat4.create();
-		mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
-		mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
+		const mvpMatrix = math.mat4.create();
+		math.mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
+		math.mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
 
 		gl.activeTexture(gl.TEXTURE0);
-		texture.bind();
-		shader.bind();
-		shader.setUniformInt('uSampler', 0);
-		shader.setUniformMat4('uMVP', mvpMatrix);
+		crateTexture.bind();
+		basicShader.bind();
+		basicShader.setUniformInt('uSampler', 0);
+		basicShader.setUniformMat4('uMVP', mvpMatrix);
 		buffer.bind();
 		gl.drawArrays(buffer.drawMode, 0, buffer.count);
 		buffer.unbind();
-		texture.unbind();
-		shader.unbind();
+		crateTexture.unbind();
+		basicShader.unbind();
 
 		// continue draw loop
 		requestAnimationFrame(draw);

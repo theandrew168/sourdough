@@ -1,6 +1,6 @@
-import { mat4 } from 'gl-matrix';
+import * as math from 'gl-matrix';
 
-import { ATTRIB_LOCATIONS } from './attrib';
+import * as attrib from './attrib';
 
 export class Shader {
 	private gl: WebGL2RenderingContextStrict;
@@ -16,7 +16,7 @@ export class Shader {
 		this.compileShader(fragShader, fragSource);
 
 		this.program = this.gl.createProgram()!;
-		Object.values(ATTRIB_LOCATIONS).forEach((value) => {
+		Object.values(attrib.LOCATIONS).forEach((value) => {
 			this.gl.bindAttribLocation(this.program, value.location, value.attrib);
 		});
 
@@ -59,7 +59,7 @@ export class Shader {
 		this.gl.uniform1i(location, value);
 	}
 
-	public setUniformMat4(name: string, value: mat4) {
+	public setUniformMat4(name: string, value: math.mat4) {
 		// TODO: cache this?
 		const location = this.gl.getUniformLocation(this.program, name);
 		if (!location) {
