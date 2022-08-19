@@ -19,6 +19,7 @@ export class Texture {
 			imageBitmap,
 		);
 		this.gl.generateMipmap(this.gl.TEXTURE_2D);
+		this.gl.bindTexture(this.gl.TEXTURE_2D, null);
 	}
 
 	public bind() {

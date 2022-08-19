@@ -51,6 +51,7 @@ export class Cubemap {
 				this.gl.CLAMP_TO_EDGE,
 			);
 		});
+		this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, null);
 	}
 
 	public bind() {
