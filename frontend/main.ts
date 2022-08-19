@@ -1,6 +1,7 @@
 import * as math from 'gl-matrix';
 
 import * as asset from './asset';
+import * as camera from './camera';
 import * as obj from './model/obj';
 import * as vertexbuffer from './webgl/vertexbuffer';
 import * as shader from './webgl/shader';
@@ -33,41 +34,27 @@ async function main() {
 	const cubeModel = obj.createModel(cubeSource);
 	const cubeBuffer = new vertexbuffer.VertexBuffer(gl, cubeModel);
 
+	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
+
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
 		// convert to seconds
 		now *= 0.001;
 
 		checkResize(gl);
+		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
+
 		gl.clearColor(0, 0, 0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		// Now move the drawing position a bit to where we want to
 		// start drawing the square.
 		const modelMatrix = math.mat4.create();
-		math.mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, -4.0]);
 		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
 		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
 
-		const viewMatrix = math.mat4.create();
-		math.mat4.identity(viewMatrix);
-
-		// Create a perspective matrix, a special matrix that is
-		// used to simulate the distortion of perspective in a camera.
-		// Our field of view is 45 degrees, with a width/height
-		// ratio that matches the display size of the canvas
-		// and we only want to see objects between 0.1 units
-		// and 100 units away from the camera.
-
-		const fieldOfView = (45 * Math.PI) / 180; // in radians
-		const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-		const zNear = 0.1;
-		const zFar = 100.0;
-
-		// note: glmatrix.js always has the first argument
-		// as the destination to receive the result.
-		const projectionMatrix = math.mat4.create();
-		math.mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+		const viewMatrix = cam.view();
+		const projectionMatrix = cam.perspective();
 
 		// multiply MVP matrices together (backwards)
 		const mvpMatrix = math.mat4.create();
