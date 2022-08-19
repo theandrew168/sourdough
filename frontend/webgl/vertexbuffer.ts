@@ -15,8 +15,8 @@ export class VertexBuffer {
 		const { format, drawMode, vertices } = model;
 		this.drawMode = toWebGLDrawMode(this.gl, drawMode);
 
-		const stride = vertex.vertexFormatStride(format);
-		this.count = vertices.length / vertex.vertexFormatSize(format);
+		const stride = vertex.formatStride(format);
+		this.count = vertices.length / vertex.formatSize(format);
 
 		this.vbo = this.gl.createBuffer()!;
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);

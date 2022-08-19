@@ -26,17 +26,6 @@ export class Shader {
 		this.gl.deleteShader(fragShader);
 	}
 
-	static async fromPath(gl: WebGL2RenderingContextStrict, vertPath: string, fragPath: string) {
-		const vertSourceResp = await fetch(vertPath);
-		const vertSource = await vertSourceResp.text();
-
-		const fragSourceResp = await fetch(fragPath);
-		const fragSource = await fragSourceResp.text();
-
-		const shader = new Shader(gl, vertSource, fragSource);
-		return shader;
-	}
-
 	public bind() {
 		this.gl.useProgram(this.program);
 	}

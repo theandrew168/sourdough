@@ -7,6 +7,6 @@ export enum DrawMode {
 
 export type Model = {
 	drawMode: DrawMode;
-	format: vertex.VertexComponent[];
+	format: vertex.Component[];
 	vertices: Float32Array;
 };

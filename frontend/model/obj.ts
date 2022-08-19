@@ -69,13 +69,13 @@ export function createModel(source: string): model.Model {
 	});
 
 	// determine format
-	let format: vertex.VertexFormat = [];
-	format.push({ type: vertex.VertexType.Position, size: vertex.toVertexSize(positionSize) });
+	let format: vertex.Format = [];
+	format.push({ type: vertex.Type.Position, size: vertex.size(positionSize) });
 	if (texcoordSize !== 0) {
-		format.push({ type: vertex.VertexType.TexCoord, size: vertex.toVertexSize(texcoordSize) });
+		format.push({ type: vertex.Type.TexCoord, size: vertex.size(texcoordSize) });
 	}
 	if (normalSize !== 0) {
-		format.push({ type: vertex.VertexType.Normal, size: vertex.toVertexSize(normalSize) });
+		format.push({ type: vertex.Type.Normal, size: vertex.size(normalSize) });
 	}
 
 	const m: model.Model = {

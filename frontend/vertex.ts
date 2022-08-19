@@ -1,32 +1,32 @@
-export enum VertexType {
+export enum Type {
 	Position,
 	TexCoord,
 	Normal,
 	Color,
 }
 
-export type VertexSize = 1 | 2 | 3 | 4;
+export type Size = 1 | 2 | 3 | 4;
 
-export function toVertexSize(size: number): VertexSize {
+export function size(size: number): Size {
 	const valid = size in [1, 2, 3, 4];
 	if (!valid) {
 		throw new Error(`invalid VertexSize: ${size}`);
 	}
-	return size as VertexSize;
+	return size as Size;
 }
 
 // this assumes that the primitive type is always a 32-bit float
-export type VertexComponent = {
-	type: VertexType;
-	size: VertexSize;
+export type Component = {
+	type: Type;
+	size: Size;
 };
 
-export type VertexFormat = VertexComponent[];
+export type Format = Component[];
 
-export function vertexFormatSize(format: VertexFormat): number {
+export function formatSize(format: Format): number {
 	return format.reduce((sum, fmt) => sum + fmt.size, 0);
 }
 
-export function vertexFormatStride(format: VertexFormat): number {
-	return vertexFormatSize(format) * 4;
+export function formatStride(format: Format): number {
+	return formatSize(format) * 4;
 }

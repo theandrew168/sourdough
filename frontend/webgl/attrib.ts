@@ -5,22 +5,22 @@ export type Location = {
 	location: number;
 };
 
-export type Locations = Record<vertex.VertexType, Location>;
+export type Locations = Record<vertex.Type, Location>;
 
 export const LOCATIONS: Locations = {
-	[vertex.VertexType.Position]: {
+	[vertex.Type.Position]: {
 		attrib: 'aPosition',
 		location: 0,
 	},
-	[vertex.VertexType.TexCoord]: {
+	[vertex.Type.TexCoord]: {
 		attrib: 'aTexCoord',
 		location: 1,
 	},
-	[vertex.VertexType.Normal]: {
+	[vertex.Type.Normal]: {
 		attrib: 'aNormal',
 		location: 2,
 	},
-	[vertex.VertexType.Color]: {
+	[vertex.Type.Color]: {
 		attrib: 'aColor',
 		location: 3,
 	},
