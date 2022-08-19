@@ -1,5 +1,6 @@
 import * as math from 'gl-matrix';
 
+import * as asset from './asset';
 import * as obj from './model/obj';
 import * as vertexbuffer from './webgl/vertexbuffer';
 import * as shader from './webgl/shader';
@@ -21,23 +22,16 @@ async function main() {
 
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-	const vertSourceResp = await fetch('/shader/basic_vert.glsl');
-	const vertSource = await vertSourceResp.text();
+	const basicVertSource = await asset.loadText('/shader/basic_vert.glsl');
+	const basicFragSource = await asset.loadText('/shader/basic_frag.glsl');
+	const basicShader = new shader.Shader(gl, basicVertSource, basicFragSource);
 
-	const fragSourceResp = await fetch('/shader/basic_frag.glsl');
-	const fragSource = await fragSourceResp.text();
-	const basicShader = new shader.Shader(gl, vertSource, fragSource);
+	const crateImage = await asset.loadImage('/texture/crate.png');
+	const crateTexture = new texture.Texture(gl, crateImage);
 
-	const imageSourceResp = await fetch('/texture/crate.png');
-	const imageSource = await imageSourceResp.blob();
-	const imageBitmap = await createImageBitmap(imageSource);
-	const crateTexture = new texture.Texture(gl, imageBitmap);
-
-	const modelSourceResp = await fetch('/model/cube.obj');
-	const modelSource = await modelSourceResp.text();
-
-	const model = obj.createModel(modelSource);
-	const buffer = new vertexbuffer.VertexBuffer(gl, model);
+	const cubeSource = await asset.loadText('/model/cube.obj');
+	const cubeModel = obj.createModel(cubeSource);
+	const cubeBuffer = new vertexbuffer.VertexBuffer(gl, cubeModel);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -85,9 +79,9 @@ async function main() {
 		basicShader.bind();
 		basicShader.setUniformInt('uSampler', 0);
 		basicShader.setUniformMat4('uMVP', mvpMatrix);
-		buffer.bind();
-		gl.drawArrays(buffer.drawMode, 0, buffer.count);
-		buffer.unbind();
+		cubeBuffer.bind();
+		gl.drawArrays(cubeBuffer.drawMode, 0, cubeBuffer.count);
+		cubeBuffer.unbind();
 		crateTexture.unbind();
 		basicShader.unbind();
 
