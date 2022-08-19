@@ -26,6 +26,10 @@ export class Camera {
 		this.height = height;
 	}
 
+	public moveX(amount: number) {
+		this.position[0] += amount;
+	}
+
 	public view(): math.mat4 {
 		const eye = math.vec3.clone(this.position);
 

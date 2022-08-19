@@ -36,6 +36,17 @@ async function main() {
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
+	// super simple camera movement demo
+	canvas.addEventListener('touchstart', (ev) => {
+		const touch = ev.touches[0];
+		console.log('touch', touch.clientX, touch.clientY);
+		if (touch.clientX < gl.canvas.clientWidth / 2) {
+			cam.moveX(-0.25);
+		} else {
+			cam.moveX(0.25);
+		}
+	});
+
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
 		// convert to seconds
@@ -87,5 +98,8 @@ function checkResize(gl: WebGL2RenderingContextStrict) {
 		console.log('resize', width, height);
 	}
 }
+
+// example of how to push main funcs to global scope
+(globalThis as any).main = main;
 
 main();
