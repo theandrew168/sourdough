@@ -1,13 +1,12 @@
 #version 300 es
 
 in vec4 aPosition;
-in vec2 aTexCoord;
 
-out vec2 vTexCoord;
+out vec3 vTexCoord;
 
 uniform mat4 uMVP;
 
 void main() {
-	vTexCoord = aTexCoord;
+	vTexCoord = aPosition.xyz;
 	gl_Position = uMVP * aPosition;
 }
