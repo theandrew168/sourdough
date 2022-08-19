@@ -5,7 +5,6 @@ import * as obj from './model/obj';
 import * as vertexbuffer from './webgl/vertexbuffer';
 import * as shader from './webgl/shader';
 import * as texture from './webgl/texture';
-import * as cubemap from './webgl/cubemap';
 
 async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -27,24 +26,8 @@ async function main() {
 	const basicFragSource = await asset.loadText('/shader/basic_frag.glsl');
 	const basicShader = new shader.Shader(gl, basicVertSource, basicFragSource);
 
-	const skyboxVertSource = await asset.loadText('/shader/skybox_vert.glsl');
-	const skyboxFragSource = await asset.loadText('/shader/skybox_frag.glsl');
-	const skyboxShader = new shader.Shader(gl, skyboxVertSource, skyboxFragSource);
-	console.log(skyboxShader);
-
 	const crateImage = await asset.loadImage('/texture/crate.png');
 	const crateTexture = new texture.Texture(gl, crateImage);
-
-	const skyboxImages = {
-		right: await asset.loadImage('/cubemap/lake/right.jpg'),
-		left: await asset.loadImage('/cubemap/lake/left.jpg'),
-		top: await asset.loadImage('/cubemap/lake/top.jpg'),
-		bottom: await asset.loadImage('/cubemap/lake/bottom.jpg'),
-		front: await asset.loadImage('/cubemap/lake/front.jpg'),
-		back: await asset.loadImage('/cubemap/lake/back.jpg'),
-	};
-	const skyboxTexture = new cubemap.Cubemap(gl, skyboxImages);
-	console.log(skyboxTexture);
 
 	const cubeSource = await asset.loadText('/model/cube.obj');
 	const cubeModel = obj.createModel(cubeSource);
@@ -58,23 +41,6 @@ async function main() {
 		checkResize(gl);
 		gl.clearColor(0, 0, 0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		const sky = math.mat4.create();
-		math.mat4.identity(sky);
-
-		// draw the skybox
-		gl.depthMask(false);
-		gl.activeTexture(gl.TEXTURE0);
-		skyboxShader.bind();
-		skyboxShader.setUniformMat4('uMVP', sky);
-		skyboxShader.setUniformInt('uSampler', 0);
-		skyboxTexture.bind();
-		cubeBuffer.bind();
-		gl.drawArrays(cubeBuffer.drawMode, 0, cubeBuffer.count);
-		cubeBuffer.unbind();
-		skyboxTexture.unbind();
-		skyboxShader.unbind();
-		gl.depthMask(true);
 
 		// Now move the drawing position a bit to where we want to
 		// start drawing the square.
