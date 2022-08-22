@@ -17,7 +17,7 @@ export class Camera {
 		this.far = 100;
 		this.fov = 45;
 
-		this.position = math.vec3.fromValues(0, 0, 10);
+		this.position = math.vec3.fromValues(0, 0, 6);
 		this.front = math.vec3.fromValues(0, 0, -1);
 	}
 
