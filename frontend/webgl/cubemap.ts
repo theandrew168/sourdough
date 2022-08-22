@@ -18,7 +18,7 @@ export class Cubemap {
 		};
 
 		this.texture = this.gl.createTexture()!;
-		this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, this.texture);
+		this.bind();
 		Object.entries(images).forEach(([face, image]) => {
 			const target = targets[face as Face];
 			this.gl.texImage2D(
@@ -51,7 +51,7 @@ export class Cubemap {
 				this.gl.CLAMP_TO_EDGE,
 			);
 		});
-		this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, null);
+		this.unbind();
 	}
 
 	public bind() {

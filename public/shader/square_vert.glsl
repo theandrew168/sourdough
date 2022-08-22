@@ -1,12 +1,13 @@
 #version 300 es
 
 in vec4 aPosition;
+in vec4 aColor;
 
-out vec3 vTexCoord;
+out vec4 vColor;
 
 uniform mat4 uMVP;
 
 void main() {
-	vTexCoord = aPosition.xyz;
+	vColor = aColor;
 	gl_Position = uMVP * aPosition;
 }
