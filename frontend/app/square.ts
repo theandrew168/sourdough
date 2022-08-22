@@ -1,6 +1,7 @@
 import * as math from 'gl-matrix';
 
 import * as asset from '../asset';
+import * as camera from '../camera';
 import * as model from '../model';
 import * as vertex from '../vertex';
 import * as shader from '../webgl/shader';
@@ -38,21 +39,31 @@ export async function main() {
 		await asset.loadText('/shader/square_frag.glsl'),
 	);
 
+	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
+
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
 		// convert to seconds
 		now *= 0.001;
 
 		utils.resizeGL(gl);
+		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
+
 		gl.clearColor(0.2, 0.3, 0.4, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		const mvp = math.mat4.create();
-		math.mat4.identity(mvp);
-		math.mat4.rotateZ(mvp, mvp, now);
+		const modelMatrix = math.mat4.create();
+		math.mat4.identity(modelMatrix);
+		math.mat4.translate(modelMatrix, modelMatrix, [0, 0, -4]);
+		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
+
+		const projectionMatrix = cam.perspective();
+
+		const mvpMatrix = math.mat4.create();
+		math.mat4.multiply(mvpMatrix, projectionMatrix, modelMatrix);
 
 		s.bind();
-		s.setUniformMat4('uMVP', mvp);
+		s.setUniformMat4('uMVP', mvpMatrix);
 		b.bind();
 		gl.drawArrays(b.drawMode, 0, b.count);
 
