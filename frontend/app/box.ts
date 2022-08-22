@@ -3,29 +3,14 @@ import * as math from 'gl-matrix';
 import * as asset from '../asset';
 import * as camera from '../camera';
 import * as obj from '../model/obj';
-import * as resize from '../resize';
 import * as vertexbuffer from '../webgl/vertexbuffer';
 import * as shader from '../webgl/shader';
 import * as texture from '../webgl/texture';
+import * as utils from '../webgl/utils';
 
 export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
-	const gl = canvas.getContext('webgl2') as unknown as WebGL2RenderingContextStrict;
-	if (!gl) {
-		alert('Unable to initialize WebGL. Your browser or machine may not support it.');
-		return;
-	}
-
-	gl.enable(gl.BLEND);
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LEQUAL);
-
-	gl.enable(gl.CULL_FACE);
-	gl.cullFace(gl.BACK);
-
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	const gl = utils.initGL(canvas);
 
 	const basicVertSource = await asset.loadText('/shader/basic_vert.glsl');
 	const basicFragSource = await asset.loadText('/shader/basic_frag.glsl');
@@ -56,7 +41,7 @@ export async function main() {
 		// convert to seconds
 		now *= 0.001;
 
-		resize.check(gl);
+		utils.resizeGL(gl);
 		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
 		gl.clearColor(0, 0, 0, 1.0);
