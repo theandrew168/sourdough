@@ -3,24 +3,50 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script type="module">
-			import './main.js';
-			box();
-		</script>
+		<link rel="stylesheet" href="/css/tachyons.min.css" />
 		<title>WebGL Experiments</title>
 
 		<style>
-			html, body, canvas {
-				display: block;
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				height: 100%;
+			.gap1 {
+				gap: 0.25rem;
+			}
+			.gap2 {
+				gap: 0.5rem;
+			}
+			.gap3 {
+				gap: 1rem;
+			}
+			.gap4 {
+				gap: 2rem;
 			}
 		</style>
 	</head>
 
-	<body>
-		<canvas id="glCanvas"></canvas>
+	<body class="bg-light-gray sans-serif pa4">
+		<header>
+			<h1 class="f1 tc underline">Sourdough</h1>
+		</header>
+		<main class="mw6 mw7-ns center">
+			<ul class="list pa0 flex flex-wrap justify-around gap2">
+				<li class="tc">
+					<h2 class="mv2">Triangle</h2>
+					<a href="/app/triangle.html">
+						<img class="mw4 br4 grow" src="/screenshot/triangle.webp" alt="Triangle demo screenshot"/>
+					</a>
+				</li>
+				<li class="tc">
+					<h2 class="mv2">Square</h2>
+					<a href="/app/square.html">
+						<img class="mw4 br4 grow" src="/screenshot/square.webp" alt="Square demo screenshot"/>
+					</a>
+				</li>
+				<li class="tc">
+					<h2 class="mv2">Box</h2>
+					<a href="/app/box.html">
+						<img class="mw4 br4 grow" src="/screenshot/box.webp" alt="Box demo screenshot"/>
+					</a>
+				</li>
+			</ul>
+		</main>
 	</body>
 </html>
