@@ -12,6 +12,9 @@ export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
+	gl.clearColor(0.2, 0.3, 0.4, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 	const m: model.Model = {
 		drawMode: model.DrawMode.TriangleStrip,
 		format: [
@@ -31,7 +34,6 @@ export async function main() {
 		]),
 	};
 	const b = new vertexbuffer.VertexBuffer(gl, m);
-	console.log(b);
 
 	const s = new shader.Shader(
 		gl,
@@ -39,7 +41,7 @@ export async function main() {
 		await asset.loadText('/shader/square_frag.glsl'),
 	);
 
-	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight, [0, 0, 10]);
+	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {

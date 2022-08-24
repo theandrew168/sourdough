@@ -7,17 +7,17 @@ export class Camera {
 	private far: number;
 	private fov: number;
 
-	private position: math.vec3;
-	private front: math.vec3;
+	public position: math.vec3;
+	public front: math.vec3;
 
-	constructor(width: number, height: number, position: math.vec3) {
+	constructor(width: number, height: number) {
 		this.width = width;
 		this.height = height;
 		this.near = 0.1;
 		this.far = 100;
 		this.fov = 45;
 
-		this.position = math.vec3.clone(position);
+		this.position = math.vec3.fromValues(0, 0, 10);
 		this.front = math.vec3.fromValues(0, 0, -1);
 	}
 

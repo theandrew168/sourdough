@@ -11,6 +11,9 @@ export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
+	gl.clearColor(0.1, 0.1, 0.1, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 	const s = new shader.Shader(
 		gl,
 		await asset.loadText('/shader/light_vert.glsl'),
@@ -18,10 +21,9 @@ export async function main() {
 	);
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
-	console.log(m);
 	const b = new vertexbuffer.VertexBuffer(gl, m);
 
-	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight, [0, 0, 10]);
+	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -52,6 +54,8 @@ export async function main() {
 		s.setUniformVec3('uObjectColor', [1.0, 0.5, 0.31]);
 		s.setUniformVec3('uLightPosition', [0, 2.0, 2.0]);
 		s.setUniformVec3('uLightColor', [1.0, 1.0, 1.0]);
+		s.setUniformVec3('uCameraPosition', cam.position);
+
 		b.bind();
 		gl.drawArrays(b.drawMode, 0, b.count);
 

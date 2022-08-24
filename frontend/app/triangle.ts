@@ -9,6 +9,9 @@ export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
+	gl.clearColor(0.2, 0.3, 0.4, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 	const m: model.Model = {
 		drawMode: model.DrawMode.Triangles,
 		format: [{ type: vertex.Type.Position, size: 3 }],
