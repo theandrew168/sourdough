@@ -23,7 +23,7 @@ export async function main() {
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
 	const b = new vertexbuffer.VertexBuffer(gl, m);
 
-	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
+	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight, [0, 0, 10]);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {

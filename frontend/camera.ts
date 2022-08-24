@@ -10,14 +10,14 @@ export class Camera {
 	private position: math.vec3;
 	private front: math.vec3;
 
-	constructor(width: number, height: number) {
+	constructor(width: number, height: number, position: math.vec3) {
 		this.width = width;
 		this.height = height;
 		this.near = 0.1;
 		this.far = 100;
 		this.fov = 45;
 
-		this.position = math.vec3.fromValues(0, 0, 10);
+		this.position = math.vec3.clone(position);
 		this.front = math.vec3.fromValues(0, 0, -1);
 	}
 

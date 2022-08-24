@@ -39,23 +39,28 @@ export class Shader {
 	}
 
 	public setUniformInt(name: string, value: number) {
-		// TODO: cache this?
-		const location = this.gl.getUniformLocation(this.program, name);
-		if (!location) {
-			throw new Error(`invalid uniform location: ${name}`);
-		}
-
+		const location = this.getUniformLocation(name);
 		this.gl.uniform1i(location, value);
 	}
 
+	public setUniformVec3(name: string, value: math.vec3) {
+		const location = this.getUniformLocation(name);
+		this.gl.uniform3fv(location, value);
+	}
+
 	public setUniformMat4(name: string, value: math.mat4) {
+		const location = this.getUniformLocation(name);
+		this.gl.uniformMatrix4fv(location, false, value);
+	}
+
+	private getUniformLocation(name: string): WebGLUniformLocation {
 		// TODO: cache this?
 		const location = this.gl.getUniformLocation(this.program, name);
 		if (!location) {
 			throw new Error(`invalid uniform location: ${name}`);
 		}
 
-		this.gl.uniformMatrix4fv(location, false, value);
+		return location;
 	}
 
 	private compileShader(shader: WebGLShader, source: string) {
