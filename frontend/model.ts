@@ -9,4 +9,5 @@ export type Model = {
 	drawMode: DrawMode;
 	format: vertex.Format;
 	vertices: Float32Array;
+	indices?: Uint16Array;
 };

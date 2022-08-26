@@ -6,6 +6,11 @@ export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContextStrict 
 		throw new Error(msg);
 	}
 
+	console.log('WebGL Vendor:   %s\n', gl.getParameter(gl.VENDOR));
+	console.log('WebGL Renderer: %s\n', gl.getParameter(gl.RENDERER));
+	console.log('WebGL Version:  %s\n', gl.getParameter(gl.VERSION));
+	console.log('GLSL Version:   %s\n', gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
+
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 

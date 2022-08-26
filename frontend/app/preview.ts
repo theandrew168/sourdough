@@ -2,8 +2,8 @@ import * as math from 'gl-matrix';
 
 import * as asset from '../asset';
 import * as camera from '../camera';
-import * as obj from '../model/obj';
-import * as vertexbuffer from '../webgl/vertexbuffer';
+import * as obj from '../loader/obj';
+import * as vertexarray from '../webgl/vertexarray';
 import * as shader from '../webgl/shader';
 import * as utils from '../webgl/utils';
 
@@ -21,7 +21,7 @@ export async function main() {
 	);
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
-	const b = new vertexbuffer.VertexBuffer(gl, m);
+	const v = new vertexarray.VertexArray(gl, m);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
@@ -56,8 +56,8 @@ export async function main() {
 		s.setUniformVec3('uLightColor', [1.0, 1.0, 1.0]);
 		s.setUniformVec3('uCameraPosition', cam.position);
 
-		b.bind();
-		gl.drawArrays(b.drawMode, 0, b.count);
+		v.bind();
+		v.draw();
 
 		// continue draw loop
 		requestAnimationFrame(draw);

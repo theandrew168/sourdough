@@ -3,7 +3,7 @@ import * as model from '../model';
 import * as vertex from '../vertex';
 import * as shader from '../webgl/shader';
 import * as utils from '../webgl/utils';
-import * as vertexbuffer from '../webgl/vertexbuffer';
+import * as vertexarray from '../webgl/vertexarray';
 
 export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -22,7 +22,7 @@ export async function main() {
 			 0.0,  0.5,  0.0,
 		]),
 	};
-	const b = new vertexbuffer.VertexBuffer(gl, m);
+	const v = new vertexarray.VertexArray(gl, m);
 
 	const s = new shader.Shader(
 		gl,
@@ -37,8 +37,8 @@ export async function main() {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		s.bind();
-		b.bind();
-		gl.drawArrays(b.drawMode, 0, b.count);
+		v.bind();
+		v.draw();
 
 		requestAnimationFrame(draw);
 	}

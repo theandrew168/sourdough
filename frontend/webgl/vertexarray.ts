@@ -2,28 +2,39 @@ import * as attrib from './attrib';
 import * as vertex from '../vertex';
 import * as model from '../model';
 
-export class VertexBuffer {
+export class VertexArray {
 	private gl: WebGL2RenderingContextStrict;
 	private vbo: WebGLBuffer;
+	private ibo?: WebGLBuffer;
 	private vao: WebGLVertexArrayObject;
-	public drawMode: WebGLRenderingContextStrict.DrawMode;
-	public count: number;
+	private drawMode: WebGLRenderingContextStrict.DrawMode;
+	private count: number;
 
 	constructor(gl: WebGL2RenderingContextStrict, model: model.Model) {
 		this.gl = gl;
 
-		const { format, drawMode, vertices } = model;
+		const { drawMode, format, vertices, indices } = model;
+		const stride = vertex.formatStride(format);
 		this.drawMode = toWebGLDrawMode(this.gl, drawMode);
 
-		const stride = vertex.formatStride(format);
-		this.count = vertices.length / vertex.formatSize(format);
+		if (indices) {
+			this.count = indices.length;
+		} else {
+			this.count = vertices.length / vertex.formatSize(format);
+		}
+
+		this.vao = this.gl.createVertexArray()!;
+		this.bind();
 
 		this.vbo = this.gl.createBuffer()!;
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
 		this.gl.bufferData(this.gl.ARRAY_BUFFER, vertices, this.gl.STATIC_DRAW);
 
-		this.vao = this.gl.createVertexArray()!;
-		this.bind();
+		if (indices) {
+			this.ibo = this.gl.createBuffer()!;
+			this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.ibo);
+			this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, indices, this.gl.STATIC_DRAW);
+		}
 
 		let offset = 0;
 		for (const { type, size } of format) {
@@ -37,6 +48,14 @@ export class VertexBuffer {
 		this.unbind();
 	}
 
+	public draw() {
+		if (this.ibo) {
+			this.gl.drawElements(this.drawMode, this.count, this.gl.UNSIGNED_SHORT, 0);
+		} else {
+			this.gl.drawArrays(this.drawMode, 0, this.count);
+		}
+	}
+
 	public bind() {
 		this.gl.bindVertexArray(this.vao);
 	}
@@ -48,6 +67,9 @@ export class VertexBuffer {
 	public destroy() {
 		this.gl.deleteVertexArray(this.vao);
 		this.gl.deleteBuffer(this.vbo);
+		if (this.ibo) {
+			this.gl.deleteBuffer(this.ibo);
+		}
 	}
 }
 

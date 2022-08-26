@@ -2,8 +2,8 @@ import * as math from 'gl-matrix';
 
 import * as asset from '../asset';
 import * as camera from '../camera';
-import * as obj from '../model/obj';
-import * as vertexbuffer from '../webgl/vertexbuffer';
+import * as obj from '../loader/obj';
+import * as vertexarray from '../webgl/vertexarray';
 import * as shader from '../webgl/shader';
 import * as texture from '../webgl/texture';
 import * as utils from '../webgl/utils';
@@ -24,7 +24,7 @@ export async function main() {
 	const t = new texture.Texture(gl, await asset.loadImage('/texture/crate.png'));
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
-	const b = new vertexbuffer.VertexBuffer(gl, m);
+	const v = new vertexarray.VertexArray(gl, m);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
@@ -58,8 +58,8 @@ export async function main() {
 		s.bind();
 		s.setUniformMat4('uMVP', mvpMatrix);
 		s.setUniformInt('uSampler', 0);
-		b.bind();
-		gl.drawArrays(b.drawMode, 0, b.count);
+		v.bind();
+		v.draw();
 
 		// continue draw loop
 		requestAnimationFrame(draw);

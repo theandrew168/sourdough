@@ -6,7 +6,7 @@ import * as model from '../model';
 import * as vertex from '../vertex';
 import * as shader from '../webgl/shader';
 import * as utils from '../webgl/utils';
-import * as vertexbuffer from '../webgl/vertexbuffer';
+import * as vertexarray from '../webgl/vertexarray';
 
 export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -16,24 +16,31 @@ export async function main() {
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	const m: model.Model = {
-		drawMode: model.DrawMode.TriangleStrip,
+		drawMode: model.DrawMode.Triangles,
 		format: [
-			{ type: vertex.Type.Position, size: 2 },
-			{ type: vertex.Type.Color, size: 4 },
+			{ type: vertex.Type.Position, size: 3 },
+			// { type: vertex.Type.Color, size: 4 },
 		],
 		// prettier-ignore
 		vertices: new Float32Array([
-			 0.5,  0.5,
-			 1.0,  1.0,  1.0,  1.0, // white
-			-0.5,  0.5,
-			 1.0,  0.0,  0.0,  1.0, // red
-			 0.5, -0.5,
-			 0.0,  1.0,  0.0,  1.0, // green
-			-0.5, -0.5,
-			 0.0,  0.0,  1.0,  1.0, // blue
+			 0.5,  0.5,  0.0, // top-right
+			//  1.0,  1.0,  1.0,  1.0, // white
+			 0.5, -0.5,  0.0, // bottom-right
+			//  0.0,  1.0,  0.0,  1.0, // green
+			-0.5, -0.5,  0.0, // bottom-left
+			//  0.0,  0.0,  1.0,  1.0, // blue
+			-0.5,  0.5,  0.0, // top-left
+			//  1.0,  0.0,  0.0,  1.0, // red
+		]),
+		// prettier-ignore
+		indices: new Uint16Array([
+			0, 1, 3,
+			1, 2, 3,
 		]),
 	};
-	const b = new vertexbuffer.VertexBuffer(gl, m);
+	const v = new vertexarray.VertexArray(gl, m);
+	console.log(m);
+	console.log(v);
 
 	const s = new shader.Shader(
 		gl,
@@ -66,8 +73,8 @@ export async function main() {
 
 		s.bind();
 		s.setUniformMat4('uMVP', mvpMatrix);
-		b.bind();
-		gl.drawArrays(b.drawMode, 0, b.count);
+		v.bind();
+		v.draw();
 
 		requestAnimationFrame(draw);
 	}
