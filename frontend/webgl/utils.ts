@@ -20,6 +20,8 @@ export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContextStrict 
 	gl.enable(gl.CULL_FACE);
 	gl.cullFace(gl.BACK);
 
+	gl.frontFace(gl.CCW);
+
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 	return gl;

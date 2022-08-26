@@ -6,7 +6,7 @@ export class Texture {
 		this.gl = gl;
 
 		this.texture = this.gl.createTexture()!;
-		this.bind();
+		this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 		this.gl.texImage2D(
 			this.gl.TEXTURE_2D,
 			0,
@@ -19,7 +19,7 @@ export class Texture {
 			imageBitmap,
 		);
 		this.gl.generateMipmap(this.gl.TEXTURE_2D);
-		this.unbind();
+		this.gl.bindTexture(this.gl.TEXTURE_2D, null);
 	}
 
 	public bind() {

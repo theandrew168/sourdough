@@ -24,7 +24,7 @@ export class VertexArray {
 		}
 
 		this.vao = this.gl.createVertexArray()!;
-		this.bind();
+		this.gl.bindVertexArray(this.vao);
 
 		this.vbo = this.gl.createBuffer()!;
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
@@ -45,7 +45,7 @@ export class VertexArray {
 			offset += size * 4;
 		}
 
-		this.unbind();
+		this.gl.bindVertexArray(null);
 	}
 
 	public draw() {

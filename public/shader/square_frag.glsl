@@ -6,6 +6,5 @@ in vec4 vColor;
 out vec4 oFragColor;
 
 void main() {
-	// oFragColor = vColor;
-	oFragColor = vec4(1,1,1,1);
+	oFragColor = vColor;
 }

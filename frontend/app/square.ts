@@ -19,28 +19,26 @@ export async function main() {
 		drawMode: model.DrawMode.Triangles,
 		format: [
 			{ type: vertex.Type.Position, size: 3 },
-			// { type: vertex.Type.Color, size: 4 },
+			{ type: vertex.Type.Color, size: 4 },
 		],
 		// prettier-ignore
 		vertices: new Float32Array([
-			 0.5,  0.5,  0.0, // top-right
-			//  1.0,  1.0,  1.0,  1.0, // white
-			 0.5, -0.5,  0.0, // bottom-right
-			//  0.0,  1.0,  0.0,  1.0, // green
-			-0.5, -0.5,  0.0, // bottom-left
-			//  0.0,  0.0,  1.0,  1.0, // blue
 			-0.5,  0.5,  0.0, // top-left
-			//  1.0,  0.0,  0.0,  1.0, // red
+			 1.0,  0.0,  0.0,  1.0, // red
+			 0.5,  0.5,  0.0, // top-right
+			 1.0,  1.0,  1.0,  1.0, // white
+			-0.5, -0.5,  0.0, // bottom-left
+			 0.0,  0.0,  1.0,  1.0, // blue
+			 0.5, -0.5,  0.0, // bottom-right
+			 0.0,  1.0,  0.0,  1.0, // green
 		]),
 		// prettier-ignore
 		indices: new Uint16Array([
-			0, 1, 3,
-			1, 2, 3,
+			0, 3, 1,
+			0, 2, 3,
 		]),
 	};
 	const v = new vertexarray.VertexArray(gl, m);
-	console.log(m);
-	console.log(v);
 
 	const s = new shader.Shader(
 		gl,
