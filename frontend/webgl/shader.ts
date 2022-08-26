@@ -43,6 +43,11 @@ export class Shader {
 		this.gl.uniform1i(location, value);
 	}
 
+	public setUniformFloat(name: string, value: number) {
+		const location = this.getUniformLocation(name);
+		this.gl.uniform1f(location, value);
+	}
+
 	public setUniformVec3(name: string, value: math.vec3) {
 		const location = this.getUniformLocation(name);
 		this.gl.uniform3fv(location, value);
