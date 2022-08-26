@@ -31,12 +31,16 @@ export async function main() {
 	let cur = mats[idx];
 	let mat = MATERIALS[cur];
 	console.log(cur);
-	canvas.addEventListener('touchstart', (ev) => {
+
+	const cycle = () => {
 		idx = (idx + 1) % mats.length;
 		cur = mats[idx];
 		mat = MATERIALS[cur];
 		console.log(cur);
-	});
+	};
+
+	canvas.addEventListener('mousedown', (ev) => cycle());
+	canvas.addEventListener('touchstart', (ev) => cycle());
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
