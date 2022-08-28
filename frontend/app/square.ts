@@ -42,8 +42,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/shader/square_vert.glsl'),
-		await asset.loadText('/shader/square_frag.glsl'),
+		await asset.loadText('/app/square/square_vert.glsl'),
+		await asset.loadText('/app/square/square_frag.glsl'),
 	);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);

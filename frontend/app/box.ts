@@ -17,8 +17,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/shader/box_vert.glsl'),
-		await asset.loadText('/shader/box_frag.glsl'),
+		await asset.loadText('/app/box/box_vert.glsl'),
+		await asset.loadText('/app/box/box_frag.glsl'),
 	);
 
 	const t = new texture.Texture(gl, await asset.loadImage('/texture/crate.png'));

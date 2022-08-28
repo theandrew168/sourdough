@@ -26,8 +26,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/shader/triangle_vert.glsl'),
-		await asset.loadText('/shader/triangle_frag.glsl'),
+		await asset.loadText('/app/triangle/triangle_vert.glsl'),
+		await asset.loadText('/app/triangle/triangle_frag.glsl'),
 	);
 
 	requestAnimationFrame(draw);

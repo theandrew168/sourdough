@@ -17,8 +17,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/shader/light_vert.glsl'),
-		await asset.loadText('/shader/light_frag.glsl'),
+		await asset.loadText('/app/materials/materials_vert.glsl'),
+		await asset.loadText('/app/materials/materials_frag.glsl'),
 	);
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
@@ -40,7 +40,6 @@ export async function main() {
 	};
 
 	canvas.addEventListener('mousedown', (ev) => cycle());
-	canvas.addEventListener('touchstart', (ev) => cycle());
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
