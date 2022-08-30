@@ -21,7 +21,7 @@ export async function main() {
 		await asset.loadText('/app/box/box_frag.glsl'),
 	);
 
-	const t = new texture.Texture(gl, await asset.loadImage('/texture/crate.png'));
+	const t = new texture.Texture(gl, await asset.loadImage('/app/box/box.png'));
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
 	const v = new vertexarray.VertexArray(gl, m);

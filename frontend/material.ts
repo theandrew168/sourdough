@@ -1,16 +1,16 @@
 import * as math from 'gl-matrix';
 
-export type Material = {
+export type BasicMaterial = {
 	ambient: math.vec3;
 	diffuse: math.vec3;
 	specular: math.vec3;
 	shininess: number;
 };
 
-export type Materials = Record<string, Material>;
+export type BasicMaterials = Record<string, BasicMaterial>;
 
 // http://devernay.free.fr/cours/opengl/materials.html
-export const MATERIALS: Materials = {
+export const BASIC_MATERIALS: BasicMaterials = {
 	emerald: {
 		ambient: [0.0215, 0.1745, 0.0215],
 		diffuse: [0.07568, 0.61424, 0.07568],
