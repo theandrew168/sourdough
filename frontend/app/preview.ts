@@ -12,7 +12,7 @@ export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
-	gl.clearColor(0.1, 0.1, 0.1, 1.0);
+	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	const s = new shader.Shader(
@@ -21,8 +21,7 @@ export async function main() {
 		await asset.loadText('/app/preview/preview_frag.glsl'),
 	);
 
-	const tDiff = new texture.Texture(gl, await asset.loadImage('/app/preview/box_diffuse.png'));
-	const tSpec = new texture.Texture(gl, await asset.loadImage('/app/preview/box_specular.png'));
+	const t = new texture.Texture(gl, await asset.loadImage('/app/preview/box.png'));
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
 	const v = new vertexarray.VertexArray(gl, m);
@@ -37,38 +36,28 @@ export async function main() {
 		utils.resizeGL(gl);
 		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
-		gl.clearColor(0.1, 0.1, 0.1, 1.0);
+		gl.clearColor(0.2, 0.3, 0.4, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		const modelMatrix = math.mat4.create();
-		math.mat4.identity(modelMatrix);
-		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.5);
 
 		const viewMatrix = cam.view();
 		const projectionMatrix = cam.perspective();
 
-		gl.activeTexture(gl.TEXTURE0);
-		tDiff.bind();
+		// Now move the drawing position a bit to where we want to
+		// start drawing the square.
+		const modelMatrix = math.mat4.create();
+		math.mat4.rotateX(modelMatrix, modelMatrix, now * 1.3);
+		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
+		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
 
-		gl.activeTexture(gl.TEXTURE1);
-		tSpec.bind();
+		// multiply MVP matrices together (backwards)
+		const mvpMatrix = math.mat4.create();
+		math.mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
+		math.mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
 
+		t.bind();
 		s.bind();
-
-		s.setUniformMat4('uModel', modelMatrix);
-		s.setUniformMat4('uView', viewMatrix);
-		s.setUniformMat4('uProjection', projectionMatrix);
-		s.setUniformVec3('uCameraPosition', cam.position);
-
-		s.setUniformInt('uMaterial.diffuse', 0);
-		s.setUniformInt('uMaterial.specular', 1);
-		s.setUniformFloat('uMaterial.shininess', 32.0);
-
-		s.setUniformVec3('uLight.position', [0.0, 0.0, 4.0]);
-		s.setUniformVec3('uLight.ambient', [0.2, 0.2, 0.2]);
-		s.setUniformVec3('uLight.diffuse', [0.5, 0.5, 0.5]);
-		s.setUniformVec3('uLight.specular', [1.0, 1.0, 1.0]);
-
+		s.setUniformMat4('uMVP', mvpMatrix);
+		s.setUniformInt('uSampler', 0);
 		v.bind();
 		v.draw();
 
