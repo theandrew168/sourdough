@@ -5,46 +5,57 @@ import (
 	"strconv"
 )
 
-func Interpret(words []string) error {
-	s := NewStack(2048)
+type Forth struct {
+	s *Stack
+}
+
+func New() *Forth {
+	f := Forth{
+		s: NewStack(2048),
+	}
+	return &f
+}
+
+func (f *Forth) Interpret(source string) error {
+	words := Lex(source)
 	for _, word := range words {
 		switch word {
 		case "+":
-			a, err := s.Pop()
+			a, err := f.s.Pop()
 			if err != nil {
 				return err
 			}
 
-			b, err := s.Pop()
+			b, err := f.s.Pop()
 			if err != nil {
 				return err
 			}
 
 			c := a + b
 
-			err = s.Push(c)
+			err = f.s.Push(c)
 			if err != nil {
 				return err
 			}
 		case "*":
-			a, err := s.Pop()
+			a, err := f.s.Pop()
 			if err != nil {
 				return err
 			}
 
-			b, err := s.Pop()
+			b, err := f.s.Pop()
 			if err != nil {
 				return err
 			}
 
 			c := a * b
 
-			err = s.Push(c)
+			err = f.s.Push(c)
 			if err != nil {
 				return err
 			}
 		case ".":
-			i, err := s.Pop()
+			i, err := f.s.Pop()
 			if err != nil {
 				return err
 			}
@@ -55,7 +66,7 @@ func Interpret(words []string) error {
 				return err
 			}
 
-			s.Push(int32(i))
+			f.s.Push(int32(i))
 		}
 	}
 
