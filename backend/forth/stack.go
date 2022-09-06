@@ -2,6 +2,8 @@ package forth
 
 import (
 	"errors"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -20,6 +22,16 @@ func NewStack(size int) *Stack {
 		buf: make([]int32, size),
 	}
 	return &s
+}
+
+func (s *Stack) String() string {
+	var data []string
+	for i := 0; i < s.idx; i++ {
+		d := int(s.buf[i])
+		data = append(data, strconv.Itoa(d))
+	}
+
+	return strings.Join(data, " ")
 }
 
 func (s *Stack) Push(e int32) error {

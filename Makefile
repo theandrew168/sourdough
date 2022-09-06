@@ -26,6 +26,10 @@ run-frontend: node_modules
 run-backend: frontend
 	go run main.go
 
+.PHONY: test
+test:
+	go test -v ./...
+
 .PHONY: release
 release: frontend
 	goreleaser release --snapshot --rm-dist
