@@ -61,8 +61,7 @@ export class Camera {
 	}
 
 	public perspective(): math.mat4 {
-		// convert fov to radians
-		const fov = (this.fov * Math.PI) / 180.0;
+		const fov = rads(this.fov);
 		const aspect = this.width / this.height;
 
 		const perspective = math.mat4.create();
