@@ -79,10 +79,6 @@ export class Camera {
 	}
 }
 
-function degs(rads: number): number {
-	return rads * (180.0 / Math.PI);
-}
-
 function rads(degs: number): number {
 	return degs * (Math.PI / 180.0);
 }
