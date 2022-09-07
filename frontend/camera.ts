@@ -6,9 +6,10 @@ export class Camera {
 	private near: number;
 	private far: number;
 	private fov: number;
+	private pitch: number;
+	private yaw: number;
 
 	public position: math.vec3;
-	public front: math.vec3;
 
 	constructor(width: number, height: number) {
 		this.width = width;
@@ -16,9 +17,10 @@ export class Camera {
 		this.near = 0.1;
 		this.far = 100;
 		this.fov = 45;
+		this.yaw = -90.0;
+		this.pitch = 0.0;
 
 		this.position = math.vec3.fromValues(0, 0, 10);
-		this.front = math.vec3.fromValues(0, 0, -1);
 	}
 
 	public setDimensions(width: number, height: number) {
@@ -26,16 +28,31 @@ export class Camera {
 		this.height = height;
 	}
 
-	public moveX(amount: number) {
-		this.position[0] += amount;
+	public adjustYaw(offset: number) {
+		this.yaw += offset;
+	}
+
+	public adjustPitch(offset: number) {
+		this.pitch -= offset;
+		if (this.pitch >= 89.0) this.pitch = 89.0;
+		if (this.pitch <= -89.0) this.pitch = -89.0;
 	}
 
 	public view(): math.mat4 {
+		const front = math.vec3.fromValues(
+			Math.cos(rads(this.yaw)) * Math.cos(rads(this.pitch)),
+			Math.sin(rads(this.pitch)),
+			Math.sin(rads(this.yaw)) * Math.cos(rads(this.pitch)),
+		);
+
+		// where is the camera located
 		const eye = math.vec3.clone(this.position);
 
+		// where / what is the camera looking at
 		const center = math.vec3.create();
-		math.vec3.add(center, this.position, this.front);
+		math.vec3.add(center, this.position, front);
 
+		// what direction is up
 		const up = math.vec3.fromValues(0, 1, 0);
 
 		const view = math.mat4.create();
@@ -60,4 +77,12 @@ export class Camera {
 		math.mat4.ortho(orthographic, -aspect, aspect, -1, 1, this.near, this.far);
 		return orthographic;
 	}
+}
+
+function degs(rads: number): number {
+	return rads * (180.0 / Math.PI);
+}
+
+function rads(degs: number): number {
+	return degs * (Math.PI / 180.0);
 }

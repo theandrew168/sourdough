@@ -3,6 +3,7 @@ import * as square from './app/square';
 import * as box from './app/box';
 import * as materials from './app/materials';
 import * as metal from './app/metal';
+import * as skybox from './app/skybox';
 import * as preview from './app/preview';
 
 // export each app entrypoint at the global scope
@@ -11,4 +12,5 @@ import * as preview from './app/preview';
 (globalThis as any).box = box.main;
 (globalThis as any).materials = materials.main;
 (globalThis as any).metal = metal.main;
+(globalThis as any).skybox = skybox.main;
 (globalThis as any).preview = preview.main;

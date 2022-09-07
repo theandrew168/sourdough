@@ -9,12 +9,12 @@ export class Cubemap {
 		this.gl = gl;
 
 		const targets: Record<Face, WebGLRenderingContextStrict.TexImage2DTarget> = {
-			right: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-			left: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-			top: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-			bottom: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-			front: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-			back: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+			right: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+			left: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+			top: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+			bottom: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+			front: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+			back: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
 		};
 
 		this.texture = this.gl.createTexture()!;
