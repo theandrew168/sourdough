@@ -20,28 +20,28 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/preview/box_vert.glsl'),
-		await asset.loadText('/app/preview/box_frag.glsl'),
+		await asset.loadText('/app/skybox/box_vert.glsl'),
+		await asset.loadText('/app/skybox/box_frag.glsl'),
 	);
 
-	const t = new texture.Texture(gl, await asset.loadImage('/app/preview/box.png'));
+	const t = new texture.Texture(gl, await asset.loadImage('/app/skybox/box.png'));
 
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const s2 = new shader.Shader(
 		gl,
-		await asset.loadText('/app/preview/sky_vert.glsl'),
-		await asset.loadText('/app/preview/sky_frag.glsl'),
+		await asset.loadText('/app/skybox/sky_vert.glsl'),
+		await asset.loadText('/app/skybox/sky_frag.glsl'),
 	);
 
 	const images: cubemap.Images = {
-		right: await asset.loadImage('/app/preview/sky/right.jpg'),
-		left: await asset.loadImage('/app/preview/sky/left.jpg'),
-		top: await asset.loadImage('/app/preview/sky/top.jpg'),
-		bottom: await asset.loadImage('/app/preview/sky/bottom.jpg'),
-		front: await asset.loadImage('/app/preview/sky/front.jpg'),
-		back: await asset.loadImage('/app/preview/sky/back.jpg'),
+		right: await asset.loadImage('/app/skybox/sky/right.jpg'),
+		left: await asset.loadImage('/app/skybox/sky/left.jpg'),
+		top: await asset.loadImage('/app/skybox/sky/top.jpg'),
+		bottom: await asset.loadImage('/app/skybox/sky/bottom.jpg'),
+		front: await asset.loadImage('/app/skybox/sky/front.jpg'),
+		back: await asset.loadImage('/app/skybox/sky/back.jpg'),
 	};
 	const t2 = new cubemap.Cubemap(gl, images);
 

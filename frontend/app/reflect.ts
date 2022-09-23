@@ -7,7 +7,6 @@ import * as camera from '../camera';
 import * as obj from '../loader/obj';
 import * as vertexarray from '../webgl/vertexarray';
 import * as shader from '../webgl/shader';
-import * as texture from '../webgl/texture';
 import * as utils from '../webgl/utils';
 import * as cubemap from '../webgl/cubemap';
 
@@ -20,28 +19,27 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/preview/box_vert.glsl'),
-		await asset.loadText('/app/preview/box_frag.glsl'),
+		await asset.loadText('/app/reflect/reflect_vert.glsl'),
+		await asset.loadText('/app/reflect/reflect_frag.glsl'),
 	);
 
-	const t = new texture.Texture(gl, await asset.loadImage('/app/preview/box.png'));
-
 	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
+	console.log(m);
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const s2 = new shader.Shader(
 		gl,
-		await asset.loadText('/app/preview/sky_vert.glsl'),
-		await asset.loadText('/app/preview/sky_frag.glsl'),
+		await asset.loadText('/app/reflect/sky_vert.glsl'),
+		await asset.loadText('/app/reflect/sky_frag.glsl'),
 	);
 
 	const images: cubemap.Images = {
-		right: await asset.loadImage('/app/preview/sky/right.jpg'),
-		left: await asset.loadImage('/app/preview/sky/left.jpg'),
-		top: await asset.loadImage('/app/preview/sky/top.jpg'),
-		bottom: await asset.loadImage('/app/preview/sky/bottom.jpg'),
-		front: await asset.loadImage('/app/preview/sky/front.jpg'),
-		back: await asset.loadImage('/app/preview/sky/back.jpg'),
+		right: await asset.loadImage('/app/reflect/sky/right.jpg'),
+		left: await asset.loadImage('/app/reflect/sky/left.jpg'),
+		top: await asset.loadImage('/app/reflect/sky/top.jpg'),
+		bottom: await asset.loadImage('/app/reflect/sky/bottom.jpg'),
+		front: await asset.loadImage('/app/reflect/sky/front.jpg'),
+		back: await asset.loadImage('/app/reflect/sky/back.jpg'),
 	};
 	const t2 = new cubemap.Cubemap(gl, images);
 
@@ -110,7 +108,7 @@ export async function main() {
 
 		t2.bind();
 		s2.bind();
-		s2.setUniformInt('uSampler', 0);
+		s2.setUniformInt('uTexture', 0);
 		s2.setUniformMat4('uMVP', mvpSky);
 		v2.bind();
 		v2.draw();
@@ -122,24 +120,21 @@ export async function main() {
 		// start drawing the square.
 		const modelMatrix = math.mat4.create();
 		math.mat4.identity(modelMatrix);
-		math.mat4.rotateX(modelMatrix, modelMatrix, now * 1.3);
-		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
 		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
+		math.mat4.rotateX(modelMatrix, modelMatrix, now * 0.3);
 
-		// multiply MVP matrices together (backwards)
-		const mvpMatrix = math.mat4.create();
-		math.mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
-		math.mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
-
-		t.bind();
+		t2.bind();
 		s.bind();
-		s.setUniformMat4('uMVP', mvpMatrix);
-		s.setUniformInt('uSampler', 0);
+		s.setUniformInt('uTexture', 0);
+		s.setUniformVec3('uCameraPosition', cam.position);
+		s.setUniformMat4('uModel', modelMatrix);
+		s.setUniformMat4('uView', viewMatrix);
+		s.setUniformMat4('uProjection', projectionMatrix);
 		v.bind();
 		v.draw();
 		v.unbind();
 		s.unbind();
-		t.unbind();
+		t2.unbind();
 
 		// continue draw loop
 		requestAnimationFrame(draw);

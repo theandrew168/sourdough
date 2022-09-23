@@ -5,10 +5,10 @@ in vec4 vPosition;
 
 out vec4 oFragColor;
 
-uniform samplerCube uSampler;
+uniform samplerCube uTexture;
 uniform mat4 uMVP;
 
 void main() {
 	vec4 t = uMVP * vPosition;
-	oFragColor = texture(uSampler, normalize(t.xyz / t.w));
+	oFragColor = texture(uTexture, normalize(t.xyz / t.w));
 }
