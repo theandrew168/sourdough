@@ -20,7 +20,7 @@ export class Camera {
 		this.yaw = -90.0;
 		this.pitch = 0.0;
 
-		this.position = math.vec3.fromValues(0, 0, 6);
+		this.position = math.vec3.fromValues(0, 0, 10);
 	}
 
 	public setDimensions(width: number, height: number) {
