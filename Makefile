@@ -28,7 +28,8 @@ run-backend: frontend
 
 .PHONY: test
 test:
-	go test -v ./...
+	go test -count=1 ./...
+	npm test
 
 .PHONY: release
 release: frontend
