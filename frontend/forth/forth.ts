@@ -5,7 +5,9 @@ export class Forth {
 		this.ds = [];
 	}
 
-	public interpret(source: string) {
+	public interpret(source: string): string {
+		let output: string = '';
+
 		const tokens = this.lex(source);
 		tokens.forEach((token) => {
 			switch (token) {
@@ -37,15 +39,22 @@ export class Forth {
 					this.ds.push(c);
 					break;
 				}
+				case 'CR': {
+					output += '\n';
+					break;
+				}
 				case '.': {
 					const a = this.ds.pop()!;
-					console.log(a);
+					output += a.toString();
+					break;
 				}
 				default:
 					this.ds.push(Number(token));
 					break;
 			}
 		});
+
+		return output;
 	}
 
 	private lex(source: string): string[] {
