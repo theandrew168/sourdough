@@ -10,7 +10,8 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"gl-matrix": "^3.4.3"
+		"gl-matrix": "^3.4.3",
+		"xterm": "^5.0.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.0.3",
@@ -22,7 +23,7 @@
 		"webgl-strict-types": "^1.0.5"
 	},
 	"jest": {
-  	"preset": "ts-jest"
+		"preset": "ts-jest"
 	},
 	"prettier": {
 		"useTabs": true,
