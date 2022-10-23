@@ -90,7 +90,13 @@ export class Intepreter {
 
 			// special token: pop and emit top of stack
 			if (token === '.') {
-				output += this.stack.pop()!;
+				const item = this.stack.pop();
+				if (item == null) {
+					output = 'error: empty stack';
+					return;
+				}
+
+				output += item.toString();
 				return;
 			}
 
@@ -98,6 +104,8 @@ export class Intepreter {
 			const word = this.dict[token];
 			if (word) {
 				word(this.stack);
+			} else if (Number.isNaN(Number(token))) {
+				output = 'error: invalid number';
 			} else {
 				this.stack.push(Number(token));
 			}
