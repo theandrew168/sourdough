@@ -47,8 +47,28 @@ func (app *Application) Handler() http.Handler {
 	// prometheus metrics
 	mux.Handle("/metrics", promhttp.Handler(), "GET")
 
-	public := http.FileServer(http.FS(app.public))
-	mux.Handle("/...", gzhttp.GzipHandler(public))
+	// public files to be served (and auto-compressed)
+	public := gzhttp.GzipHandler(http.FileServer(http.FS(app.public)))
+	mux.Handle("/", public)
+	mux.Handle("/index.html", public)
+	mux.Handle("/index.js", public)
+	mux.Handle("/robots.txt", public)
+	mux.Handle("/favicon.ico", public)
+	mux.Handle("/app/...", public)
+	mux.Handle("/css/...", public)
+	mux.Handle("/model/...", public)
+	mux.Handle("/texture/...", public)
+
+	// all other routes should return the index page
+	// so that the frontend router can take over
+	mux.Handle("/...", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		index, err := fs.ReadFile(app.public, "index.html")
+		if err != nil {
+			panic(err)
+		}
+
+		w.Write(index)
+	}))
 
 	return mux
 }
