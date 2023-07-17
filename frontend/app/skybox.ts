@@ -32,14 +32,15 @@ export async function main(gl: WebGL2RenderingContextStrict) {
 		await asset.loadText("/static/shader/sky_frag.glsl"),
 	);
 
-	const images: cubemap.Images = {
-		right: await asset.loadImage("/static/texture/sky/right.jpg"),
-		left: await asset.loadImage("/static/texture/sky/left.jpg"),
-		top: await asset.loadImage("/static/texture/sky/top.jpg"),
-		bottom: await asset.loadImage("/static/texture/sky/bottom.jpg"),
-		front: await asset.loadImage("/static/texture/sky/front.jpg"),
-		back: await asset.loadImage("/static/texture/sky/back.jpg"),
-	};
+	const [right, left, top, bottom, front, back] = await Promise.all([
+		asset.loadImage("/static/texture/sky/right.jpg"),
+		asset.loadImage("/static/texture/sky/left.jpg"),
+		asset.loadImage("/static/texture/sky/top.jpg"),
+		asset.loadImage("/static/texture/sky/bottom.jpg"),
+		asset.loadImage("/static/texture/sky/front.jpg"),
+		asset.loadImage("/static/texture/sky/back.jpg"),
+	])
+	const images: cubemap.Images = { right, left, top, bottom, front, back };
 	const t2 = new cubemap.Cubemap(gl, images);
 
 	const m2: model.Model = {
