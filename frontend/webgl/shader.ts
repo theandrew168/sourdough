@@ -1,6 +1,6 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
-import * as attrib from './attrib';
+import * as attrib from "./attrib";
 
 export class Shader {
 	private gl: WebGL2RenderingContextStrict;

@@ -1,10 +1,10 @@
-import * as triangle from './app/triangle';
-import * as square from './app/square';
-import * as box from './app/box';
-import * as materials from './app/materials';
-import * as metal from './app/metal';
-import * as skybox from './app/skybox';
-import * as reflect from './app/reflect';
+import * as triangle from "./app/triangle";
+import * as square from "./app/square";
+import * as box from "./app/box";
+import * as materials from "./app/materials";
+import * as metal from "./app/metal";
+import * as skybox from "./app/skybox";
+import * as reflect from "./app/reflect";
 
 // export each app entrypoint at the global scope
 (globalThis as any).triangle = triangle.main;

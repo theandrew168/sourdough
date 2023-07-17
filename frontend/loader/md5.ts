@@ -1,5 +1,5 @@
-import * as model from '../model';
-import * as vertex from '../vertex';
+import * as model from "../model";
+import * as vertex from "../vertex";
 
 export function readMD5(source: string): model.Model {
 	const m: model.Model = {

@@ -1,15 +1,15 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
-import * as asset from '../asset';
-import * as camera from '../camera';
-import * as model from '../model';
-import * as vertex from '../vertex';
-import * as shader from '../webgl/shader';
-import * as utils from '../webgl/utils';
-import * as vertexarray from '../webgl/vertexarray';
+import * as asset from "../asset";
+import * as camera from "../camera";
+import * as model from "../model";
+import * as vertex from "../vertex";
+import * as shader from "../webgl/shader";
+import * as utils from "../webgl/utils";
+import * as vertexarray from "../webgl/vertexarray";
 
 export async function main() {
-	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
+	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
@@ -42,8 +42,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/square/square_vert.glsl'),
-		await asset.loadText('/app/square/square_frag.glsl'),
+		await asset.loadText("/app/square/square_vert.glsl"),
+		await asset.loadText("/app/square/square_frag.glsl"),
 	);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
@@ -70,7 +70,7 @@ export async function main() {
 		math.mat4.multiply(mvpMatrix, projectionMatrix, modelMatrix);
 
 		s.bind();
-		s.setUniformMat4('uMVP', mvpMatrix);
+		s.setUniformMat4("uMVP", mvpMatrix);
 		v.bind();
 		v.draw();
 

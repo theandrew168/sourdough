@@ -1,15 +1,15 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
-import * as asset from '../asset';
-import * as camera from '../camera';
-import * as obj from '../loader/obj';
-import * as vertexarray from '../webgl/vertexarray';
-import * as shader from '../webgl/shader';
-import * as utils from '../webgl/utils';
-import { BASIC_MATERIALS, EMERALD, type BasicMaterial } from '../material';
+import * as asset from "../asset";
+import * as camera from "../camera";
+import * as obj from "../loader/obj";
+import * as vertexarray from "../webgl/vertexarray";
+import * as shader from "../webgl/shader";
+import * as utils from "../webgl/utils";
+import { BASIC_MATERIALS, EMERALD, type BasicMaterial } from "../material";
 
 export async function main() {
-	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
+	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.1, 0.1, 0.1, 1.0);
@@ -17,29 +17,29 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/materials/materials_vert.glsl'),
-		await asset.loadText('/app/materials/materials_frag.glsl'),
+		await asset.loadText("/app/materials/materials_vert.glsl"),
+		await asset.loadText("/app/materials/materials_frag.glsl"),
 	);
 
-	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
+	const m = obj.createModel(await asset.loadText("/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	// cycle materials upon touch
 	const mats = Object.keys(BASIC_MATERIALS);
 
 	let idx = 0;
-	let cur = mats[idx] ?? '';
+	let cur = mats[idx] ?? "";
 	let mat: BasicMaterial = BASIC_MATERIALS[cur] ?? EMERALD;
 	console.log(cur);
 
 	const cycle = () => {
 		idx = (idx + 1) % mats.length;
-		cur = mats[idx] ?? '';
+		cur = mats[idx] ?? "";
 		mat = BASIC_MATERIALS[cur] ?? EMERALD;
 		console.log(cur);
 	};
 
-	canvas.addEventListener('mousedown', (ev) => cycle());
+	canvas.addEventListener("mousedown", (ev) => cycle());
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
 
@@ -67,20 +67,20 @@ export async function main() {
 
 		s.bind();
 
-		s.setUniformMat4('uModel', modelMatrix);
-		s.setUniformMat4('uView', viewMatrix);
-		s.setUniformMat4('uProjection', projectionMatrix);
-		s.setUniformVec3('uCameraPosition', cam.position);
+		s.setUniformMat4("uModel", modelMatrix);
+		s.setUniformMat4("uView", viewMatrix);
+		s.setUniformMat4("uProjection", projectionMatrix);
+		s.setUniformVec3("uCameraPosition", cam.position);
 
-		s.setUniformVec3('uMaterial.ambient', mat.ambient);
-		s.setUniformVec3('uMaterial.diffuse', mat.diffuse);
-		s.setUniformVec3('uMaterial.specular', mat.specular);
-		s.setUniformFloat('uMaterial.shininess', mat.shininess);
+		s.setUniformVec3("uMaterial.ambient", mat.ambient);
+		s.setUniformVec3("uMaterial.diffuse", mat.diffuse);
+		s.setUniformVec3("uMaterial.specular", mat.specular);
+		s.setUniformFloat("uMaterial.shininess", mat.shininess);
 
-		s.setUniformVec3('uLight.position', [0, 2.0, 2.0]);
-		s.setUniformVec3('uLight.ambient', [0.2, 0.2, 0.2]);
-		s.setUniformVec3('uLight.diffuse', [0.5, 0.5, 0.5]);
-		s.setUniformVec3('uLight.specular', [1.0, 1.0, 1.0]);
+		s.setUniformVec3("uLight.position", [0, 2.0, 2.0]);
+		s.setUniformVec3("uLight.ambient", [0.2, 0.2, 0.2]);
+		s.setUniformVec3("uLight.diffuse", [0.5, 0.5, 0.5]);
+		s.setUniformVec3("uLight.specular", [1.0, 1.0, 1.0]);
 
 		v.bind();
 		v.draw();

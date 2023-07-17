@@ -1,4 +1,4 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
 export class Camera {
 	private width: number;

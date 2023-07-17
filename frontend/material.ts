@@ -1,4 +1,4 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
 export type BasicMaterial = {
 	ambient: math.vec3;
@@ -85,73 +85,73 @@ export const BASIC_MATERIALS: BasicMaterials = {
 		specular: [0.508273, 0.508273, 0.508273],
 		shininess: 0.4,
 	},
-	'black-plastic': {
+	"black-plastic": {
 		ambient: [0.0, 0.0, 0.0],
 		diffuse: [0.01, 0.01, 0.01],
 		specular: [0.5, 0.5, 0.5],
 		shininess: 0.25,
 	},
-	'cyan-plastic': {
+	"cyan-plastic": {
 		ambient: [0.0, 0.1, 0.06],
 		diffuse: [0.0, 0.50980392, 0.50980392],
 		specular: [0.50196078, 0.50196078, 0.50196078],
 		shininess: 0.25,
 	},
-	'green-plastic': {
+	"green-plastic": {
 		ambient: [0.0, 0.0, 0.0],
 		diffuse: [0.1, 0.35, 0.1],
 		specular: [0.45, 0.55, 0.45],
 		shininess: 0.25,
 	},
-	'red-plastic': {
+	"red-plastic": {
 		ambient: [0.0, 0.0, 0.0],
 		diffuse: [0.5, 0.0, 0.0],
 		specular: [0.7, 0.6, 0.6],
 		shininess: 0.25,
 	},
-	'white-plastic': {
+	"white-plastic": {
 		ambient: [0.0, 0.0, 0.0],
 		diffuse: [0.55, 0.55, 0.55],
 		specular: [0.7, 0.7, 0.7],
 		shininess: 0.25,
 	},
-	'yellow-plastic': {
+	"yellow-plastic": {
 		ambient: [0.0, 0.0, 0.0],
 		diffuse: [0.5, 0.5, 0.0],
 		specular: [0.6, 0.6, 0.5],
 		shininess: 0.25,
 	},
-	'black-rubber': {
+	"black-rubber": {
 		ambient: [0.02, 0.02, 0.02],
 		diffuse: [0.01, 0.01, 0.01],
 		specular: [0.4, 0.4, 0.4],
 		shininess: 0.078125,
 	},
-	'cyan-rubber': {
+	"cyan-rubber": {
 		ambient: [0.0, 0.05, 0.05],
 		diffuse: [0.4, 0.5, 0.5],
 		specular: [0.04, 0.7, 0.7],
 		shininess: 0.078125,
 	},
-	'green-rubber': {
+	"green-rubber": {
 		ambient: [0.0, 0.05, 0.0],
 		diffuse: [0.4, 0.5, 0.4],
 		specular: [0.04, 0.7, 0.04],
 		shininess: 0.078125,
 	},
-	'red-rubber': {
+	"red-rubber": {
 		ambient: [0.05, 0.0, 0.0],
 		diffuse: [0.5, 0.4, 0.4],
 		specular: [0.7, 0.04, 0.04],
 		shininess: 0.078125,
 	},
-	'white-rubber': {
+	"white-rubber": {
 		ambient: [0.05, 0.05, 0.05],
 		diffuse: [0.5, 0.5, 0.5],
 		specular: [0.7, 0.7, 0.7],
 		shininess: 0.078125,
 	},
-	'yellow-rubber': {
+	"yellow-rubber": {
 		ambient: [0.05, 0.05, 0.0],
 		diffuse: [0.5, 0.5, 0.4],
 		specular: [0.7, 0.7, 0.04],

@@ -1,12 +1,12 @@
-import * as asset from '../asset';
-import * as model from '../model';
-import * as vertex from '../vertex';
-import * as shader from '../webgl/shader';
-import * as utils from '../webgl/utils';
-import * as vertexarray from '../webgl/vertexarray';
+import * as asset from "../asset";
+import * as model from "../model";
+import * as vertex from "../vertex";
+import * as shader from "../webgl/shader";
+import * as utils from "../webgl/utils";
+import * as vertexarray from "../webgl/vertexarray";
 
 export async function main() {
-	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
+	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
@@ -26,8 +26,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/triangle/triangle_vert.glsl'),
-		await asset.loadText('/app/triangle/triangle_frag.glsl'),
+		await asset.loadText("/app/triangle/triangle_vert.glsl"),
+		await asset.loadText("/app/triangle/triangle_frag.glsl"),
 	);
 
 	requestAnimationFrame(draw);

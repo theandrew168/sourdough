@@ -1,15 +1,15 @@
 export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContextStrict {
-	const gl = canvas.getContext('webgl2') as unknown as WebGL2RenderingContextStrict;
+	const gl = canvas.getContext("webgl2") as unknown as WebGL2RenderingContextStrict;
 	if (!gl) {
-		const msg = 'Unable to initialize WebGL. Your browser or machine may not support it.';
+		const msg = "Unable to initialize WebGL. Your browser or machine may not support it.";
 		alert(msg);
 		throw new Error(msg);
 	}
 
-	console.log('WebGL Vendor:   %s\n', gl.getParameter(gl.VENDOR));
-	console.log('WebGL Renderer: %s\n', gl.getParameter(gl.RENDERER));
-	console.log('WebGL Version:  %s\n', gl.getParameter(gl.VERSION));
-	console.log('GLSL Version:   %s\n', gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
+	console.log("WebGL Vendor:   %s\n", gl.getParameter(gl.VENDOR));
+	console.log("WebGL Renderer: %s\n", gl.getParameter(gl.RENDERER));
+	console.log("WebGL Version:  %s\n", gl.getParameter(gl.VERSION));
+	console.log("GLSL Version:   %s\n", gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

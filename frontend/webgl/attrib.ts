@@ -1,4 +1,4 @@
-import * as vertex from '../vertex';
+import * as vertex from "../vertex";
 
 export type Location = {
 	attrib: string;
@@ -9,19 +9,19 @@ export type Locations = Record<vertex.Type, Location>;
 
 export const LOCATIONS: Locations = {
 	[vertex.Type.Position]: {
-		attrib: 'aPosition',
+		attrib: "aPosition",
 		location: 0,
 	},
 	[vertex.Type.TexCoord]: {
-		attrib: 'aTexCoord',
+		attrib: "aTexCoord",
 		location: 1,
 	},
 	[vertex.Type.Normal]: {
-		attrib: 'aNormal',
+		attrib: "aNormal",
 		location: 2,
 	},
 	[vertex.Type.Color]: {
-		attrib: 'aColor',
+		attrib: "aColor",
 		location: 3,
 	},
 };

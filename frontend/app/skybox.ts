@@ -1,18 +1,18 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
-import * as asset from '../asset';
-import * as model from '../model';
-import * as vertex from '../vertex';
-import * as camera from '../camera';
-import * as obj from '../loader/obj';
-import * as vertexarray from '../webgl/vertexarray';
-import * as shader from '../webgl/shader';
-import * as texture from '../webgl/texture';
-import * as utils from '../webgl/utils';
-import * as cubemap from '../webgl/cubemap';
+import * as asset from "../asset";
+import * as model from "../model";
+import * as vertex from "../vertex";
+import * as camera from "../camera";
+import * as obj from "../loader/obj";
+import * as vertexarray from "../webgl/vertexarray";
+import * as shader from "../webgl/shader";
+import * as texture from "../webgl/texture";
+import * as utils from "../webgl/utils";
+import * as cubemap from "../webgl/cubemap";
 
 export async function main() {
-	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
+	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
@@ -20,28 +20,28 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/skybox/box_vert.glsl'),
-		await asset.loadText('/app/skybox/box_frag.glsl'),
+		await asset.loadText("/app/skybox/box_vert.glsl"),
+		await asset.loadText("/app/skybox/box_frag.glsl"),
 	);
 
-	const t = new texture.Texture(gl, await asset.loadImage('/app/skybox/box.png'));
+	const t = new texture.Texture(gl, await asset.loadImage("/app/skybox/box.png"));
 
-	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
+	const m = obj.createModel(await asset.loadText("/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const s2 = new shader.Shader(
 		gl,
-		await asset.loadText('/app/skybox/sky_vert.glsl'),
-		await asset.loadText('/app/skybox/sky_frag.glsl'),
+		await asset.loadText("/app/skybox/sky_vert.glsl"),
+		await asset.loadText("/app/skybox/sky_frag.glsl"),
 	);
 
 	const images: cubemap.Images = {
-		right: await asset.loadImage('/app/skybox/sky/right.jpg'),
-		left: await asset.loadImage('/app/skybox/sky/left.jpg'),
-		top: await asset.loadImage('/app/skybox/sky/top.jpg'),
-		bottom: await asset.loadImage('/app/skybox/sky/bottom.jpg'),
-		front: await asset.loadImage('/app/skybox/sky/front.jpg'),
-		back: await asset.loadImage('/app/skybox/sky/back.jpg'),
+		right: await asset.loadImage("/app/skybox/sky/right.jpg"),
+		left: await asset.loadImage("/app/skybox/sky/left.jpg"),
+		top: await asset.loadImage("/app/skybox/sky/top.jpg"),
+		bottom: await asset.loadImage("/app/skybox/sky/bottom.jpg"),
+		front: await asset.loadImage("/app/skybox/sky/front.jpg"),
+		back: await asset.loadImage("/app/skybox/sky/back.jpg"),
 	};
 	const t2 = new cubemap.Cubemap(gl, images);
 
@@ -64,7 +64,7 @@ export async function main() {
 
 	let prevX = 0;
 	let prevY = 0;
-	canvas.addEventListener('touchstart', (ev) => {
+	canvas.addEventListener("touchstart", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;
@@ -73,7 +73,7 @@ export async function main() {
 		prevX = touch.clientX;
 		prevY = touch.clientY;
 	});
-	canvas.addEventListener('touchmove', (ev) => {
+	canvas.addEventListener("touchmove", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;
@@ -118,8 +118,8 @@ export async function main() {
 
 		t2.bind();
 		s2.bind();
-		s2.setUniformInt('uSampler', 0);
-		s2.setUniformMat4('uMVP', mvpSky);
+		s2.setUniformInt("uSampler", 0);
+		s2.setUniformMat4("uMVP", mvpSky);
 		v2.bind();
 		v2.draw();
 		v2.unbind();
@@ -141,8 +141,8 @@ export async function main() {
 
 		t.bind();
 		s.bind();
-		s.setUniformMat4('uMVP', mvpMatrix);
-		s.setUniformInt('uSampler', 0);
+		s.setUniformMat4("uMVP", mvpMatrix);
+		s.setUniformInt("uSampler", 0);
 		v.bind();
 		v.draw();
 		v.unbind();

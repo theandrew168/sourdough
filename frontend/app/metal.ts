@@ -1,15 +1,15 @@
-import * as math from 'gl-matrix';
+import * as math from "gl-matrix";
 
-import * as asset from '../asset';
-import * as camera from '../camera';
-import * as obj from '../loader/obj';
-import * as vertexarray from '../webgl/vertexarray';
-import * as shader from '../webgl/shader';
-import * as texture from '../webgl/texture';
-import * as utils from '../webgl/utils';
+import * as asset from "../asset";
+import * as camera from "../camera";
+import * as obj from "../loader/obj";
+import * as vertexarray from "../webgl/vertexarray";
+import * as shader from "../webgl/shader";
+import * as texture from "../webgl/texture";
+import * as utils from "../webgl/utils";
 
 export async function main() {
-	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
+	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.1, 0.1, 0.1, 1.0);
@@ -17,14 +17,14 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText('/app/metal/metal_vert.glsl'),
-		await asset.loadText('/app/metal/metal_frag.glsl'),
+		await asset.loadText("/app/metal/metal_vert.glsl"),
+		await asset.loadText("/app/metal/metal_frag.glsl"),
 	);
 
-	const tDiff = new texture.Texture(gl, await asset.loadImage('/app/metal/box_diffuse.png'));
-	const tSpec = new texture.Texture(gl, await asset.loadImage('/app/metal/box_specular.png'));
+	const tDiff = new texture.Texture(gl, await asset.loadImage("/app/metal/box_diffuse.png"));
+	const tSpec = new texture.Texture(gl, await asset.loadImage("/app/metal/box_specular.png"));
 
-	const m = obj.createModel(await asset.loadText('/model/cube.obj'));
+	const m = obj.createModel(await asset.loadText("/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
@@ -55,19 +55,19 @@ export async function main() {
 
 		s.bind();
 
-		s.setUniformMat4('uModel', modelMatrix);
-		s.setUniformMat4('uView', viewMatrix);
-		s.setUniformMat4('uProjection', projectionMatrix);
-		s.setUniformVec3('uCameraPosition', cam.position);
+		s.setUniformMat4("uModel", modelMatrix);
+		s.setUniformMat4("uView", viewMatrix);
+		s.setUniformMat4("uProjection", projectionMatrix);
+		s.setUniformVec3("uCameraPosition", cam.position);
 
-		s.setUniformInt('uMaterial.diffuse', 0);
-		s.setUniformInt('uMaterial.specular', 1);
-		s.setUniformFloat('uMaterial.shininess', 32.0);
+		s.setUniformInt("uMaterial.diffuse", 0);
+		s.setUniformInt("uMaterial.specular", 1);
+		s.setUniformFloat("uMaterial.shininess", 32.0);
 
-		s.setUniformVec3('uLight.position', [0.0, 0.0, 4.0]);
-		s.setUniformVec3('uLight.ambient', [0.2, 0.2, 0.2]);
-		s.setUniformVec3('uLight.diffuse', [0.5, 0.5, 0.5]);
-		s.setUniformVec3('uLight.specular', [1.0, 1.0, 1.0]);
+		s.setUniformVec3("uLight.position", [0.0, 0.0, 4.0]);
+		s.setUniformVec3("uLight.ambient", [0.2, 0.2, 0.2]);
+		s.setUniformVec3("uLight.diffuse", [0.5, 0.5, 0.5]);
+		s.setUniformVec3("uLight.specular", [1.0, 1.0, 1.0]);
 
 		v.bind();
 		v.draw();

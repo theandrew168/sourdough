@@ -1,4 +1,4 @@
-import * as vertex from './vertex';
+import * as vertex from "./vertex";
 
 export enum DrawMode {
 	Triangles,
