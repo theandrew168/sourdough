@@ -5,8 +5,8 @@ in vec2 vTexCoord;
 
 out vec4 oFragColor;
 
-uniform sampler2D uSampler;
+uniform sampler2D uTexture;
 
 void main() {
-	oFragColor = texture(uSampler, vTexCoord);
+	oFragColor = texture(uTexture, vTexCoord);
 }

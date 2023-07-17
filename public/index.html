@@ -1,100 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-full" lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="initial-scale=1, width=device-width" />
+
 		<title>WebGL Experiments</title>
-
-		<link rel="stylesheet" href="/css/minireset.min.css" />
-		<style>
-			html {
-				background-color: #efefef;
-				font-family: sans-serif;
-			}
-			body {
-				margin: 0 auto;
-				max-width: 48rem;
-				padding: 4rem 2rem;
-				text-align: center;
-			}
-			h1 {
-				font-size: 4rem;
-				margin-bottom: 2rem;
-				text-decoration: underline;
-			}
-			h2 {
-				font-size: 1.5rem;
-				font-weight: 700;
-				margin-bottom: 0.5rem;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 1.5rem;
-				justify-content: center;
-			}
-			img {
-				max-width: 8rem;
-				border-radius: 1rem;
-			}
-			.grow {
-				transition: all .2s ease-in-out;
-			}
-			.grow:hover {
-				transform: scale(1.05);
-			}
-		</style>
+		<link rel="stylesheet" href="/index.css" />
+		<script src="/index.js" type="module"></script>
 	</head>
-
-	<body>
-		<header>
-			<h1>Sourdough</h1>
-		</header>
-		<main>
-			<ul>
-				<li>
-					<h2>Triangle</h2>
-					<a href="/app/triangle/">
-						<img class="grow" src="/app/triangle/icon.webp" alt="Triangle demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Square</h2>
-					<a href="/app/square/">
-						<img class="grow" src="/app/square/icon.webp" alt="Square demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Box</h2>
-					<a href="/app/box/">
-						<img class="grow" src="/app/box/icon.webp" alt="Box demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Materials</h2>
-					<a href="/app/materials/">
-						<img class="grow" src="/app/materials/icon.webp" alt="Materials demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Metal</h2>
-					<a href="/app/metal/">
-						<img class="grow" src="/app/metal/icon.webp" alt="Metal demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Skybox</h2>
-					<a href="/app/skybox/">
-						<img class="grow" src="/app/skybox/icon.webp" alt="Skybox demo screenshot"/>
-					</a>
-				</li>
-				<li>
-					<h2>Reflect</h2>
-					<a href="/app/reflect/">
-						<img class="grow" src="/app/reflect/icon.webp" alt="Reflect demo screenshot"/>
-					</a>
-				</li>
-			</ul>
-		</main>
+	<body class="h-full">
+		<div class="h-full" id="main"></div>
 	</body>
 </html>

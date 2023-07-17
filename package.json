@@ -1,21 +1,28 @@
 {
 	"name": "sourdough",
 	"private": true,
-	"version": "0.0.0",
-	"type": "module",
 	"scripts": {
 		"build-types": "tsc",
-		"build-js": "esbuild frontend/index.ts --outfile=public/index.js --target=es2020 --bundle --minify",
-		"build": "npm run build-types && npm run build-js",
-		"run-js": "esbuild frontend/index.ts --outfile=public/index.js --target=es2020 --bundle --watch",
+		"build-js": "esbuild frontend/index.tsx --outfile=public/index.js --target=es2020 --bundle --minify",
+		"build-css": "tailwindcss -i tailwind.config.css -o public/index.css --minify",
+		"build": "npm run build-types && npm run build-js && npm run build-css",
+		"run-js": "esbuild frontend/index.tsx --outfile=public/index.js --target=es2020 --bundle --watch",
+		"run-css": "tailwindcss -i tailwind.config.css -o public/index.css --watch",
 		"format": "prettier --write frontend/"
 	},
 	"dependencies": {
-		"gl-matrix": "^3.4.3"
+		"gl-matrix": "^3.4.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-router": "^6.14.1",
+		"react-router-dom": "^6.14.1"
 	},
 	"devDependencies": {
+		"@types/react": "^18.2.15",
+		"@types/react-dom": "^18.2.7",
 		"esbuild": "^0.18.13",
 		"prettier": "^2.8.8",
+		"tailwindcss": "^3.3.3",
 		"typescript": "^5.1.6",
 		"webgl-strict-types": "^1.0.5"
 	},

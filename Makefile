@@ -18,8 +18,12 @@ frontend-types: node_modules
 frontend-js: node_modules
 	npm run build-js
 
+.PHONY: frontend-css
+frontend-css: node_modules
+	npm run build-css
+
 .PHONY: frontend
-frontend: frontend-types frontend-js
+frontend: frontend-types frontend-js frontend-css
 
 .PHONY: backend
 backend: frontend
@@ -29,8 +33,12 @@ backend: frontend
 run-frontend-js: node_modules
 	npm run run-js
 
+.PHONY: run-frontend-css
+run-frontend-css: node_modules
+	npm run run-css
+
 .PHONY: run-frontend
-run-frontend: run-frontend-js
+run-frontend: run-frontend-js run-frontend-css
 
 .PHONY: run-backend
 run-backend:
@@ -42,28 +50,39 @@ run: run-frontend run-backend
 .PHONY: test
 test:
 	go test -count=1 ./...
-	npm test
 
 .PHONY: release
 release: frontend
-	goreleaser release --snapshot --rm-dist
+	goreleaser release --snapshot --clean
 
 .PHONY: deploy
 deploy: release
 	scp dist/sourdough_linux_amd64.deb derz@sbsbx.com:/tmp
 	ssh -t derz@sbsbx.com sudo dpkg -i /tmp/sourdough_linux_amd64.deb
 
-.PHONY: update
-update:
-	go get -u ./...
-	go mod tidy
+.PHONY: update-frontend
+update-frontend:
 	npm update
 
-.PHONY: format
-format: node_modules
-	gofmt -l -s -w .
+.PHONY: update-backend
+update-backend:
+	go get -u ./...
+	go mod tidy
+
+.PHONY: update
+update: update-frontend update-backend
+
+.PHONY: format-frontend
+format-frontend: node_modules
 	npm run format
+
+.PHONY: format-backend
+format-backend:
+	gofmt -l -s -w .
+
+.PHONY: format
+format: format-frontend format-backend
 
 .PHONY: clean
 clean:
-	rm -fr sourdough public/index.js dist/
+	rm -fr sourdough public/index.js public/index.css dist/ tmp/

@@ -1,6 +1,6 @@
 import * as attrib from "./attrib";
-import * as vertex from "../vertex";
-import * as model from "../model";
+import * as vertex from "../gfx/vertex";
+import * as model from "../gfx/model";
 
 export class VertexArray {
 	private gl: WebGL2RenderingContextStrict;

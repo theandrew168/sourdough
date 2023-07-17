@@ -1,38 +1,30 @@
-# sourdough
+# Sourdough
+
 Projects that people can appreciate
 
 ## Setup
-This project depends on the [Go programming language](https://golang.org/dl/) and [NodeJS](https://nodejs.org/en/).
+
+This project depends on the [Go programming language](https://golang.org/dl/) and [NodeJS JavaScript environment](https://nodejs.org/en).
+I like to use a [POSIX-compatible Makefile](https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/utilities/make.html) to facilitate the various project operations but traditional [Go commands](https://pkg.go.dev/cmd/go) and [NPM scripts](https://docs.npmjs.com/cli/v9/commands/npm-run-script) will work just as well.
+
+On macOS, these dependencies can be easily installed via [Homebrew](https://brew.sh/):
+
+```
+brew install go node
+```
 
 ## Building
+
 To build the application into a standalone binary, run:
-```bash
-make
+
+```
+make -j4
 ```
 
-## Local Development
-### Services
-This project uses [Redis](https://redis.io/) for ephemeral storage and caching.
-To develop locally, you'll need to run these services locally somehow or another.
-I find [Docker](https://www.docker.com/) to be a nice tool for this but you can do whatever works best.
+## Running
 
-The following command starts the necessary containers:
-```
-docker compose up -d
-```
+To run (and auto-reload) the backend and frontend simultaneously (needs at least `-j3`):
 
-These containers can be stopped via:
 ```
-docker compose down
-```
-
-### Running
-To start the frontend web server:
-```bash
-make run-frontend
-```
-
-To start the backend web server:
-```bash
-make run-backend
+make -j4 run
 ```

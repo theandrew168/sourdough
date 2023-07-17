@@ -1,29 +1,26 @@
 import * as math from "gl-matrix";
 
-import * as asset from "../asset";
-import * as camera from "../camera";
+import * as asset from "../gfx/asset";
+import * as camera from "../gfx/camera";
 import * as obj from "../loader/obj";
 import * as vertexarray from "../webgl/vertexarray";
 import * as shader from "../webgl/shader";
 import * as texture from "../webgl/texture";
 import * as utils from "../webgl/utils";
 
-export async function main() {
-	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
-	const gl = utils.initGL(canvas);
-
+export async function main(gl: WebGL2RenderingContextStrict) {
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText("/app/box/box_vert.glsl"),
-		await asset.loadText("/app/box/box_frag.glsl"),
+		await asset.loadText("/static/shader/box_vert.glsl"),
+		await asset.loadText("/static/shader/box_frag.glsl"),
 	);
 
-	const t = new texture.Texture(gl, await asset.loadImage("/app/box/box.png"));
+	const t = new texture.Texture(gl, await asset.loadImage("/static/texture/box.png"));
 
-	const m = obj.createModel(await asset.loadText("/model/cube.obj"));
+	const m = obj.createModel(await asset.loadText("/static/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
@@ -57,7 +54,7 @@ export async function main() {
 		t.bind();
 		s.bind();
 		s.setUniformMat4("uMVP", mvpMatrix);
-		s.setUniformInt("uSampler", 0);
+		s.setUniformInt("uTexture", 0);
 		v.bind();
 		v.draw();
 

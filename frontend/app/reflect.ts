@@ -1,45 +1,41 @@
 import * as math from "gl-matrix";
 
-import * as asset from "../asset";
-import * as model from "../model";
-import * as vertex from "../vertex";
-import * as camera from "../camera";
+import * as asset from "../gfx/asset";
+import * as model from "../gfx/model";
+import * as vertex from "../gfx/vertex";
+import * as camera from "../gfx/camera";
 import * as obj from "../loader/obj";
 import * as vertexarray from "../webgl/vertexarray";
 import * as shader from "../webgl/shader";
 import * as utils from "../webgl/utils";
 import * as cubemap from "../webgl/cubemap";
 
-export async function main() {
-	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
-	const gl = utils.initGL(canvas);
-
+export async function main(gl: WebGL2RenderingContextStrict) {
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText("/app/reflect/reflect_vert.glsl"),
-		await asset.loadText("/app/reflect/reflect_frag.glsl"),
+		await asset.loadText("/static/shader/reflect_vert.glsl"),
+		await asset.loadText("/static/shader/reflect_frag.glsl"),
 	);
 
-	const m = obj.createModel(await asset.loadText("/model/cube.obj"));
-	console.log(m);
+	const m = obj.createModel(await asset.loadText("/static/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
 	const s2 = new shader.Shader(
 		gl,
-		await asset.loadText("/app/reflect/sky_vert.glsl"),
-		await asset.loadText("/app/reflect/sky_frag.glsl"),
+		await asset.loadText("/static/shader/sky_vert.glsl"),
+		await asset.loadText("/static/shader/sky_frag.glsl"),
 	);
 
 	const images: cubemap.Images = {
-		right: await asset.loadImage("/app/reflect/sky/right.jpg"),
-		left: await asset.loadImage("/app/reflect/sky/left.jpg"),
-		top: await asset.loadImage("/app/reflect/sky/top.jpg"),
-		bottom: await asset.loadImage("/app/reflect/sky/bottom.jpg"),
-		front: await asset.loadImage("/app/reflect/sky/front.jpg"),
-		back: await asset.loadImage("/app/reflect/sky/back.jpg"),
+		right: await asset.loadImage("/static/texture/sky/right.jpg"),
+		left: await asset.loadImage("/static/texture/sky/left.jpg"),
+		top: await asset.loadImage("/static/texture/sky/top.jpg"),
+		bottom: await asset.loadImage("/static/texture/sky/bottom.jpg"),
+		front: await asset.loadImage("/static/texture/sky/front.jpg"),
+		back: await asset.loadImage("/static/texture/sky/back.jpg"),
 	};
 	const t2 = new cubemap.Cubemap(gl, images);
 
@@ -62,7 +58,7 @@ export async function main() {
 
 	let prevX = 0;
 	let prevY = 0;
-	canvas.addEventListener("touchstart", (ev) => {
+	gl.canvas.addEventListener("touchstart", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;
@@ -71,7 +67,7 @@ export async function main() {
 		prevX = touch.clientX;
 		prevY = touch.clientY;
 	});
-	canvas.addEventListener("touchmove", (ev) => {
+	gl.canvas.addEventListener("touchmove", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;

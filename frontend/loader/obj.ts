@@ -1,5 +1,5 @@
-import * as model from "../model";
-import * as vertex from "../vertex";
+import * as model from "../gfx/model";
+import * as vertex from "../gfx/vertex";
 
 export function createModel(source: string): model.Model {
 	let positionSize = 0;

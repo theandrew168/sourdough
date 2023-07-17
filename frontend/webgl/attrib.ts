@@ -1,4 +1,4 @@
-import * as vertex from "../vertex";
+import * as vertex from "../gfx/vertex";
 
 export type Location = {
 	attrib: string;

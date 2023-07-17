@@ -52,12 +52,10 @@ func (app *Application) Handler() http.Handler {
 	mux.Handle("/", public)
 	mux.Handle("/index.html", public)
 	mux.Handle("/index.js", public)
+	mux.Handle("/index.css", public)
 	mux.Handle("/robots.txt", public)
 	mux.Handle("/favicon.ico", public)
-	mux.Handle("/app/...", public)
-	mux.Handle("/css/...", public)
-	mux.Handle("/model/...", public)
-	mux.Handle("/texture/...", public)
+	mux.Handle("/static/...", public)
 
 	// all other routes should return the index page
 	// so that the frontend router can take over

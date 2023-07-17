@@ -1,17 +1,14 @@
 import * as math from "gl-matrix";
 
-import * as asset from "../asset";
-import * as camera from "../camera";
-import * as model from "../model";
-import * as vertex from "../vertex";
+import * as asset from "../gfx/asset";
+import * as camera from "../gfx/camera";
+import * as model from "../gfx/model";
+import * as vertex from "../gfx/vertex";
 import * as shader from "../webgl/shader";
 import * as utils from "../webgl/utils";
 import * as vertexarray from "../webgl/vertexarray";
 
-export async function main() {
-	const canvas = document.querySelector("#glCanvas") as HTMLCanvasElement;
-	const gl = utils.initGL(canvas);
-
+export async function main(gl: WebGL2RenderingContextStrict) {
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -42,8 +39,8 @@ export async function main() {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText("/app/square/square_vert.glsl"),
-		await asset.loadText("/app/square/square_frag.glsl"),
+		await asset.loadText("/static/shader/square_vert.glsl"),
+		await asset.loadText("/static/shader/square_frag.glsl"),
 	);
 
 	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
