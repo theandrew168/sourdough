@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import APPS from "./apps";
 
+/**
+ * Home screen of "apps".
+ */
 export default function Home() {
 	return (
 		<div className="h-full bg-gray-100">

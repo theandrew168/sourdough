@@ -1,7 +1,18 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import Router from "./Router";
+import Home from "./Home";
+import App from "./App";
+import APPS from "./apps";
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <Home />,
+	},
+	...APPS.map((app) => ({ path: app.path, element: <App main={app.main} /> })),
+]);
 
 const main = document.getElementById("main");
 if (!main) {
@@ -11,6 +22,6 @@ if (!main) {
 const root = createRoot(main);
 root.render(
 	<React.StrictMode>
-		<Router />
+		<RouterProvider router={router} />
 	</React.StrictMode>,
 );
