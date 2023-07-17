@@ -27,7 +27,6 @@ func NewApplication(publicFS fs.FS) *Application {
 
 func (app *Application) Handler() http.Handler {
 	mux := flow.New()
-	mux.Use(app.logRequest)
 
 	// healthcheck endpoint
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {

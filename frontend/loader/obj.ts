@@ -43,28 +43,28 @@ export function createModel(source: string): model.Model {
 		if (indices.length === 1) {
 			// position
 			const positionIndex = Number(indices[0]);
-			vertices.push(...positions[positionIndex - 1]);
+			vertices.push(...positions[positionIndex - 1] ?? []);
 		} else if (indices.length === 2) {
 			// position + texcoord
 			const positionIndex = Number(indices[0]);
-			vertices.push(...positions[positionIndex - 1]);
+			vertices.push(...positions[positionIndex - 1] ?? []);
 
 			const texcoordIndex = Number(indices[1]);
-			vertices.push(...texcoords[texcoordIndex - 1]);
+			vertices.push(...texcoords[texcoordIndex - 1] ?? []);
 		} else if (indices.length === 3) {
 			// position + texcoord? + normal
 			const positionIndex = Number(indices[0]);
-			vertices.push(...positions[positionIndex - 1]);
+			vertices.push(...positions[positionIndex - 1] ?? []);
 
 			// this check works because Number('') === 0 and no
 			// obj indices will be zero (they are one-based)
 			const texcoordIndex = Number(indices[1]);
 			if (texcoordIndex !== 0) {
-				vertices.push(...texcoords[texcoordIndex - 1]);
+				vertices.push(...texcoords[texcoordIndex - 1] ?? []);
 			}
 
 			const normalIndex = Number(indices[2]) - 1;
-			vertices.push(...normals[normalIndex]);
+			vertices.push(...normals[normalIndex] ?? []);
 		}
 	});
 

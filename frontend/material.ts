@@ -7,16 +7,18 @@ export type BasicMaterial = {
 	shininess: number;
 };
 
+export const EMERALD: BasicMaterial = {
+	ambient: [0.0215, 0.1745, 0.0215],
+	diffuse: [0.07568, 0.61424, 0.07568],
+	specular: [0.633, 0.727811, 0.633],
+	shininess: 0.6,
+};
+
 export type BasicMaterials = Record<string, BasicMaterial>;
 
 // http://devernay.free.fr/cours/opengl/materials.html
 export const BASIC_MATERIALS: BasicMaterials = {
-	emerald: {
-		ambient: [0.0215, 0.1745, 0.0215],
-		diffuse: [0.07568, 0.61424, 0.07568],
-		specular: [0.633, 0.727811, 0.633],
-		shininess: 0.6,
-	},
+	emerald: EMERALD,
 	jade: {
 		ambient: [0.135, 0.2225, 0.1575],
 		diffuse: [0.54, 0.89, 0.63],

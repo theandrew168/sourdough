@@ -4,33 +4,30 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "esbuild frontend/main.ts --outfile=public/main.js --bundle --serve=127.0.0.1:5000 --servedir=public",
-		"build": "tsc && esbuild frontend/main.ts --outfile=public/main.js --bundle --minify",
-		"format": "prettier --write frontend/",
-		"test": "jest"
+		"build-types": "tsc",
+		"build-js": "esbuild frontend/index.ts --outfile=public/index.js --target=es2020 --bundle --minify",
+		"build": "npm run build-types && npm run build-js",
+		"run-js": "esbuild frontend/index.ts --outfile=public/index.js --target=es2020 --bundle --watch",
+		"format": "prettier --write frontend/"
 	},
 	"dependencies": {
-		"gl-matrix": "^3.4.3",
-		"xterm": "^5.0.0"
+		"gl-matrix": "^3.4.3"
 	},
 	"devDependencies": {
-		"@types/jest": "^29.0.3",
-		"esbuild": "^0.15.2",
-		"jest": "^29.0.3",
-		"prettier": "^2.6.2",
-		"ts-jest": "^29.0.2",
-		"typescript": "^4.8.3",
+		"esbuild": "^0.18.13",
+		"prettier": "^2.8.8",
+		"typescript": "^5.1.6",
 		"webgl-strict-types": "^1.0.5"
 	},
-	"jest": {
-		"preset": "ts-jest"
-	},
 	"prettier": {
-		"useTabs": true,
-		"semi": true,
-		"singleQuote": true,
+		"arrowParens": "always",
+		"bracketSameLine": false,
 		"bracketSpacing": true,
+		"jsxSingleQuote": false,
+		"printWidth": 120,
+		"semi": true,
+		"singleQuote": false,
 		"trailingComma": "all",
-		"printWidth": 100
+		"useTabs": true
 	}
 }

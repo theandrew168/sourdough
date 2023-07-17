@@ -6,7 +6,7 @@ import * as obj from '../loader/obj';
 import * as vertexarray from '../webgl/vertexarray';
 import * as shader from '../webgl/shader';
 import * as utils from '../webgl/utils';
-import { BASIC_MATERIALS } from '../material';
+import { BASIC_MATERIALS, EMERALD, type BasicMaterial } from '../material';
 
 export async function main() {
 	const canvas = document.querySelector('#glCanvas') as HTMLCanvasElement;
@@ -28,14 +28,14 @@ export async function main() {
 	const mats = Object.keys(BASIC_MATERIALS);
 
 	let idx = 0;
-	let cur = mats[idx];
-	let mat = BASIC_MATERIALS[cur];
+	let cur = mats[idx] ?? '';
+	let mat: BasicMaterial = BASIC_MATERIALS[cur] ?? EMERALD;
 	console.log(cur);
 
 	const cycle = () => {
 		idx = (idx + 1) % mats.length;
-		cur = mats[idx];
-		mat = BASIC_MATERIALS[cur];
+		cur = mats[idx] ?? '';
+		mat = BASIC_MATERIALS[cur] ?? EMERALD;
 		console.log(cur);
 	};
 

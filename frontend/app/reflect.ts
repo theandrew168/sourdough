@@ -64,11 +64,19 @@ export async function main() {
 	let prevY = 0;
 	canvas.addEventListener('touchstart', (ev) => {
 		const touch = ev.touches[0];
+		if (!touch) {
+			return;
+		}
+
 		prevX = touch.clientX;
 		prevY = touch.clientY;
 	});
 	canvas.addEventListener('touchmove', (ev) => {
 		const touch = ev.touches[0];
+		if (!touch) {
+			return;
+		}
+
 		const curX = touch.clientX;
 		const curY = touch.clientY;
 		const deltaX = curX - prevX;

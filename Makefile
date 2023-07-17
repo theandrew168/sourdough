@@ -10,21 +10,34 @@ build: frontend backend
 node_modules:
 	npm install
 
+.PHONY: frontend-types
+frontend-types: node_modules
+	npm run build-types
+
+.PHONY: frontend-js
+frontend-js: node_modules
+	npm run build-js
+
 .PHONY: frontend
-frontend: node_modules
-	npm run build
+frontend: frontend-types frontend-js
 
 .PHONY: backend
 backend: frontend
 	go build -o sourdough main.go
 
+.PHONY: run-frontend-js
+run-frontend-js: node_modules
+	npm run run-js
+
 .PHONY: run-frontend
-run-frontend: node_modules
-	npm run dev
+run-frontend: run-frontend-js
 
 .PHONY: run-backend
-run-backend: frontend
-	go run main.go
+run-backend:
+	DEBUG=1 go run github.com/cosmtrek/air@latest
+
+.PHONY: run
+run: run-frontend run-backend
 
 .PHONY: test
 test:
@@ -53,4 +66,4 @@ format: node_modules
 
 .PHONY: clean
 clean:
-	rm -fr sourdough dist/ node_modules/ public/main.js
+	rm -fr sourdough public/index.js dist/

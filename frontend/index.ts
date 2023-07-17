@@ -5,7 +5,6 @@ import * as materials from './app/materials';
 import * as metal from './app/metal';
 import * as skybox from './app/skybox';
 import * as reflect from './app/reflect';
-import * as forth from './app/forth';
 
 // export each app entrypoint at the global scope
 (globalThis as any).triangle = triangle.main;
@@ -15,4 +14,3 @@ import * as forth from './app/forth';
 (globalThis as any).metal = metal.main;
 (globalThis as any).skybox = skybox.main;
 (globalThis as any).reflect = reflect.main;
-(globalThis as any).forth = forth.main;
