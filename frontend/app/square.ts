@@ -8,7 +8,9 @@ import * as shader from "../webgl/shader";
 import * as utils from "../webgl/utils";
 import * as vertexarray from "../webgl/vertexarray";
 
-export async function main(gl: WebGL2RenderingContextStrict) {
+export async function main(canvas: HTMLCanvasElement) {
+	const gl = utils.initGL(canvas);
+
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

@@ -5,12 +5,13 @@ import * as materials from "./app/materials";
 import * as metal from "./app/metal";
 import * as skybox from "./app/skybox";
 import * as reflect from "./app/reflect";
+import * as life from "./app/life";
 
 type AppMetadata = {
 	name: string;
 	icon: string;
 	path: string;
-	main: (gl: WebGL2RenderingContextStrict) => void;
+	main: (canvas: HTMLCanvasElement) => void;
 };
 
 const APPS: AppMetadata[] = [
@@ -55,6 +56,12 @@ const APPS: AppMetadata[] = [
 		icon: "/static/icon/reflect.webp",
 		path: "/app/reflect",
 		main: reflect.main,
+	},
+	{
+		name: "Life",
+		icon: "/static/icon/triangle.webp",
+		path: "/app/life",
+		main: life.main,
 	},
 ];
 

@@ -11,7 +11,9 @@ import * as texture from "../webgl/texture";
 import * as utils from "../webgl/utils";
 import * as cubemap from "../webgl/cubemap";
 
-export async function main(gl: WebGL2RenderingContextStrict) {
+export async function main(canvas: HTMLCanvasElement) {
+	const gl = utils.initGL(canvas);
+
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -39,7 +41,7 @@ export async function main(gl: WebGL2RenderingContextStrict) {
 		asset.loadImage("/static/texture/sky/bottom.jpg"),
 		asset.loadImage("/static/texture/sky/front.jpg"),
 		asset.loadImage("/static/texture/sky/back.jpg"),
-	])
+	]);
 	const images: cubemap.Images = { right, left, top, bottom, front, back };
 	const t2 = new cubemap.Cubemap(gl, images);
 

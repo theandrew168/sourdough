@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-import { initGL } from "./webgl/utils";
-
 type Props = {
-	main: (gl: WebGL2RenderingContextStrict) => void;
+	main: (canvas: HTMLCanvasElement) => void;
 };
 
 /**
@@ -15,11 +13,10 @@ export default function App({ main }: Props) {
 	useEffect(() => {
 		const canvas = ref.current;
 		if (!canvas) {
-			throw new Error("Failed to find WebGL canvas.");
+			throw new Error("Failed to find canvas.");
 		}
 
-		const gl = initGL(canvas);
-		main(gl);
+		main(canvas);
 	}, []);
 
 	return <canvas className="h-full w-full" ref={ref}></canvas>;

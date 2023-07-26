@@ -12,6 +12,10 @@
 		"noUnusedLocals": true,
 		"strict": true,
 		"strictNullChecks": true,
+		"typeRoots": [
+			"node_modules/@types",
+			"node_modules/@webgpu/types",
+		],
 
 		// Modules
 		"module": "ES2020",
@@ -35,7 +39,7 @@
 	},
 	"include": [
 		"frontend",
-		"node_modules/webgl-strict-types/index.d.ts"
+		"node_modules/webgl-strict-types/index.d.ts",
 	]
 }
 

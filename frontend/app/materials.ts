@@ -8,7 +8,9 @@ import * as shader from "../webgl/shader";
 import * as utils from "../webgl/utils";
 import { BASIC_MATERIALS, EMERALD, type BasicMaterial } from "../gfx/material";
 
-export async function main(gl: WebGL2RenderingContextStrict) {
+export async function main(canvas: HTMLCanvasElement) {
+	const gl = utils.initGL(canvas);
+
 	gl.clearColor(0.1, 0.1, 0.1, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
