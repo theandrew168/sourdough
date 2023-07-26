@@ -15,9 +15,24 @@ export async function main(canvas: HTMLCanvasElement) {
 		throw new Error("Failed to get canvas context.");
 	}
 
-	const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
-	context.configure({
-		device: device,
-		format: canvasFormat,
+	const format = navigator.gpu.getPreferredCanvasFormat();
+	console.log("format: ", format);
+	context.configure({ device, format });
+
+	const encoder = device.createCommandEncoder();
+	const texture = context.getCurrentTexture();
+	const pass = encoder.beginRenderPass({
+		colorAttachments: [
+			{
+				view: texture.createView(),
+				loadOp: "clear",
+				clearValue: { r: 0.2, g: 0.3, b: 0.4, a: 1 },
+				storeOp: "store",
+			},
+		],
 	});
+	pass.end();
+
+	const commandBuffer = encoder.finish();
+	device.queue.submit([commandBuffer]);
 }
