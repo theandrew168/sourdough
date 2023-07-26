@@ -14,7 +14,7 @@ export default function Home() {
 				<ul className="flex flex-wrap justify-center gap-6">
 					{APPS.map((app) => (
 						<li key={app.path}>
-							<h2 className="text-2xl font-bold mb-2">{app.name}</h2>
+							<h2 className="text-xl font-bold mb-2">{app.name}</h2>
 							<Link to={app.path}>
 								<img className="rounded-2xl w-32 shadow-2xl transition-all hover:scale-105" src={app.icon}></img>
 							</Link>
