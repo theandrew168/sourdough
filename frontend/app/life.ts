@@ -1,3 +1,5 @@
+const GRID_SIZE = 32;
+
 export async function main(canvas: HTMLCanvasElement) {
 	if (!navigator.gpu) {
 		throw new Error("WebGPU not supported on this browser.");
@@ -17,6 +19,19 @@ export async function main(canvas: HTMLCanvasElement) {
 
 	const format = navigator.gpu.getPreferredCanvasFormat();
 	context.configure({ device, format });
+
+	const encoder = device.createCommandEncoder();
+	const texture = context.getCurrentTexture();
+	const pass = encoder.beginRenderPass({
+		colorAttachments: [
+			{
+				view: texture.createView(),
+				loadOp: "clear",
+				clearValue: [0.2, 0.3, 0.4, 1.0],
+				storeOp: "store",
+			},
+		],
+	});
 
 	// prettier-ignore
 	const vertices = new Float32Array([
@@ -51,15 +66,23 @@ export async function main(canvas: HTMLCanvasElement) {
 	const cellShaderModule = device.createShaderModule({
 		label: "Cell shader",
 		code: `
+			@group(0) @binding(0) var<uniform> grid: vec2f;
+
 			@vertex
-			fn vertexMain(@location(0) pos: vec2f) ->
-				@builtin(position) vec4f {
-				return vec4f(pos, 0, 1);
+			fn vertexMain(
+				@location(0) pos: vec2f,
+				@builtin(instance_index) instance: u32,
+			) -> @builtin(position) vec4f {
+				let i = f32(instance);
+				let cell = vec2f(i % grid.x, floor(i / grid.x));
+				let cellOffset = (cell / grid) * 2.0;
+				let gridPos = (pos + 1.0) / grid - 1.0 + cellOffset;
+				return vec4f(gridPos, 0.0, 1.0);
 			}
 
 			@fragment
 			fn fragmentMain() -> @location(0) vec4f {
-				return vec4f(1, 0, 0, 1);
+				return vec4f(1.0, 0.0, 0.0, 1.0);
 			}
 		`,
 	});
@@ -83,22 +106,30 @@ export async function main(canvas: HTMLCanvasElement) {
 		},
 	});
 
-	const encoder = device.createCommandEncoder();
-	const texture = context.getCurrentTexture();
-	const pass = encoder.beginRenderPass({
-		colorAttachments: [
+	// Create a uniform buffer that describes the grid.
+	const uniformArray = new Float32Array([GRID_SIZE, GRID_SIZE]);
+	const uniformBuffer = device.createBuffer({
+		label: "Grid Uniforms",
+		size: uniformArray.byteLength,
+		usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+	});
+	device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
+
+	const bindGroup = device.createBindGroup({
+		label: "Cell renderer bind group",
+		layout: cellPipeline.getBindGroupLayout(0),
+		entries: [
 			{
-				view: texture.createView(),
-				loadOp: "clear",
-				clearValue: [0.2, 0.3, 0.4, 1.0],
-				storeOp: "store",
+				binding: 0,
+				resource: { buffer: uniformBuffer },
 			},
 		],
 	});
 
 	pass.setPipeline(cellPipeline);
 	pass.setVertexBuffer(0, vertexBuffer);
-	pass.draw(vertices.length / 2);
+	pass.setBindGroup(0, bindGroup);
+	pass.draw(vertices.length / 2, GRID_SIZE * GRID_SIZE);
 
 	pass.end();
 

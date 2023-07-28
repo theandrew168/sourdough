@@ -19,5 +19,5 @@ export default function App({ main }: Props) {
 		main(canvas);
 	}, []);
 
-	return <canvas className="h-full w-full" ref={ref}></canvas>;
+	return <canvas className="h-full w-full" width={512} height={512} ref={ref}></canvas>;
 }
