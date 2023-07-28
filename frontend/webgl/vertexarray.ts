@@ -3,14 +3,14 @@ import * as vertex from "../gfx/vertex";
 import * as model from "../gfx/model";
 
 export class VertexArray {
-	private gl: WebGL2RenderingContextStrict;
+	private gl: WebGL2RenderingContext;
 	private vbo: WebGLBuffer;
 	private ibo?: WebGLBuffer;
 	private vao: WebGLVertexArrayObject;
-	private drawMode: WebGLRenderingContextStrict.DrawMode;
+	private drawMode: number;
 	private count: number;
 
-	constructor(gl: WebGL2RenderingContextStrict, model: model.Model) {
+	constructor(gl: WebGL2RenderingContext, model: model.Model) {
 		this.gl = gl;
 
 		const { drawMode, format, vertices, indices } = model;
@@ -74,10 +74,10 @@ export class VertexArray {
 }
 
 function toWebGLDrawMode(
-	gl: WebGL2RenderingContextStrict,
+	gl: WebGL2RenderingContext,
 	drawMode: model.DrawMode,
-): WebGLRenderingContextStrict.DrawMode {
-	const webGLDrawModes: Record<model.DrawMode, WebGLRenderingContextStrict.DrawMode> = {
+): number {
+	const webGLDrawModes: Record<model.DrawMode, number> = {
 		[model.DrawMode.Triangles]: gl.TRIANGLES,
 		[model.DrawMode.TriangleStrip]: gl.TRIANGLE_STRIP,
 	};

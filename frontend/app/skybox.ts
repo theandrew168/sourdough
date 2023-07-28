@@ -60,11 +60,11 @@ export async function main(canvas: HTMLCanvasElement) {
 	};
 	const v2 = new vertexarray.VertexArray(gl, m2);
 
-	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
+	const cam = new camera.Camera(canvas.clientWidth, canvas.clientHeight);
 
 	let prevX = 0;
 	let prevY = 0;
-	gl.canvas.addEventListener("touchstart", (ev) => {
+	canvas.addEventListener("touchstart", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;
@@ -73,7 +73,7 @@ export async function main(canvas: HTMLCanvasElement) {
 		prevX = touch.clientX;
 		prevY = touch.clientY;
 	});
-	gl.canvas.addEventListener("touchmove", (ev) => {
+	canvas.addEventListener("touchmove", (ev) => {
 		const touch = ev.touches[0];
 		if (!touch) {
 			return;
@@ -96,7 +96,7 @@ export async function main(canvas: HTMLCanvasElement) {
 		now *= 0.001;
 
 		utils.resizeGL(gl);
-		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
+		cam.setDimensions(canvas.clientWidth, canvas.clientHeight);
 
 		gl.clearColor(0.2, 0.3, 0.4, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

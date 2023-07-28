@@ -1,5 +1,5 @@
-export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContextStrict {
-	const gl = canvas.getContext("webgl2") as unknown as WebGL2RenderingContextStrict;
+export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContext {
+	const gl = canvas.getContext("webgl2");
 	if (!gl) {
 		const msg = "Unable to initialize WebGL. Your browser or machine may not support it.";
 		alert(msg);
@@ -27,9 +27,10 @@ export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContextStrict 
 	return gl;
 }
 
-export function resizeGL(gl: WebGL2RenderingContextStrict) {
-	const width = gl.canvas.clientWidth;
-	const height = gl.canvas.clientHeight;
+export function resizeGL(gl: WebGL2RenderingContext) {
+	const canvas = gl.canvas as HTMLCanvasElement;
+	const width = canvas.clientWidth;
+	const height = canvas.clientHeight;
 	if (gl.canvas.width != width || gl.canvas.height != height) {
 		gl.canvas.width = width;
 		gl.canvas.height = height;

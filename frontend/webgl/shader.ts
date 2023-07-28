@@ -3,10 +3,10 @@ import * as math from "gl-matrix";
 import * as attrib from "./attrib";
 
 export class Shader {
-	private gl: WebGL2RenderingContextStrict;
+	private gl: WebGL2RenderingContext;
 	private program: WebGLProgram;
 
-	constructor(gl: WebGL2RenderingContextStrict, vertSource: string, fragSource: string) {
+	constructor(gl: WebGL2RenderingContext, vertSource: string, fragSource: string) {
 		this.gl = gl;
 
 		const vertShader = this.gl.createShader(this.gl.VERTEX_SHADER)!;

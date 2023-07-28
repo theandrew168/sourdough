@@ -1,8 +1,8 @@
 export class Texture {
-	private gl: WebGL2RenderingContextStrict;
+	private gl: WebGL2RenderingContext;
 	private texture: WebGLTexture;
 
-	constructor(gl: WebGL2RenderingContextStrict, imageBitmap: ImageBitmap) {
+	constructor(gl: WebGL2RenderingContext, imageBitmap: ImageBitmap) {
 		this.gl = gl;
 
 		this.texture = this.gl.createTexture()!;

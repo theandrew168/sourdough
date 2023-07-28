@@ -2,13 +2,13 @@ export type Face = "right" | "left" | "top" | "bottom" | "front" | "back";
 export type Images = Record<Face, ImageBitmap>;
 
 export class Cubemap {
-	private gl: WebGL2RenderingContextStrict;
+	private gl: WebGL2RenderingContext;
 	private texture: WebGLTexture;
 
-	constructor(gl: WebGL2RenderingContextStrict, images: Images) {
+	constructor(gl: WebGL2RenderingContext, images: Images) {
 		this.gl = gl;
 
-		const targets: Record<Face, WebGLRenderingContextStrict.TexImage2DTarget> = {
+		const targets: Record<Face, number> = {
 			right: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
 			left: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
 			top: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,

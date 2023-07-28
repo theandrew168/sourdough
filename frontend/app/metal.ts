@@ -26,7 +26,7 @@ export async function main(canvas: HTMLCanvasElement) {
 	const m = obj.createModel(await asset.loadText("/static/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
 
-	const cam = new camera.Camera(gl.canvas.clientWidth, gl.canvas.clientHeight);
+	const cam = new camera.Camera(canvas.clientWidth, canvas.clientHeight);
 
 	requestAnimationFrame(draw);
 	function draw(now: DOMHighResTimeStamp) {
@@ -34,7 +34,7 @@ export async function main(canvas: HTMLCanvasElement) {
 		now *= 0.001;
 
 		utils.resizeGL(gl);
-		cam.setDimensions(gl.canvas.clientWidth, gl.canvas.clientHeight);
+		cam.setDimensions(canvas.clientWidth, canvas.clientHeight);
 
 		gl.clearColor(0.1, 0.1, 0.1, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

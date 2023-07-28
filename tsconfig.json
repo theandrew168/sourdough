@@ -39,7 +39,6 @@
 	},
 	"include": [
 		"frontend",
-		"node_modules/webgl-strict-types/index.d.ts",
 	]
 }
 
