@@ -73,10 +73,7 @@ export class VertexArray {
 	}
 }
 
-function toWebGLDrawMode(
-	gl: WebGL2RenderingContext,
-	drawMode: model.DrawMode,
-): number {
+function toWebGLDrawMode(gl: WebGL2RenderingContext, drawMode: model.DrawMode): number {
 	const webGLDrawModes: Record<model.DrawMode, number> = {
 		[model.DrawMode.Triangles]: gl.TRIANGLES,
 		[model.DrawMode.TriangleStrip]: gl.TRIANGLE_STRIP,
