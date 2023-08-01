@@ -117,12 +117,17 @@ export async function main(canvas: HTMLCanvasElement) {
 		ctx.stroke();
 		ctx.closePath();
 
-		// bug dot
+		const bugWorldPosition: Position = {
+			x: center.x + bug.position.x * UNIT_SIZE,
+			y: center.y - bug.position.y * UNIT_SIZE,
+		};
+
+		// position dot
 		ctx.fillStyle = "black";
 		ctx.beginPath();
 		ctx.arc(
-			center.x + bug.position.x * UNIT_SIZE,
-			center.y - bug.position.y * UNIT_SIZE,
+			bugWorldPosition.x,
+			bugWorldPosition.y,
 			BUG_SIZE,
 			0,
 			2 * Math.PI,
@@ -130,23 +135,20 @@ export async function main(canvas: HTMLCanvasElement) {
 		ctx.fill();
 		ctx.closePath();
 
-		const dot: Position = {
-			x: center.x + bug.position.x * UNIT_SIZE,
-			y: center.y - bug.position.y * UNIT_SIZE,
-		};
+		const dotWorldPosition: Position = { ...bugWorldPosition };
 		switch (bug.direction) {
-			case 'up': dot.y -= UNIT_SIZE / 2; break;
-			case 'down': dot.y += UNIT_SIZE / 2; break;
-			case 'left': dot.x -= UNIT_SIZE / 2; break;
-			case 'right': dot.x += UNIT_SIZE / 2; break;
+			case 'up': dotWorldPosition.y -= UNIT_SIZE / 2; break;
+			case 'down': dotWorldPosition.y += UNIT_SIZE / 2; break;
+			case 'left': dotWorldPosition.x -= UNIT_SIZE / 2; break;
+			case 'right': dotWorldPosition.x += UNIT_SIZE / 2; break;
 		}
 
 		// direction dot
 		ctx.fillStyle = "red";
 		ctx.beginPath();
 		ctx.arc(
-			dot.x,
-			dot.y,
+			dotWorldPosition.x,
+			dotWorldPosition.y,
 			4,
 			0,
 			2 * Math.PI,
