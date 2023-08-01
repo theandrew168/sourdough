@@ -6,12 +6,14 @@ import * as metal from "./app/metal";
 import * as skybox from "./app/skybox";
 import * as reflect from "./app/reflect";
 import * as life from "./app/life";
+import * as bugs from "./app/bugs";
 
 type AppMetadata = {
 	name: string;
 	icon: string;
 	path: string;
 	main: (canvas: HTMLCanvasElement) => void;
+	hidden?: boolean;
 };
 
 const APPS: AppMetadata[] = [
@@ -62,6 +64,13 @@ const APPS: AppMetadata[] = [
 		icon: "/static/icon/triangle.webp",
 		path: "/app/life",
 		main: life.main,
+		hidden: true,
+	},
+	{
+		name: "Bugs",
+		icon: "/static/icon/bugs.webp",
+		path: "/app/bugs",
+		main: bugs.main,
 	},
 ];
 

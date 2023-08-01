@@ -20,8 +20,4 @@ if (!main) {
 }
 
 const root = createRoot(main);
-root.render(
-	<React.StrictMode>
-		<RouterProvider router={router} />
-	</React.StrictMode>,
-);
+root.render(<RouterProvider router={router} />);
