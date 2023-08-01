@@ -17,6 +17,7 @@ type Bug = {
 
 const BUG_SIZE = 25;
 const UNIT_SIZE = 50;
+const BUG_TICK_MS = 250;
 
 const step = function (bug: Bug) {
 	const word = bug.program.words[bug.program.pc];
@@ -197,8 +198,10 @@ export async function main(canvas: HTMLCanvasElement) {
 
 	canvas.style.backgroundColor = "ForestGreen";
 
+	let tick = 0;
+
 	requestAnimationFrame(draw);
-	function draw(_now: DOMHighResTimeStamp) {
+	function draw(now: DOMHighResTimeStamp) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		// horizontal line
@@ -217,6 +220,10 @@ export async function main(canvas: HTMLCanvasElement) {
 		ctx.stroke();
 		ctx.closePath();
 
+		if (now - tick >= BUG_TICK_MS) {
+			bugs.forEach((bug) => step(bug));
+			tick = now;
+		}
 		bugs.forEach((bug) => drawBug(bug, ctx, canvas));
 
 		requestAnimationFrame(draw);
