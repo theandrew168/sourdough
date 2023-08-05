@@ -1,3 +1,5 @@
+import React, { useEffect, useRef } from "react";
+
 type Direction = "up" | "down" | "left" | "right";
 type Position = {
 	x: number;
@@ -125,7 +127,7 @@ const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLC
 	ctx.closePath();
 };
 
-export async function main(canvas: HTMLCanvasElement) {
+async function main(canvas: HTMLCanvasElement) {
 	const squareCW: Program = {
 		pc: 0,
 		words: ["forward", "right", "forward", "right", "forward", "right", "forward", "right"],
@@ -228,4 +230,27 @@ export async function main(canvas: HTMLCanvasElement) {
 
 		requestAnimationFrame(draw);
 	}
+}
+
+export function App() {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) {
+			throw new Error("Failed to find canvas.");
+		}
+
+		main(canvas);
+	}, []);
+
+	return (
+		<div className="relative h-full w-hull">
+			<canvas className="h-full w-full" ref={canvasRef}></canvas>
+			<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
+				<p>Hello world!</p>
+				<p>Neat overlay</p>
+			</div>
+		</div>
+	);
 }

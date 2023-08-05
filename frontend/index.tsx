@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Home from "./Home";
-import App from "./App";
 import APPS from "./apps";
 
 const router = createBrowserRouter([
@@ -11,7 +10,7 @@ const router = createBrowserRouter([
 		path: "/",
 		element: <Home />,
 	},
-	...APPS.map((app) => ({ path: app.path, element: <App main={app.main} /> })),
+	...APPS.map((app) => ({ path: app.path, element: app.element })),
 ]);
 
 const main = document.getElementById("main");

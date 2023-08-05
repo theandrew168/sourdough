@@ -1,6 +1,8 @@
+import React, { useEffect, useRef } from "react";
+
 const GRID_SIZE = 64;
 
-export async function main(canvas: HTMLCanvasElement) {
+async function main(canvas: HTMLCanvasElement) {
 	if (!navigator.gpu) {
 		throw new Error("WebGPU not supported on this browser.");
 	}
@@ -150,4 +152,19 @@ export async function main(canvas: HTMLCanvasElement) {
 	pass.end();
 
 	device.queue.submit([encoder.finish()]);
+}
+
+export function App() {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) {
+			throw new Error("Failed to find canvas.");
+		}
+
+		main(canvas);
+	}, []);
+
+	return <canvas width={512} height={512} className="h-full w-full" ref={canvasRef}></canvas>;
 }

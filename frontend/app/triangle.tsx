@@ -1,3 +1,5 @@
+import React, { useEffect, useRef } from "react";
+
 import * as asset from "../gfx/asset";
 import * as model from "../gfx/model";
 import * as vertex from "../gfx/vertex";
@@ -5,7 +7,7 @@ import * as shader from "../webgl/shader";
 import * as utils from "../webgl/utils";
 import * as vertexarray from "../webgl/vertexarray";
 
-export async function main(canvas: HTMLCanvasElement) {
+async function main(canvas: HTMLCanvasElement) {
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
@@ -41,4 +43,19 @@ export async function main(canvas: HTMLCanvasElement) {
 
 		requestAnimationFrame(draw);
 	}
+}
+
+export function App() {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) {
+			throw new Error("Failed to find canvas.");
+		}
+
+		main(canvas);
+	}, []);
+
+	return <canvas className="h-full w-full" ref={canvasRef}></canvas>;
 }

@@ -1,3 +1,5 @@
+import React from "react";
+
 import * as triangle from "./app/triangle";
 import * as square from "./app/square";
 import * as box from "./app/box";
@@ -12,7 +14,7 @@ type AppMetadata = {
 	name: string;
 	icon: string;
 	path: string;
-	main: (canvas: HTMLCanvasElement) => void;
+	element: React.JSX.Element;
 	hidden?: boolean;
 };
 
@@ -21,56 +23,56 @@ const APPS: AppMetadata[] = [
 		name: "Triangle",
 		icon: "/static/icon/triangle.webp",
 		path: "/app/triangle",
-		main: triangle.main,
+		element: <triangle.App />,
 	},
 	{
 		name: "Square",
 		icon: "/static/icon/square.webp",
 		path: "/app/square",
-		main: square.main,
+		element: <square.App />,
 	},
 	{
 		name: "Box",
 		icon: "/static/icon/box.webp",
 		path: "/app/box",
-		main: box.main,
+		element: <box.App />,
 	},
 	{
 		name: "Materials",
 		icon: "/static/icon/materials.webp",
 		path: "/app/materials",
-		main: materials.main,
+		element: <materials.App />,
 	},
 	{
 		name: "Metal",
 		icon: "/static/icon/metal.webp",
 		path: "/app/metal",
-		main: metal.main,
+		element: <metal.App />,
 	},
 	{
 		name: "Skybox",
 		icon: "/static/icon/skybox.webp",
 		path: "/app/skybox",
-		main: skybox.main,
+		element: <skybox.App />,
 	},
 	{
 		name: "Reflect",
 		icon: "/static/icon/reflect.webp",
 		path: "/app/reflect",
-		main: reflect.main,
+		element: <reflect.App />,
 	},
 	{
 		name: "Life",
 		icon: "/static/icon/triangle.webp",
 		path: "/app/life",
-		main: life.main,
+		element: <life.App />,
 		hidden: true,
 	},
 	{
 		name: "Bugs",
 		icon: "/static/icon/bugs.webp",
 		path: "/app/bugs",
-		main: bugs.main,
+		element: <bugs.App />,
 	},
 ];
 

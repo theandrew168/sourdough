@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import * as math from "gl-matrix";
 
 import * as asset from "../gfx/asset";
@@ -7,10 +8,11 @@ import * as camera from "../gfx/camera";
 import * as obj from "../loader/obj";
 import * as vertexarray from "../webgl/vertexarray";
 import * as shader from "../webgl/shader";
+import * as texture from "../webgl/texture";
 import * as utils from "../webgl/utils";
 import * as cubemap from "../webgl/cubemap";
 
-export async function main(canvas: HTMLCanvasElement) {
+async function main(canvas: HTMLCanvasElement) {
 	const gl = utils.initGL(canvas);
 
 	gl.clearColor(0.2, 0.3, 0.4, 1.0);
@@ -18,9 +20,11 @@ export async function main(canvas: HTMLCanvasElement) {
 
 	const s = new shader.Shader(
 		gl,
-		await asset.loadText("/static/shader/reflect_vert.glsl"),
-		await asset.loadText("/static/shader/reflect_frag.glsl"),
+		await asset.loadText("/static/shader/box_vert.glsl"),
+		await asset.loadText("/static/shader/box_frag.glsl"),
 	);
+
+	const t = new texture.Texture(gl, await asset.loadImage("/static/texture/box.png"));
 
 	const m = obj.createModel(await asset.loadText("/static/model/cube.obj"));
 	const v = new vertexarray.VertexArray(gl, m);
@@ -127,23 +131,41 @@ export async function main(canvas: HTMLCanvasElement) {
 		// start drawing the square.
 		const modelMatrix = math.mat4.create();
 		math.mat4.identity(modelMatrix);
+		math.mat4.rotateX(modelMatrix, modelMatrix, now * 1.3);
+		math.mat4.rotateZ(modelMatrix, modelMatrix, now);
 		math.mat4.rotateY(modelMatrix, modelMatrix, now * 0.7);
-		math.mat4.rotateX(modelMatrix, modelMatrix, now * 0.3);
 
-		t2.bind();
+		// multiply MVP matrices together (backwards)
+		const mvpMatrix = math.mat4.create();
+		math.mat4.mul(mvpMatrix, projectionMatrix, viewMatrix);
+		math.mat4.mul(mvpMatrix, mvpMatrix, modelMatrix);
+
+		t.bind();
 		s.bind();
+		s.setUniformMat4("uMVP", mvpMatrix);
 		s.setUniformInt("uTexture", 0);
-		s.setUniformVec3("uCameraPosition", cam.position);
-		s.setUniformMat4("uModel", modelMatrix);
-		s.setUniformMat4("uView", viewMatrix);
-		s.setUniformMat4("uProjection", projectionMatrix);
 		v.bind();
 		v.draw();
 		v.unbind();
 		s.unbind();
-		t2.unbind();
+		t.unbind();
 
 		// continue draw loop
 		requestAnimationFrame(draw);
 	}
+}
+
+export function App() {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) {
+			throw new Error("Failed to find canvas.");
+		}
+
+		main(canvas);
+	}, []);
+
+	return <canvas className="h-full w-full" ref={canvasRef}></canvas>;
 }
