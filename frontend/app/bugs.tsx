@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Direction = "up" | "down" | "left" | "right";
 type Position = {
@@ -19,28 +19,38 @@ type Bug = {
 
 const BUG_SIZE = 25;
 const UNIT_SIZE = 50;
-const BUG_TICK_MS = 250;
 
-const step = function (bug: Bug) {
+const step = function (bug: Bug): Bug {
+	// deep copy the current bug
+	const newBug: Bug = {
+		...bug,
+		position: {
+			...bug.position,
+		},
+		program: {
+			...bug.program,
+		},
+	};
+
 	const word = bug.program.words[bug.program.pc];
 	if (!word) {
-		return;
+		throw new Error("Invalid program index");
 	}
 
 	switch (word) {
 		case "forward": {
 			switch (bug.direction) {
 				case "up":
-					bug.position.y += 1;
+					newBug.position.y += 1;
 					break;
 				case "down":
-					bug.position.y -= 1;
+					newBug.position.y -= 1;
 					break;
 				case "left":
-					bug.position.x -= 1;
+					newBug.position.x -= 1;
 					break;
 				case "right":
-					bug.position.x += 1;
+					newBug.position.x += 1;
 					break;
 			}
 			break;
@@ -48,16 +58,16 @@ const step = function (bug: Bug) {
 		case "right": {
 			switch (bug.direction) {
 				case "up":
-					bug.direction = "right";
+					newBug.direction = "right";
 					break;
 				case "down":
-					bug.direction = "left";
+					newBug.direction = "left";
 					break;
 				case "left":
-					bug.direction = "up";
+					newBug.direction = "up";
 					break;
 				case "right":
-					bug.direction = "down";
+					newBug.direction = "down";
 					break;
 			}
 			break;
@@ -65,24 +75,26 @@ const step = function (bug: Bug) {
 		case "left": {
 			switch (bug.direction) {
 				case "up":
-					bug.direction = "left";
+					newBug.direction = "left";
 					break;
 				case "down":
-					bug.direction = "right";
+					newBug.direction = "right";
 					break;
 				case "left":
-					bug.direction = "down";
+					newBug.direction = "down";
 					break;
 				case "right":
-					bug.direction = "up";
+					newBug.direction = "up";
 					break;
 			}
 			break;
 		}
 	}
 
-	bug.program.pc += 1;
-	bug.program.pc %= bug.program.words.length;
+	newBug.program.pc += 1;
+	newBug.program.pc %= newBug.program.words.length;
+	console.log(newBug);
+	return newBug;
 };
 
 const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
@@ -128,124 +140,78 @@ const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLC
 };
 
 export function App() {
-	const squareCW: Program = {
-		pc: 0,
-		words: ["forward", "right", "forward", "right", "forward", "right", "forward", "right"],
-	};
-	const squareCCW: Program = {
-		pc: 0,
-		words: ["forward", "left", "forward", "left", "forward", "left", "forward", "left"],
-	};
-	const bigSquare: Program = {
-		pc: 0,
-		words: [
-			"forward",
-			"forward",
-			"forward",
-			"forward",
-			"right",
-			"forward",
-			"forward",
-			"forward",
-			"forward",
-			"right",
-			"forward",
-			"forward",
-			"forward",
-			"forward",
-			"right",
-			"forward",
-			"forward",
-			"forward",
-			"forward",
-			"right",
-		],
-	};
-
-	const bugs: Bug[] = [
-		{
-			direction: "up",
-			position: { x: 0, y: 0 },
-			program: { ...squareCW },
+	const [bug, setBug] = useState<Bug>({
+		direction: "up",
+		position: { x: 0, y: 0 },
+		program: {
+			pc: 0,
+			words: ["forward", "right", "forward", "right", "forward", "right", "forward", "right"],
 		},
-		{
-			direction: "down",
-			position: { x: -1, y: 0 },
-			program: { ...squareCCW },
-		},
-		{
-			direction: "right",
-			position: { x: -2, y: 2 },
-			program: { ...bigSquare },
-		},
-	];
+	});
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	// redraw when the bug changes
+	// TODO: redraw upon window resize (track size in state)
 	useEffect(() => {
-		const maybeCanvas = canvasRef.current;
-		if (!maybeCanvas) {
+		const canvas = canvasRef.current;
+		if (!canvas) {
 			throw new Error("Failed to find canvas.");
 		}
 
-		const canvas: HTMLCanvasElement = maybeCanvas;
-		canvas.style.backgroundColor = "ForestGreen";
-
 		canvas.width = canvas.clientWidth;
 		canvas.height = canvas.clientHeight;
-		window.addEventListener("resize", (_event: UIEvent) => {
-			canvas.width = canvas.clientWidth;
-			canvas.height = canvas.clientHeight;
-		});
 
-		canvas.addEventListener("mousedown", (_event: MouseEvent) => {
-			bugs.forEach((bug) => step(bug));
-		});
-
-		const maybeCtx = canvas.getContext("2d");
-		if (!maybeCtx) {
+		const ctx = canvas.getContext("2d");
+		if (!ctx) {
 			throw new Error("Canvas 2D not supported on this browser.");
 		}
 
-		const ctx: CanvasRenderingContext2D = maybeCtx;
+		// set background color
+		canvas.style.backgroundColor = "ForestGreen";
 
-		let tick = 0;
-		requestAnimationFrame(draw);
-		function draw(now: DOMHighResTimeStamp) {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// clear the canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			// horizontal line
-			ctx.fillStyle = "black";
-			ctx.beginPath();
-			ctx.moveTo(-canvas.width, canvas.height / 2);
-			ctx.lineTo(canvas.width, canvas.height / 2);
-			ctx.stroke();
-			ctx.closePath();
+		// horizontal line
+		ctx.fillStyle = "black";
+		ctx.beginPath();
+		ctx.moveTo(-canvas.width, canvas.height / 2);
+		ctx.lineTo(canvas.width, canvas.height / 2);
+		ctx.stroke();
+		ctx.closePath();
 
-			// vertical line
-			ctx.fillStyle = "black";
-			ctx.beginPath();
-			ctx.moveTo(canvas.width / 2, -canvas.height);
-			ctx.lineTo(canvas.width / 2, canvas.height);
-			ctx.stroke();
-			ctx.closePath();
+		// vertical line
+		ctx.fillStyle = "black";
+		ctx.beginPath();
+		ctx.moveTo(canvas.width / 2, -canvas.height);
+		ctx.lineTo(canvas.width / 2, canvas.height);
+		ctx.stroke();
+		ctx.closePath();
 
-			if (now - tick >= BUG_TICK_MS) {
-				bugs.forEach((bug) => step(bug));
-				tick = now;
-			}
-			bugs.forEach((bug) => drawBug(bug, ctx, canvas));
+		// draw the bug!
+		drawBug(bug, ctx, canvas);
+	}, [bug]);
 
-			requestAnimationFrame(draw);
-		}
-	}, []);
+	const [isEditOpen, setIsEditOpen] = useState(false);
 
 	return (
 		<div className="relative h-full w-hull">
 			<canvas className="h-full w-full" ref={canvasRef}></canvas>
 			<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
-				<p>Hello world!</p>
-				<p>Neat overlay</p>
-				<button onClick={() => console.log("clicked")}>Click</button>
+				<button className="border border-white p-2 mr-4" onClick={() => setBug(step(bug))}>
+					Step
+				</button>
+				<button className="border border-white p-2" onClick={() => setIsEditOpen(!isEditOpen)}>
+					Edit
+				</button>
+				{isEditOpen && (
+					<div className="border border-white p-2 mt-4">
+						<p>Edit menu here</p>
+						<p>so cool</p>
+						<p>drag and drop the code</p>
+					</div>
+				)}
 			</div>
 		</div>
 	);
