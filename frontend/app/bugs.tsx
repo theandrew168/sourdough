@@ -127,7 +127,7 @@ const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLC
 	ctx.closePath();
 };
 
-async function main(canvas: HTMLCanvasElement) {
+export function App() {
 	const squareCW: Program = {
 		pc: 0,
 		words: ["forward", "right", "forward", "right", "forward", "right", "forward", "right"],
@@ -180,68 +180,63 @@ async function main(canvas: HTMLCanvasElement) {
 		},
 	];
 
-	canvas.width = canvas.clientWidth;
-	canvas.height = canvas.clientHeight;
-	window.addEventListener("resize", (_event: UIEvent) => {
-		canvas.width = canvas.clientWidth;
-		canvas.height = canvas.clientHeight;
-	});
-
-	canvas.addEventListener("mousedown", (_event: MouseEvent) => {
-		bugs.forEach((bug) => step(bug));
-	});
-
-	const maybeCtx = canvas.getContext("2d");
-	if (!maybeCtx) {
-		throw new Error("Canvas 2D not supported on this browser.");
-	}
-
-	const ctx: CanvasRenderingContext2D = maybeCtx;
-
-	canvas.style.backgroundColor = "ForestGreen";
-
-	let tick = 0;
-
-	requestAnimationFrame(draw);
-	function draw(now: DOMHighResTimeStamp) {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		// horizontal line
-		ctx.fillStyle = "black";
-		ctx.beginPath();
-		ctx.moveTo(-canvas.width, canvas.height / 2);
-		ctx.lineTo(canvas.width, canvas.height / 2);
-		ctx.stroke();
-		ctx.closePath();
-
-		// vertical line
-		ctx.fillStyle = "black";
-		ctx.beginPath();
-		ctx.moveTo(canvas.width / 2, -canvas.height);
-		ctx.lineTo(canvas.width / 2, canvas.height);
-		ctx.stroke();
-		ctx.closePath();
-
-		if (now - tick >= BUG_TICK_MS) {
-			bugs.forEach((bug) => step(bug));
-			tick = now;
-		}
-		bugs.forEach((bug) => drawBug(bug, ctx, canvas));
-
-		requestAnimationFrame(draw);
-	}
-}
-
-export function App() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-
 	useEffect(() => {
-		const canvas = canvasRef.current;
-		if (!canvas) {
+		const maybeCanvas = canvasRef.current;
+		if (!maybeCanvas) {
 			throw new Error("Failed to find canvas.");
 		}
 
-		main(canvas);
+		const canvas: HTMLCanvasElement = maybeCanvas;
+		canvas.style.backgroundColor = "ForestGreen";
+
+		canvas.width = canvas.clientWidth;
+		canvas.height = canvas.clientHeight;
+		window.addEventListener("resize", (_event: UIEvent) => {
+			canvas.width = canvas.clientWidth;
+			canvas.height = canvas.clientHeight;
+		});
+
+		canvas.addEventListener("mousedown", (_event: MouseEvent) => {
+			bugs.forEach((bug) => step(bug));
+		});
+
+		const maybeCtx = canvas.getContext("2d");
+		if (!maybeCtx) {
+			throw new Error("Canvas 2D not supported on this browser.");
+		}
+
+		const ctx: CanvasRenderingContext2D = maybeCtx;
+
+		let tick = 0;
+		requestAnimationFrame(draw);
+		function draw(now: DOMHighResTimeStamp) {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// horizontal line
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.moveTo(-canvas.width, canvas.height / 2);
+			ctx.lineTo(canvas.width, canvas.height / 2);
+			ctx.stroke();
+			ctx.closePath();
+
+			// vertical line
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.moveTo(canvas.width / 2, -canvas.height);
+			ctx.lineTo(canvas.width / 2, canvas.height);
+			ctx.stroke();
+			ctx.closePath();
+
+			if (now - tick >= BUG_TICK_MS) {
+				bugs.forEach((bug) => step(bug));
+				tick = now;
+			}
+			bugs.forEach((bug) => drawBug(bug, ctx, canvas));
+
+			requestAnimationFrame(draw);
+		}
 	}, []);
 
 	return (
@@ -250,6 +245,7 @@ export function App() {
 			<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
 				<p>Hello world!</p>
 				<p>Neat overlay</p>
+				<button onClick={() => console.log("clicked")}>Click</button>
 			</div>
 		</div>
 	);
