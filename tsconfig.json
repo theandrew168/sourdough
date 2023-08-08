@@ -11,7 +11,6 @@
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
 		"strict": true,
-		"strictNullChecks": true,
 		"typeRoots": [
 			"node_modules/@types",
 			"node_modules/@webgpu/types",

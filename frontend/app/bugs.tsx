@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { DragAndDrop, Drag, Drop, reorder } from "../dnd";
+
 type Direction = "up" | "down" | "left" | "right";
 type Position = {
 	x: number;
@@ -170,30 +172,51 @@ export function App() {
 		// set background color
 		canvas.style.backgroundColor = "ForestGreen";
 
-		// clear the canvas
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		let requestId = 0;
+		const draw = (now: DOMHighResTimeStamp) => {
+			// clear the canvas
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		// horizontal line
-		ctx.fillStyle = "black";
-		ctx.beginPath();
-		ctx.moveTo(-canvas.width, canvas.height / 2);
-		ctx.lineTo(canvas.width, canvas.height / 2);
-		ctx.stroke();
-		ctx.closePath();
+			// horizontal line
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.moveTo(-canvas.width, canvas.height / 2);
+			ctx.lineTo(canvas.width, canvas.height / 2);
+			ctx.stroke();
+			ctx.closePath();
 
-		// vertical line
-		ctx.fillStyle = "black";
-		ctx.beginPath();
-		ctx.moveTo(canvas.width / 2, -canvas.height);
-		ctx.lineTo(canvas.width / 2, canvas.height);
-		ctx.stroke();
-		ctx.closePath();
+			// vertical line
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.moveTo(canvas.width / 2, -canvas.height);
+			ctx.lineTo(canvas.width / 2, canvas.height);
+			ctx.stroke();
+			ctx.closePath();
 
-		// draw the bug!
-		drawBug(bug, ctx, canvas);
+			// draw the bug!
+			drawBug(bug, ctx, canvas);
+
+			requestId = requestAnimationFrame(draw);
+		};
+		requestId = requestAnimationFrame(draw);
+
+		return () => {
+			cancelAnimationFrame(requestId);
+		};
 	}, [bug]);
 
 	const [isEditOpen, setIsEditOpen] = useState(false);
+
+	const handleDragEnd = (result) => {
+		const { source, destination } = result;
+
+		if (!destination) {
+			return;
+		}
+
+		const reorderedItems = reorder(bug.program.words, source.index, destination.index);
+		setBug({ ...bug, program: { ...bug.program, words: reorderedItems } });
+	};
 
 	return (
 		<div className="relative h-full w-hull">
@@ -207,9 +230,17 @@ export function App() {
 				</button>
 				{isEditOpen && (
 					<div className="border border-white p-2 mt-4">
-						<p>Edit menu here</p>
-						<p>so cool</p>
-						<p>drag and drop the code</p>
+						<DragAndDrop onDragEnd={handleDragEnd}>
+							<Drop id="droppable-id">
+								{bug.program.words.map((item, index) => {
+									return (
+										<Drag key={index} id={index.toString()} index={index}>
+											<div>{item}</div>
+										</Drag>
+									);
+								})}
+							</Drop>
+						</DragAndDrop>
 					</div>
 				)}
 			</div>
