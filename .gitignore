@@ -2,6 +2,7 @@
 /main
 /sourdough
 public/index.js
+public/index.js.map
 public/index.css
 
 # Big models

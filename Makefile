@@ -85,4 +85,4 @@ format: format-frontend format-backend
 
 .PHONY: clean
 clean:
-	rm -fr sourdough public/index.js public/index.css dist/ tmp/
+	rm -fr sourdough public/index.js public/index.js.map public/index.css dist/ tmp/

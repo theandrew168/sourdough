@@ -52,6 +52,7 @@ func (app *Application) Handler() http.Handler {
 	mux.Handle("/", public)
 	mux.Handle("/index.html", public)
 	mux.Handle("/index.js", public)
+	mux.Handle("/index.js.map", public)
 	mux.Handle("/index.css", public)
 	mux.Handle("/robots.txt", public)
 	mux.Handle("/favicon.ico", public)

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import type { OnDragEndResponder } from "react-beautiful-dnd";
 
 import { DragAndDrop, Drag, Drop, reorder } from "../dnd";
 
@@ -207,7 +208,7 @@ export function App() {
 
 	const [isEditOpen, setIsEditOpen] = useState(false);
 
-	const handleDragEnd = (result) => {
+	const handleDragEnd: OnDragEndResponder = (result) => {
 		const { source, destination } = result;
 
 		if (!destination) {
@@ -235,7 +236,7 @@ export function App() {
 								{bug.program.words.map((item, index) => {
 									return (
 										<Drag key={index} id={index.toString()} index={index}>
-											<div>{item}</div>
+											<span>{item}</span>
 										</Drag>
 									);
 								})}
