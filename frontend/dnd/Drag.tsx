@@ -14,14 +14,14 @@ export default function Drag({ id, index, ...props }: PropsWithChildren<Props>) 
 			{(provided, _snapshot) => {
 				return (
 					<div
-						className="flex align-center justify-between"
+						className="flex items-center justify-between gap-8"
 						ref={provided.innerRef}
 						{...provided.draggableProps}
 						{...props}
 					>
 						{props.children}
 						<span {...provided.dragHandleProps}>
-							<ListBulletIcon className="h-6 w-6" />
+							<ListBulletIcon className="h-10 w-10" />
 						</span>
 					</div>
 				);
