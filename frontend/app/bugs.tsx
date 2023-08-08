@@ -3,6 +3,9 @@ import type { OnDragEndResponder } from "react-beautiful-dnd";
 
 import { DragAndDrop, Drag, Drop, reorder } from "../dnd";
 
+const BUG_SIZE = 25;
+const UNIT_SIZE = 50;
+
 type Direction = "up" | "down" | "left" | "right";
 type Position = {
 	x: number;
@@ -20,10 +23,26 @@ type Bug = {
 	program: Program;
 };
 
-const BUG_SIZE = 25;
-const UNIT_SIZE = 50;
+type Tile = "start" | "finish" | "empty" | "wall";
+type Map = {
+	width: number;
+	height: number;
+	// row-major
+	tiles: Tile[];
+};
 
-const step = function (bug: Bug): Bug {
+const getTile = (map: Map, x: number, y: number): Tile => {
+	if (x < 0 || x >= map.width) {
+		return "wall";
+	}
+	if (y < 0 || y >= map.height) {
+		return "wall";
+	}
+
+	return map.tiles[y * map.width + x] as Tile;
+};
+
+const step = (bug: Bug): Bug => {
 	// deep copy the current bug
 	const newBug: Bug = {
 		...bug,
@@ -44,10 +63,10 @@ const step = function (bug: Bug): Bug {
 		case "forward": {
 			switch (bug.direction) {
 				case "up":
-					newBug.position.y += 1;
+					newBug.position.y -= 1;
 					break;
 				case "down":
-					newBug.position.y -= 1;
+					newBug.position.y += 1;
 					break;
 				case "left":
 					newBug.position.x -= 1;
@@ -100,7 +119,7 @@ const step = function (bug: Bug): Bug {
 	return newBug;
 };
 
-const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+const drawBug = (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
 	const center: Position = {
 		x: canvas.width / 2,
 		y: canvas.height / 2,
@@ -108,7 +127,7 @@ const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLC
 
 	const bugWorldPosition: Position = {
 		x: center.x + bug.position.x * UNIT_SIZE,
-		y: center.y - bug.position.y * UNIT_SIZE,
+		y: center.y + bug.position.y * UNIT_SIZE,
 	};
 
 	// position dot
@@ -145,12 +164,38 @@ const drawBug = function (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLC
 export function App() {
 	const [bug, setBug] = useState<Bug>({
 		direction: "up",
-		position: { x: 0, y: 0 },
+		position: { x: 0, y: 1 },
 		program: {
 			pc: 0,
-			words: ["forward", "right", "forward", "right", "forward", "right", "forward", "right"],
+			words: ["forward", "right", "forward", "right"],
 		},
 	});
+
+	const map: Map = {
+		width: 5,
+		height: 5,
+		// prettier-ignore
+		tiles: [
+			"wall", "wall", "wall", "wall", "wall",
+			"wall", "empty", "finish", "empty", "wall",
+			"wall", "empty", "empty", "empty", "wall",
+			"wall", "empty", "start", "empty", "wall",
+			"wall", "wall", "wall", "wall", "wall",
+		],
+	};
+
+	const tryStepBug = (bug: Bug, map: Map) => {
+		const newBug = step(bug);
+		// HACK: bug coords vs map coords
+		const tile = getTile(map, newBug.position.x + 2, newBug.position.y + 2);
+		if (tile === "wall") {
+			return;
+		}
+		if (tile === "finish") {
+			alert("You win!");
+		}
+		setBug(newBug);
+	};
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -171,28 +216,46 @@ export function App() {
 		}
 
 		// set background color
-		canvas.style.backgroundColor = "ForestGreen";
+		canvas.style.backgroundColor = "black";
 
 		let requestId = 0;
-		const draw = (now: DOMHighResTimeStamp) => {
+		const draw = (_now: DOMHighResTimeStamp) => {
 			// clear the canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			// horizontal line
-			ctx.fillStyle = "black";
-			ctx.beginPath();
-			ctx.moveTo(-canvas.width, canvas.height / 2);
-			ctx.lineTo(canvas.width, canvas.height / 2);
-			ctx.stroke();
-			ctx.closePath();
+			// draw the map
+			const mapWidth = map.width * UNIT_SIZE;
+			const mapHeight = map.height * UNIT_SIZE;
+			for (let y = 0; y < map.height; y++) {
+				for (let x = 0; x < map.width; x++) {
+					const tile = getTile(map, x, y);
+					switch (tile) {
+						case "start":
+							ctx.fillStyle = "green";
+							break;
+						case "finish":
+							ctx.fillStyle = "white";
+							break;
+						case "empty":
+							ctx.fillStyle = "green";
+							break;
+						case "wall":
+							ctx.fillStyle = "gray";
+							break;
+					}
 
-			// vertical line
-			ctx.fillStyle = "black";
-			ctx.beginPath();
-			ctx.moveTo(canvas.width / 2, -canvas.height);
-			ctx.lineTo(canvas.width / 2, canvas.height);
-			ctx.stroke();
-			ctx.closePath();
+					const center: Position = {
+						x: canvas.width / 2,
+						y: canvas.height / 2,
+					};
+					ctx.fillRect(
+						x * UNIT_SIZE + center.x - mapWidth / 2,
+						y * UNIT_SIZE + center.y - mapHeight / 2,
+						UNIT_SIZE,
+						UNIT_SIZE,
+					);
+				}
+			}
 
 			// draw the bug!
 			drawBug(bug, ctx, canvas);
@@ -216,14 +279,14 @@ export function App() {
 		}
 
 		const reorderedItems = reorder(bug.program.words, source.index, destination.index);
-		setBug({ ...bug, program: { ...bug.program, words: reorderedItems } });
+		setBug({ direction: "up", position: { x: 0, y: 1 }, program: { pc: 0, words: reorderedItems } });
 	};
 
 	return (
 		<div className="relative h-full w-hull">
 			<canvas className="h-full w-full" ref={canvasRef}></canvas>
 			<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
-				<button className="border border-white p-2 mr-4" onClick={() => setBug(step(bug))}>
+				<button className="border border-white p-2 mr-4" onClick={() => tryStepBug(bug, map)}>
 					Step
 				</button>
 				<button className="border border-white p-2" onClick={() => setIsEditOpen(!isEditOpen)}>
