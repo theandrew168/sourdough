@@ -10,8 +10,6 @@ export default function Canvas2D({ draw }: Props) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const requestIdRef = useRef<number>(0);
 
-	console.log("!!! Canvas2D Render !!!");
-
 	const callback: FrameRequestCallback = (time: DOMHighResTimeStamp) => {
 		requestIdRef.current = requestAnimationFrame(callback);
 		if (!canvas || !context) {
@@ -21,6 +19,7 @@ export default function Canvas2D({ draw }: Props) {
 		draw(time, canvas, context);
 	};
 
+	// initialize the canvas and 2D drawing context
 	useEffect(() => {
 		const canvasElement = canvasRef.current;
 		if (!canvasElement) {
@@ -35,6 +34,7 @@ export default function Canvas2D({ draw }: Props) {
 		setContext(context2D);
 	}, []);
 
+	// once initialized, kick off the render loop
 	useEffect(() => {
 		requestIdRef.current = requestAnimationFrame(callback);
 		return () => cancelAnimationFrame(requestIdRef.current);
