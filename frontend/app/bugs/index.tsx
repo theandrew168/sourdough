@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import type { OnDragEndResponder } from "react-beautiful-dnd";
 
-import { DragAndDrop, Drag, Drop, reorder } from "../dnd";
+import { DragAndDrop, Drag, Drop, reorder } from "./dnd";
+import Canvas2D from "./Canvas2D";
 
 const BUG_SIZE = 25;
 const UNIT_SIZE = 50;
@@ -197,77 +198,54 @@ export function App() {
 		setBug(newBug);
 	};
 
-	const canvasRef = useRef<HTMLCanvasElement>(null);
-
-	// redraw when the bug changes
-	// TODO: redraw upon window resize (track size in state)
-	useEffect(() => {
-		const canvas = canvasRef.current;
-		if (!canvas) {
-			throw new Error("Failed to find canvas.");
-		}
-
+	const draw = (_time: DOMHighResTimeStamp, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+		// ensure canvas is properly sized
 		canvas.width = canvas.clientWidth;
 		canvas.height = canvas.clientHeight;
-
-		const ctx = canvas.getContext("2d");
-		if (!ctx) {
-			throw new Error("Canvas 2D not supported on this browser.");
-		}
 
 		// set background color
 		canvas.style.backgroundColor = "black";
 
-		let requestId = 0;
-		const draw = (_now: DOMHighResTimeStamp) => {
-			// clear the canvas
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// clear the canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			// draw the map
-			const mapWidth = map.width * UNIT_SIZE;
-			const mapHeight = map.height * UNIT_SIZE;
-			for (let y = 0; y < map.height; y++) {
-				for (let x = 0; x < map.width; x++) {
-					const tile = getTile(map, x, y);
-					switch (tile) {
-						case "start":
-							ctx.fillStyle = "green";
-							break;
-						case "finish":
-							ctx.fillStyle = "white";
-							break;
-						case "empty":
-							ctx.fillStyle = "green";
-							break;
-						case "wall":
-							ctx.fillStyle = "gray";
-							break;
-					}
-
-					const center: Position = {
-						x: canvas.width / 2,
-						y: canvas.height / 2,
-					};
-					ctx.fillRect(
-						x * UNIT_SIZE + center.x - mapWidth / 2,
-						y * UNIT_SIZE + center.y - mapHeight / 2,
-						UNIT_SIZE,
-						UNIT_SIZE,
-					);
+		// draw the map
+		const mapWidth = map.width * UNIT_SIZE;
+		const mapHeight = map.height * UNIT_SIZE;
+		for (let y = 0; y < map.height; y++) {
+			for (let x = 0; x < map.width; x++) {
+				const tile = getTile(map, x, y);
+				switch (tile) {
+					case "start":
+						ctx.fillStyle = "green";
+						break;
+					case "finish":
+						ctx.fillStyle = "white";
+						break;
+					case "empty":
+						ctx.fillStyle = "green";
+						break;
+					case "wall":
+						ctx.fillStyle = "gray";
+						break;
 				}
+
+				const center: Position = {
+					x: canvas.width / 2,
+					y: canvas.height / 2,
+				};
+				ctx.fillRect(
+					x * UNIT_SIZE + center.x - mapWidth / 2,
+					y * UNIT_SIZE + center.y - mapHeight / 2,
+					UNIT_SIZE,
+					UNIT_SIZE,
+				);
 			}
+		}
 
-			// draw the bug!
-			drawBug(bug, ctx, canvas);
-
-			requestId = requestAnimationFrame(draw);
-		};
-		requestId = requestAnimationFrame(draw);
-
-		return () => {
-			cancelAnimationFrame(requestId);
-		};
-	}, [bug]);
+		// draw the bug!
+		drawBug(bug, ctx, canvas);
+	};
 
 	const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -284,7 +262,7 @@ export function App() {
 
 	return (
 		<div className="relative h-full w-hull">
-			<canvas className="h-full w-full" ref={canvasRef}></canvas>
+			<Canvas2D draw={draw} />
 			<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
 				<button className="border border-white p-2 mr-4" onClick={() => tryStepBug(bug, map)}>
 					Step
