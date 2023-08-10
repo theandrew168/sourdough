@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 type Props = {
-	draw: (time: DOMHighResTimeStamp, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) => void;
+	draw: (dt: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) => void;
 };
 
 export default function Canvas2D({ draw }: Props) {
@@ -9,6 +9,7 @@ export default function Canvas2D({ draw }: Props) {
 	const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const requestIdRef = useRef<number>(0);
+	const timeRef = useRef<number>(0);
 
 	const callback: FrameRequestCallback = (time: DOMHighResTimeStamp) => {
 		requestIdRef.current = requestAnimationFrame(callback);
@@ -16,7 +17,10 @@ export default function Canvas2D({ draw }: Props) {
 			return;
 		}
 
-		draw(time, canvas, context);
+		const dt = time - timeRef.current;
+		timeRef.current = time;
+
+		draw(dt, canvas, context);
 	};
 
 	// initialize the canvas and 2D drawing context

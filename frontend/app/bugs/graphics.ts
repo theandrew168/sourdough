@@ -46,7 +46,7 @@ export const drawBug = (bug: Bug, ctx: CanvasRenderingContext2D, canvas: HTMLCan
 	ctx.closePath();
 };
 
-export const draw = (_time: DOMHighResTimeStamp, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+export const draw = (dt: number, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
 	// ensure canvas is properly sized
 	canvas.width = canvas.clientWidth;
 	canvas.height = canvas.clientHeight;

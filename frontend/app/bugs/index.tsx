@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import type { OnDragEndResponder } from "react-beautiful-dnd";
+import React from "react";
 
 import Canvas2D from "../../Canvas2D";
 import UserInterface from "./UserInterface";
