@@ -1,3 +1,5 @@
+import { loadImage } from "../../gfx/asset";
+import { Renderer2D } from "../../webgl/renderer";
 import { getTile, type Bug, type Position } from "./game";
 import { STATE } from "./state";
 
@@ -94,3 +96,36 @@ export const draw = (dt: number, canvas: HTMLCanvasElement, ctx: CanvasRendering
 	// draw the bug!
 	drawBug(STATE.bug, ctx, canvas);
 };
+
+export class Graphics {
+	private renderer: Renderer2D | null;
+	private isInitDone: boolean;
+
+	constructor() {
+		this.renderer = null;
+		this.isInitDone = false;
+
+		this.init = this.init.bind(this);
+		this.draw = this.draw.bind(this);
+	}
+
+	public async init(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
+		this.renderer = new Renderer2D(canvas, gl);
+
+		const spritesheet = await loadImage("/static/texture/countryside.png");
+		this.renderer.loadImage("countryside", spritesheet);
+		this.isInitDone = true;
+	}
+
+	public draw(dt: number) {
+		if (!this.isInitDone) {
+			return;
+		}
+
+		if (!this.renderer) {
+			throw new Error("Renderer has not been initialized!");
+		}
+
+		this.renderer.drawImage("countryside");
+	}
+}

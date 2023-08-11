@@ -6,5 +6,5 @@ export async function loadText(path: string): Promise<string> {
 export async function loadImage(path: string): Promise<ImageBitmap> {
 	const resp = await fetch(path);
 	const blob = await resp.blob();
-	return createImageBitmap(blob);
+	return createImageBitmap(blob, { imageOrientation: "flipY" });
 }

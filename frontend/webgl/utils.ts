@@ -1,7 +1,7 @@
 export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContext {
 	const gl = canvas.getContext("webgl2");
 	if (!gl) {
-		const msg = "Unable to initialize WebGL. Your browser or machine may not support it.";
+		const msg = "Unable to initialize WebGL2. Your browser or machine may not support it.";
 		alert(msg);
 		throw new Error(msg);
 	}
@@ -21,8 +21,6 @@ export function initGL(canvas: HTMLCanvasElement): WebGL2RenderingContext {
 	gl.cullFace(gl.BACK);
 
 	gl.frontFace(gl.CCW);
-
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 	return gl;
 }
