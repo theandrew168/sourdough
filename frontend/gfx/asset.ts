@@ -3,8 +3,12 @@ export async function loadText(path: string): Promise<string> {
 	return resp.text();
 }
 
-export async function loadImage(path: string): Promise<ImageBitmap> {
+export async function loadImage(path: string, flipY = false): Promise<ImageBitmap> {
 	const resp = await fetch(path);
 	const blob = await resp.blob();
-	return createImageBitmap(blob, { imageOrientation: "flipY" });
+	const opts: ImageBitmapOptions = {};
+	if (flipY) {
+		opts.imageOrientation = "flipY";
+	}
+	return createImageBitmap(blob, opts);
 }

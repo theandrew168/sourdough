@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { initGL } from "./webgl/utils";
+import { initGL, resizeGL } from "./webgl/utils";
 
 type Graphics = {
 	init: (canvas: HTMLCanvasElement, context: WebGL2RenderingContext) => Promise<void>;
@@ -15,7 +15,6 @@ export default function CanvasWebGL2({ graphics }: Props) {
 	const [context, setContext] = useState<WebGL2RenderingContext | null>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const requestIdRef = useRef<number>(0);
-	const timeRef = useRef<number>(0);
 
 	const callback: FrameRequestCallback = (time: DOMHighResTimeStamp) => {
 		requestIdRef.current = requestAnimationFrame(callback);
@@ -23,10 +22,8 @@ export default function CanvasWebGL2({ graphics }: Props) {
 			return;
 		}
 
-		const dt = time - timeRef.current;
-		timeRef.current = time;
-
-		graphics.draw(dt);
+		resizeGL(context);
+		graphics.draw(time);
 	};
 
 	// initialize the canvas and WebGL2 context
@@ -35,6 +32,7 @@ export default function CanvasWebGL2({ graphics }: Props) {
 		if (!canvasElement) {
 			throw new Error("Failed to find canvas element.");
 		}
+
 		const contextWebGL2 = initGL(canvasElement);
 
 		// TODO: useAsyncEffect? React Async?
@@ -52,5 +50,6 @@ export default function CanvasWebGL2({ graphics }: Props) {
 		return () => cancelAnimationFrame(requestIdRef.current);
 	}, [canvas, context]);
 
+	console.log("!!! CanvasWebGL2 Render !!!");
 	return <canvas className="h-full w-full" ref={canvasRef} />;
 }

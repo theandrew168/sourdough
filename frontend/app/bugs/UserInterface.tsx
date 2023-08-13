@@ -10,6 +10,7 @@ const handleDragEnd: OnDragEndResponder = (result) => {
 
 	// if no dest, remove the word
 	if (!destination) {
+		console.log("no dest");
 		STATE.bug.program.words.splice(source.index, 1);
 		STATE.bug = {
 			direction: "up",
@@ -20,12 +21,14 @@ const handleDragEnd: OnDragEndResponder = (result) => {
 	}
 
 	const reorderedItems = reorder(STATE.bug.program.words, source.index, destination.index);
+	console.log(reorderedItems);
 	STATE.bug = { direction: "up", position: { x: 0, y: 1 }, program: { pc: 0, words: reorderedItems } };
 };
 
 export default function UserInterface() {
 	const [isEditOpen, setIsEditOpen] = useState(false);
 
+	console.log("!!! UserInterface Render !!!");
 	return (
 		<div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white p-4 font-mono">
 			<button

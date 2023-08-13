@@ -112,12 +112,12 @@ export class Graphics {
 	public async init(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
 		this.renderer = new Renderer2D(canvas, gl);
 
-		const spritesheet = await loadImage("/static/texture/countryside.png");
+		const spritesheet = await loadImage("/static/texture/countryside.png", true);
 		this.renderer.loadImage("countryside", spritesheet);
 		this.isInitDone = true;
 	}
 
-	public draw(dt: number) {
+	public draw(_time: number) {
 		if (!this.isInitDone) {
 			return;
 		}
@@ -126,6 +126,7 @@ export class Graphics {
 			throw new Error("Renderer has not been initialized!");
 		}
 
-		this.renderer.drawImage("countryside");
+		this.renderer.drawImage("countryside", { x: 0, y: 0 });
+		this.renderer.drawImage("countryside", { x: 12, y: 0 });
 	}
 }

@@ -1,3 +1,5 @@
+import { mat4 } from "gl-matrix";
+
 import { Shader } from "./shader";
 import { VertexArray } from "./vertexarray";
 import { createModel } from "../loader/obj";
@@ -16,7 +18,7 @@ uniform mat4 uProjection;
 
 void main() {
 	vTexCoord = aTexCoord;
-	gl_Position = aPosition;
+	gl_Position = uModel * uProjection * aPosition;
 }
 `;
 
@@ -54,14 +56,25 @@ f 1/1 2/2 3/3
 f 4/4 5/5 6/6
 `;
 
+type DrawParams = {
+	x: number;
+	y: number;
+	z?: number;
+	sx?: number;
+	sy?: number;
+	r?: number;
+};
+
 export class Renderer2D {
+	private canvas: HTMLCanvasElement;
 	private gl: WebGL2RenderingContext;
 	private shader: Shader;
 	private vao: VertexArray;
 
 	private textures: Record<string, Texture>;
 
-	constructor(_canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
+	constructor(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
+		this.canvas = canvas;
 		this.gl = gl;
 
 		this.shader = new Shader(gl, VERTEX_SHADER.trim(), FRAGMENT_SHADER.trim());
@@ -86,11 +99,24 @@ export class Renderer2D {
 		this.textures[name] = texture;
 	}
 
-	public drawImage(name: string) {
+	public drawImage(name: string, { x, y, z = 0, sx = 1, sy = 1, r = 0 }: DrawParams) {
 		const texture = this.textures[name];
 		if (!texture) {
 			throw new Error(`Unknown image: ${name}. Was it loaded?`);
 		}
+
+		const model = mat4.create();
+		mat4.translate(model, model, [x / texture.width, y / texture.height, z]);
+		// mat4.rotateZ(model, model, r * (Math.PI / 180.0));
+		mat4.scale(model, model, [sx * texture.width, sy * texture.height, 1]);
+		this.shader.setUniformMat4("uModel", model);
+
+		const halfWidth = this.canvas.width / 2.0;
+		const halfHeight = this.canvas.height / 2.0;
+
+		const projection = mat4.create();
+		mat4.ortho(projection, -halfWidth, halfWidth, -halfHeight, halfHeight, -1.0, 1.0);
+		this.shader.setUniformMat4("uProjection", projection);
 
 		texture.bind();
 		this.vao.draw();
