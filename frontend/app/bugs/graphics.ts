@@ -126,10 +126,12 @@ export class Graphics {
 			throw new Error("Renderer has not been initialized!");
 		}
 
-		this.renderer.drawImage("countryside", { x: 0, y: 0 });
+		this.renderer.drawImage("countryside", { x: 0, y: 0, r: _time / 10 });
 		this.renderer.drawImage("countryside", { x: 64, y: 0 });
 		this.renderer.drawImage("countryside", { x: -64, y: 0 });
 		this.renderer.drawImage("countryside", { x: 0, y: 64 });
 		this.renderer.drawImage("countryside", { x: 0, y: -64 });
+		this.renderer.drawImage("countryside", { x: 128, y: 128, sx: 3, sy: 3 });
+		this.renderer.drawImage("countryside", { x: -96, y: -96, sx: 2, sy: 2 });
 	}
 }
