@@ -18,7 +18,7 @@ uniform mat4 uProjection;
 
 void main() {
 	vTexCoord = aTexCoord;
-	gl_Position = uModel * uProjection * aPosition;
+	gl_Position = uProjection * uModel * aPosition;
 }
 `;
 
@@ -106,8 +106,8 @@ export class Renderer2D {
 		}
 
 		const model = mat4.create();
-		mat4.translate(model, model, [x / texture.width, y / texture.height, z]);
-		// mat4.rotateZ(model, model, r * (Math.PI / 180.0));
+		mat4.translate(model, model, [x, y, z]);
+		mat4.rotateZ(model, model, r * (Math.PI / 180.0));
 		mat4.scale(model, model, [sx * texture.width, sy * texture.height, 1]);
 		this.shader.setUniformMat4("uModel", model);
 

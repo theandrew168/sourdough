@@ -127,6 +127,9 @@ export class Graphics {
 		}
 
 		this.renderer.drawImage("countryside", { x: 0, y: 0 });
-		this.renderer.drawImage("countryside", { x: 12, y: 0 });
+		this.renderer.drawImage("countryside", { x: 64, y: 0 });
+		this.renderer.drawImage("countryside", { x: -64, y: 0 });
+		this.renderer.drawImage("countryside", { x: 0, y: 64 });
+		this.renderer.drawImage("countryside", { x: 0, y: -64 });
 	}
 }
