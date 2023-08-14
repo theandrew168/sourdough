@@ -42,7 +42,7 @@ run-frontend: run-frontend-js run-frontend-css
 
 .PHONY: run-backend
 run-backend:
-	DEBUG=1 go run github.com/cosmtrek/air@latest
+	DEBUG=1 go run main.go
 
 .PHONY: run
 run: run-frontend run-backend
