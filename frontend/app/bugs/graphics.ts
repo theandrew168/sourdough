@@ -110,10 +110,9 @@ export class Graphics {
 	}
 
 	public async init(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
-		this.renderer = new Renderer2D(canvas, gl);
-
 		const spritesheet = await loadImage("/static/texture/countryside.png", true);
-		this.renderer.loadImage("countryside", spritesheet);
+		this.renderer = new Renderer2D(canvas, gl, spritesheet);
+
 		this.isInitDone = true;
 	}
 
@@ -126,12 +125,13 @@ export class Graphics {
 			throw new Error("Renderer has not been initialized!");
 		}
 
-		this.renderer.drawImage("countryside", { x: 0, y: 0, r: _time / 10 });
-		this.renderer.drawImage("countryside", { x: 64, y: 0 });
-		this.renderer.drawImage("countryside", { x: -64, y: 0 });
-		this.renderer.drawImage("countryside", { x: 0, y: 64 });
-		this.renderer.drawImage("countryside", { x: 0, y: -64 });
-		this.renderer.drawImage("countryside", { x: 128, y: 128, sx: 3, sy: 3 });
-		this.renderer.drawImage("countryside", { x: -96, y: -96, sx: 2, sy: 2 });
+		this.renderer.draw({ x: 0, y: 0, r: _time / 10 });
+		this.renderer.draw({ x: 64, y: 0 });
+		this.renderer.draw({ x: -64, y: 0 });
+		this.renderer.draw({ x: 0, y: 64 });
+		this.renderer.draw({ x: 0, y: -64 });
+		this.renderer.flush();
+		// this.renderer.drawImage("countryside", { x: 128, y: 128, sx: 3, sy: 3 });
+		// this.renderer.drawImage("countryside", { x: -96, y: -96, sx: 2, sy: 2 });
 	}
 }

@@ -1,13 +1,13 @@
 module github.com/theandrew168/sourdough
 
-go 1.20
+go 1.21
 
 require (
 	github.com/alexedwards/flow v0.0.0-20220806114457-cf11be9e0e03
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
 	github.com/klauspost/compress v1.16.7
 	github.com/prometheus/client_golang v1.16.0
-	golang.org/x/exp v0.0.0-20230810033253-352e893a4cad
+	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 )
 
 require (

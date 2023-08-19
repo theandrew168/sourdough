@@ -22,10 +22,6 @@ export default function CanvasWebGL2({ graphics }: Props) {
 			return;
 		}
 
-		// TODO: move these to draw -> renderer.startFrame?
-		resizeGL(context);
-		context.clearColor(0.2, 0.3, 0.4, 1.0);
-		context.clear(context.COLOR_BUFFER_BIT | context.DEPTH_BUFFER_BIT);
 		graphics.draw(time);
 	};
 
@@ -37,6 +33,7 @@ export default function CanvasWebGL2({ graphics }: Props) {
 		}
 
 		const contextWebGL2 = initGL(canvasElement);
+		resizeGL(contextWebGL2);
 
 		// TODO: useAsyncEffect? React Async?
 		(async () => {
