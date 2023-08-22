@@ -1,5 +1,6 @@
 import { loadImage } from "../../gfx/asset";
 import { Renderer2D } from "../../webgl/renderer";
+import { Sprite } from "../../webgl/sprite";
 import { getTile, type Bug, type Position } from "./game";
 import { STATE } from "./state";
 
@@ -125,16 +126,26 @@ export class Graphics {
 			throw new Error("Renderer has not been initialized!");
 		}
 
-		this.renderer.draw({ x: 0, y: 0, r: _time / 10 });
-		this.renderer.draw({ x: 64, y: 0 });
-		this.renderer.draw({ x: -64, y: 0 });
-		this.renderer.draw({ x: 0, y: 64 });
-		this.renderer.draw({ x: 0, y: -64 });
-		this.renderer.draw({ x: 128, y: 128, sx: 3, sy: 3 });
-		this.renderer.draw({ x: -96, y: -96, sx: 2, sy: 2 });
-		this.renderer.draw({ x: 0, y: -192, sx: Math.abs(Math.sin(_time / 1000)) * 5 });
-		this.renderer.draw({ x: Math.sin(_time / 500) * 256, y: Math.cos(_time / 500) * 256 });
-		this.renderer.draw({ x: 192, y: 0, r: _time / 10 });
+		const countryside = new Sprite(64, 64);
+		const grass = countryside.slice(32, 32, 0, 0);
+		const flower = countryside.slice(32, 32, 0, 1);
+		const boxFront = countryside.slice(32, 32, 1, 0);
+		const boxTop = countryside.slice(32, 32, 1, 1);
+
+		this.renderer.draw(countryside, { x: 0, y: 0, r: _time / 10 });
+		this.renderer.draw(countryside, { x: 64, y: 0 });
+		this.renderer.draw(countryside, { x: -64, y: 0 });
+		this.renderer.draw(countryside, { x: 0, y: 64 });
+		this.renderer.draw(countryside, { x: 0, y: -64 });
+		this.renderer.draw(countryside, { x: 128, y: 128, sx: 3, sy: 3 });
+		this.renderer.draw(countryside, { x: -96, y: -96, sx: 2, sy: 2 });
+		this.renderer.draw(countryside, { x: 0, y: -192, sx: Math.abs(Math.sin(_time / 1000)) * 5 });
+		this.renderer.draw(countryside, { x: Math.sin(_time / 500) * 256, y: Math.cos(_time / 500) * 256 });
+		this.renderer.draw(countryside, { x: 192, y: 0, r: _time / 10 });
+		this.renderer.draw(grass, { x: -128, y: 0, sx: 2, sy: 2 });
+		this.renderer.draw(flower, { x: -192, y: 0, sx: 2, sy: 2 });
+		this.renderer.draw(boxFront, { x: -256, y: 0, sx: 2, sy: 2 });
+		this.renderer.draw(boxTop, { x: -256, y: 64, sx: 2, sy: 2 });
 		this.renderer.flush();
 	}
 }

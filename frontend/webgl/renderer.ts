@@ -3,6 +3,7 @@ import { mat4 } from "gl-matrix";
 import { Shader } from "./shader";
 import { Texture } from "./texture";
 import { resizeGL } from "./utils";
+import type { Sprite } from "./sprite";
 
 const FLOAT_SIZE = 4;
 const FLOATS_PER_VERTEX = 4;
@@ -15,8 +16,6 @@ const MAX_VERTEX_COUNT = MAX_SPRITE_COUNT * VERTICES_PER_SPRITE;
 
 const INDICES_PER_SPRITE = 6;
 const MAX_INDEX_COUNT = MAX_SPRITE_COUNT * INDICES_PER_SPRITE;
-
-const TODO_IMAGE_SIZE = 64;
 
 const VERTEX_SHADER = `
 #version 300 es
@@ -49,7 +48,7 @@ void main() {
 }
 `;
 
-type DrawParams = {
+export type DrawParams = {
 	x: number;
 	y: number;
 	sx?: number;
@@ -118,10 +117,9 @@ export class Renderer2D {
 		this.texture = new Texture(gl, spritesheet);
 	}
 
-	// TODO: image details: width, height, BL=(0,0), TR=(1,1), Quad->SubQuad, first param?
-	public draw({ x, y, sx = 1, sy = 1, r = 0 }: DrawParams) {
-		const halfWidth = TODO_IMAGE_SIZE / 2.0;
-		const halfHeight = TODO_IMAGE_SIZE / 2.0;
+	public draw(sprite: Sprite, { x, y, sx = 1, sy = 1, r = 0 }: DrawParams) {
+		const halfWidth = sprite.width / 2.0;
+		const halfHeight = sprite.height / 2.0;
 
 		const radians = r * (Math.PI / 180.0);
 		const sinRot = Math.sin(radians);
@@ -132,26 +130,26 @@ export class Renderer2D {
 		// bottom-left
 		this.buffer[index + 0] = cosRot * -halfWidth * sx - sinRot * -halfHeight * sy + x;
 		this.buffer[index + 1] = sinRot * -halfWidth * sx + cosRot * -halfHeight * sy + y;
-		this.buffer[index + 2] = 0.0;
-		this.buffer[index + 3] = 0.0;
+		this.buffer[index + 2] = sprite.xMin;
+		this.buffer[index + 3] = sprite.yMin;
 
 		// bottom-right
 		this.buffer[index + 4] = cosRot * halfWidth * sx - sinRot * -halfHeight * sy + x;
 		this.buffer[index + 5] = sinRot * halfWidth * sx + cosRot * -halfHeight * sy + y;
-		this.buffer[index + 6] = 1.0;
-		this.buffer[index + 7] = 0.0;
+		this.buffer[index + 6] = sprite.xMax;
+		this.buffer[index + 7] = sprite.yMin;
 
 		// top-right
 		this.buffer[index + 8] = cosRot * halfWidth * sx - sinRot * halfHeight * sy + x;
 		this.buffer[index + 9] = sinRot * halfWidth * sx + cosRot * halfHeight * sy + y;
-		this.buffer[index + 10] = 1.0;
-		this.buffer[index + 11] = 1.0;
+		this.buffer[index + 10] = sprite.xMax;
+		this.buffer[index + 11] = sprite.yMax;
 
 		// top-left
 		this.buffer[index + 12] = cosRot * -halfWidth * sx - sinRot * halfHeight * sy + x;
 		this.buffer[index + 13] = sinRot * -halfWidth * sx + cosRot * halfHeight * sy + y;
-		this.buffer[index + 14] = 0.0;
-		this.buffer[index + 15] = 1.0;
+		this.buffer[index + 14] = sprite.xMin;
+		this.buffer[index + 15] = sprite.yMax;
 
 		const halfCanvasWidth = this.canvas.width / 2.0;
 		const halfCanvasHeight = this.canvas.height / 2.0;
