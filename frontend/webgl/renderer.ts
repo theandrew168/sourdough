@@ -120,46 +120,44 @@ export class Renderer2D {
 
 	// TODO: image details: width, height, BL=(0,0), TR=(1,1), Quad->SubQuad, first param?
 	public draw({ x, y, sx = 1, sy = 1, r = 0 }: DrawParams) {
-		const transform = mat4.create();
-		mat4.rotateZ(transform, transform, r * (Math.PI / 180.0));
-		mat4.scale(transform, transform, [sx, sy, 1]);
+		const halfWidth = TODO_IMAGE_SIZE * sx / 2.0;
+		const halfHeight = TODO_IMAGE_SIZE * sy / 2.0;
 
-		const halfSize = TODO_IMAGE_SIZE / 2.0;
+		const radians = r * (Math.PI / 180.0);
+		const sinRot = Math.sin(radians);
+		const cosRot = Math.cos(radians);
+
 		const index = this.count * FLOATS_PER_VERTEX * VERTICES_PER_SPRITE;
 
-		const posBL = vec4.fromValues(x - halfSize, y - halfSize, 0, 0);
-		vec4.transformMat4(posBL, posBL, transform);
-		this.buffer[index + 0] = posBL[0];
-		this.buffer[index + 1] = posBL[1];
+		// bottom-left
+		this.buffer[index + 0] = cosRot * (x - halfWidth) - sinRot * (y - halfHeight);
+		this.buffer[index + 1] = sinRot * (x - halfWidth) + cosRot * (y - halfHeight);
 		this.buffer[index + 2] = 0.0;
 		this.buffer[index + 3] = 0.0;
 
-		const posBR = vec4.fromValues(x + halfSize, y - halfSize, 0, 0);
-		vec4.transformMat4(posBR, posBR, transform);
-		this.buffer[index + 4] = posBR[0];
-		this.buffer[index + 5] = posBR[1];
+		// bottom-right
+		this.buffer[index + 4] = cosRot * (x + halfWidth) - sinRot * (y - halfHeight);
+		this.buffer[index + 5] = sinRot * (x + halfWidth) + cosRot * (y - halfHeight);
 		this.buffer[index + 6] = 1.0;
 		this.buffer[index + 7] = 0.0;
 
-		const posTR = vec4.fromValues(x + halfSize, y + halfSize, 0, 0);
-		vec4.transformMat4(posTR, posTR, transform);
-		this.buffer[index + 8] = posTR[0];
-		this.buffer[index + 9] = posTR[1];
+		// top-right
+		this.buffer[index + 8] = cosRot * (x + halfWidth) - sinRot * (y + halfHeight);
+		this.buffer[index + 9] = sinRot * (x + halfWidth) + cosRot * (y + halfHeight);
 		this.buffer[index + 10] = 1.0;
 		this.buffer[index + 11] = 1.0;
 
-		const posTL = vec4.fromValues(x - halfSize, y + halfSize, 0, 0);
-		vec4.transformMat4(posTL, posTL, transform);
-		this.buffer[index + 12] = posTL[0];
-		this.buffer[index + 13] = posTL[1];
+		// top-left
+		this.buffer[index + 12] = cosRot * (x - halfWidth) - sinRot * (y + halfHeight);
+		this.buffer[index + 13] = sinRot * (x - halfWidth) + cosRot * (y + halfHeight);
 		this.buffer[index + 14] = 0.0;
 		this.buffer[index + 15] = 1.0;
 
-		const halfWidth = this.canvas.width / 2.0;
-		const halfHeight = this.canvas.height / 2.0;
+		const halfCanvasWidth = this.canvas.width / 2.0;
+		const halfCanvasHeight = this.canvas.height / 2.0;
 
 		const projection = mat4.create();
-		mat4.ortho(projection, -halfWidth, halfWidth, -halfHeight, halfHeight, -1.0, 1.0);
+		mat4.ortho(projection, -halfCanvasWidth, halfCanvasWidth, -halfCanvasHeight, halfCanvasHeight, -1.0, 1.0);
 		this.shader.setUniformMat4("uProjection", projection);
 
 		this.count += 1;

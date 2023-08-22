@@ -130,8 +130,11 @@ export class Graphics {
 		this.renderer.draw({ x: -64, y: 0 });
 		this.renderer.draw({ x: 0, y: 64 });
 		this.renderer.draw({ x: 0, y: -64 });
+		this.renderer.draw({ x: 128, y: 128, sx: 3, sy: 3 });
+		this.renderer.draw({ x: -96, y: -96, sx: 2, sy: 2 });
+		this.renderer.draw({ x: 0, y: -192, sx: Math.abs(Math.sin(_time / 1000)) * 5 });
+		this.renderer.draw({ x: Math.sin(_time / 500) * 256, y: Math.cos(_time / 500) * 256 });
+		this.renderer.draw({ x: 192, y: 0, r: _time / 10 });
 		this.renderer.flush();
-		// this.renderer.drawImage("countryside", { x: 128, y: 128, sx: 3, sy: 3 });
-		// this.renderer.drawImage("countryside", { x: -96, y: -96, sx: 2, sy: 2 });
 	}
 }
