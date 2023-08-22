@@ -1,4 +1,4 @@
-import { mat4, vec4 } from "gl-matrix";
+import { mat4 } from "gl-matrix";
 
 import { Shader } from "./shader";
 import { Texture } from "./texture";
@@ -130,26 +130,26 @@ export class Renderer2D {
 		const index = this.count * FLOATS_PER_VERTEX * VERTICES_PER_SPRITE;
 
 		// bottom-left
-		this.buffer[index + 0] = (cosRot * -halfWidth * sx) - (sinRot * -halfHeight * sy) + x;
-		this.buffer[index + 1] = (sinRot * -halfWidth * sx) + (cosRot * -halfHeight * sy) + y;
+		this.buffer[index + 0] = cosRot * -halfWidth * sx - sinRot * -halfHeight * sy + x;
+		this.buffer[index + 1] = sinRot * -halfWidth * sx + cosRot * -halfHeight * sy + y;
 		this.buffer[index + 2] = 0.0;
 		this.buffer[index + 3] = 0.0;
 
 		// bottom-right
-		this.buffer[index + 4] = (cosRot * halfWidth * sx) - (sinRot * -halfHeight * sy) + x;
-		this.buffer[index + 5] = (sinRot * halfWidth * sx) + (cosRot * -halfHeight * sy) + y;
+		this.buffer[index + 4] = cosRot * halfWidth * sx - sinRot * -halfHeight * sy + x;
+		this.buffer[index + 5] = sinRot * halfWidth * sx + cosRot * -halfHeight * sy + y;
 		this.buffer[index + 6] = 1.0;
 		this.buffer[index + 7] = 0.0;
 
 		// top-right
-		this.buffer[index + 8] = (cosRot * halfWidth * sx) - (sinRot * halfHeight * sy) + x;
-		this.buffer[index + 9] = (sinRot * halfWidth * sx) + (cosRot * halfHeight * sy) + y;
+		this.buffer[index + 8] = cosRot * halfWidth * sx - sinRot * halfHeight * sy + x;
+		this.buffer[index + 9] = sinRot * halfWidth * sx + cosRot * halfHeight * sy + y;
 		this.buffer[index + 10] = 1.0;
 		this.buffer[index + 11] = 1.0;
 
 		// top-left
-		this.buffer[index + 12] = (cosRot * -halfWidth * sx) - (sinRot * halfHeight * sy) + x;
-		this.buffer[index + 13] = (sinRot * -halfWidth * sx) + (cosRot * halfHeight * sy) + y;
+		this.buffer[index + 12] = cosRot * -halfWidth * sx - sinRot * halfHeight * sy + x;
+		this.buffer[index + 13] = sinRot * -halfWidth * sx + cosRot * halfHeight * sy + y;
 		this.buffer[index + 14] = 0.0;
 		this.buffer[index + 15] = 1.0;
 
