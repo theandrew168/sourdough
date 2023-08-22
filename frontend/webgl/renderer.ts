@@ -120,8 +120,8 @@ export class Renderer2D {
 
 	// TODO: image details: width, height, BL=(0,0), TR=(1,1), Quad->SubQuad, first param?
 	public draw({ x, y, sx = 1, sy = 1, r = 0 }: DrawParams) {
-		const halfWidth = TODO_IMAGE_SIZE * sx / 2.0;
-		const halfHeight = TODO_IMAGE_SIZE * sy / 2.0;
+		const halfWidth = TODO_IMAGE_SIZE / 2.0;
+		const halfHeight = TODO_IMAGE_SIZE / 2.0;
 
 		const radians = r * (Math.PI / 180.0);
 		const sinRot = Math.sin(radians);
@@ -130,26 +130,26 @@ export class Renderer2D {
 		const index = this.count * FLOATS_PER_VERTEX * VERTICES_PER_SPRITE;
 
 		// bottom-left
-		this.buffer[index + 0] = cosRot * (x - halfWidth) - sinRot * (y - halfHeight);
-		this.buffer[index + 1] = sinRot * (x - halfWidth) + cosRot * (y - halfHeight);
+		this.buffer[index + 0] = (cosRot * -halfWidth * sx) - (sinRot * -halfHeight * sy) + x;
+		this.buffer[index + 1] = (sinRot * -halfWidth * sx) + (cosRot * -halfHeight * sy) + y;
 		this.buffer[index + 2] = 0.0;
 		this.buffer[index + 3] = 0.0;
 
 		// bottom-right
-		this.buffer[index + 4] = cosRot * (x + halfWidth) - sinRot * (y - halfHeight);
-		this.buffer[index + 5] = sinRot * (x + halfWidth) + cosRot * (y - halfHeight);
+		this.buffer[index + 4] = (cosRot * halfWidth * sx) - (sinRot * -halfHeight * sy) + x;
+		this.buffer[index + 5] = (sinRot * halfWidth * sx) + (cosRot * -halfHeight * sy) + y;
 		this.buffer[index + 6] = 1.0;
 		this.buffer[index + 7] = 0.0;
 
 		// top-right
-		this.buffer[index + 8] = cosRot * (x + halfWidth) - sinRot * (y + halfHeight);
-		this.buffer[index + 9] = sinRot * (x + halfWidth) + cosRot * (y + halfHeight);
+		this.buffer[index + 8] = (cosRot * halfWidth * sx) - (sinRot * halfHeight * sy) + x;
+		this.buffer[index + 9] = (sinRot * halfWidth * sx) + (cosRot * halfHeight * sy) + y;
 		this.buffer[index + 10] = 1.0;
 		this.buffer[index + 11] = 1.0;
 
 		// top-left
-		this.buffer[index + 12] = cosRot * (x - halfWidth) - sinRot * (y + halfHeight);
-		this.buffer[index + 13] = sinRot * (x - halfWidth) + cosRot * (y + halfHeight);
+		this.buffer[index + 12] = (cosRot * -halfWidth * sx) - (sinRot * halfHeight * sy) + x;
+		this.buffer[index + 13] = (sinRot * -halfWidth * sx) + (cosRot * halfHeight * sy) + y;
 		this.buffer[index + 14] = 0.0;
 		this.buffer[index + 15] = 1.0;
 
